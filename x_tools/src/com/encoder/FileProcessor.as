@@ -28,7 +28,7 @@ package com.encoder
 		public function open():void
 		{
 			if(!openFile)
-			{
+			{ 
 				openFile = new File();
 				openFile.addEventListener(FileListEvent.SELECT_MULTIPLE, selectMultipleFile);
 			}
