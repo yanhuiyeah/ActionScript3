@@ -6,6 +6,7 @@ package com.encoder
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.FileListEvent;
 	import flash.filesystem.File;
@@ -13,19 +14,27 @@ package com.encoder
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
+	import flash.utils.getTimer;
 	
 	
 	public class FileProcessor
 	{
+		
+		/**
+		 *全部流加载完成后回调 
+		 */		
+		private var callBack:Function;
+		
 		/**
 		 *操作文件行为
 		 */		
 		private var openFile:File;
 		
 		/**
-		 *打开 
+		 *打开选择框 
+		 * @param $callBack param:Vector.<FileData>
 		 */		
-		public function open():void
+		public function open($callBack:Function):void
 		{
 			if(!openFile)
 			{ 
@@ -35,10 +44,12 @@ package com.encoder
 			
 			try
 			{
+				this.callBack = $callBack;
 				openFile.browseForOpenMultiple("package");
 			}
 			catch ($error:Error)
 			{
+				this.callBack = null;
 				trace("打开文件失败：", $error.message);
 			}
 		}
@@ -59,6 +70,7 @@ package com.encoder
 		 */		
 		private function selectMultipleFile(event:FileListEvent):void
 		{
+			
 			var fileList:Array = event.files;
 			fileCount = fileList ? fileList.length : 0;
 			if(fileCount == 0) return;
@@ -96,58 +108,53 @@ package com.encoder
 		 */		
 		private function readByes($fs:FileStream, $fileData:FileData):void
 		{
+			var bytes:ByteArray = new ByteArray();
+			$fs.readBytes(bytes);
 			if($fileData.extension == "png" || $fileData.extension == "jpg")
 			{
+				new BytesLoader(bytes, readComplete, $fileData);
 			}
 			else
 			{
-				$fileData.bytes = new ByteArray();
-				$fs.readBytes($fileData.bytes);
-				readComplete($fileData);
+				readComplete($fileData, bytes);
 			}
 		}
 		
 		/**
-		 *读取二进制流 
+		 *读取数据完成
 		 */		
-		private function readComplete($fileData:FileData):void
+		private function readComplete($fileData:FileData, $data:Object):void
 		{
+			$fileData.data = $data;
 			this.fileDataList.push($fileData);
-			
-			if(this.fileDataList.length == fileCount)
+			if(this.fileDataList.length == fileCount && this.callBack != null)
 			{
-				
+				this.fileDataList.sort(sort);
+				this.callBack.call(null, this.fileDataList.concat());
+				this.fileDataList.length = 0;
+				this.callBack = null;
 			}
-			
-			
-//			var bytes:ByteArray = new ByteArray();
-//			$fs.readBytes(bytes);
-//			
-//			var bmd:BitmapData = new BitmapData(500,500);
-//			bmd.setPixels(new Rectangle(0,0,100,100), bytes);
-//			ui.rawChildren.addChild(new Bitmap(bmd));
-//			return;
-//			
-//			var loader:Loader = new Loader();
-//			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoaderComplete);
-//			try
-//			{
-//				loader.loadBytes(bytes);
-//			}
-//			catch($e:Error)
-//			{
-//				trace($e.message);
-//			}
 		}
 		
-//		/**
-//		 *文件加载成功 
-//		 * @param event
-//		 */		
-//		private function onLoaderComplete(event:Event):void
-//		{
-//		}
-		
+		/**
+		 *排序 
+		 * @param $item1
+		 * @param $item2
+		 * @return 
+		 */		
+		private function sort($item1:FileData, $item2:FileData):int
+		{
+			if($item1.index > $item2.index)	
+			{
+				return 1;
+			}
+			else if($item1.index < $item2.index)
+			{
+				return -1;
+			}
+			
+			return 0;
+		}
 		//========================================
 		
 		private static var _instance:FileProcessor;
@@ -165,4 +172,67 @@ package com.encoder
 		{
 		}
 	}
+}
+
+//=============================
+import com.encoder.data.FileData;
+
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.display.LoaderInfo;
+import flash.events.Event;
+import flash.utils.ByteArray;
+
+class BytesLoader
+{
+	
+	private var loader:Loader;
+	
+	private var callBack:Function;
+	
+	private var fileData:FileData;
+	
+	private var bytes:ByteArray;
+	
+	public function BytesLoader($bytes:ByteArray, $callBack:Function, $fileData:FileData)
+	{
+		this.fileData = $fileData;
+		this.callBack = $callBack;
+		this.bytes = $bytes;
+		loader = new Loader();
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+		loader.loadBytes(this.bytes);
+	}
+	
+	private function loadComplete($e:Event):void
+	{
+		var contentLoaderInfo:LoaderInfo = $e.currentTarget as LoaderInfo;
+		contentLoaderInfo.removeEventListener(Event.COMPLETE, loadComplete);
+		var bmd:BitmapData = Bitmap(contentLoaderInfo.content).bitmapData;
+		if(this.callBack != null)
+		{
+			this.callBack.call(null, fileData, bmd);
+		}
+		desroty();
+	}
+	
+	public function desroty():void
+	{
+		if(this.bytes)
+		{
+			this.bytes.clear();
+			this.bytes = null;
+		}
+		
+		if(loader)
+		{
+			loader.unload();
+			this.loader = null;
+		}
+		this.callBack = null;
+		this.fileData = null;
+	}
+	
+	
 }
