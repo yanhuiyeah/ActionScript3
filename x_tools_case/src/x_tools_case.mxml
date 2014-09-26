@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" width="1280" height="900"
-					   xmlns:mx="library://ns.adobe.com/flex/mx">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:com="com.*" 
+					   creationComplete="onComplete(event)">
 	<fx:Script>
 		<![CDATA[
-			import com.encoder.FileProcessor;
-			import com.encoder.data.FileData;
-			protected function button1_clickHandler(event:MouseEvent):void
+			import com.Main;
+			import com.core.IPluginContainer;
+			import com.core.ToolsManager;
+			import com.view.plugins.PackagePlugin;
+			
+			import mx.events.FlexEvent;
+
+			
+			private function onComplete(event:FlexEvent):void
 			{
-				FileProcessor.instance.open(callBack);
+				var main:Main = new Main();
+				ToolsManager.instance.registerPluginsContainer(main);
+				main.addEventListener(FlexEvent.CREATION_COMPLETE, onMainComplete);
+				this.addElement(main);				
 			}
 			
-			private function callBack($vect:Vector.<FileData>):void
+			/**注册插件  */
+			private function registerPlugins():void
 			{
-				this.bytes = new ByteArray();
-				for each (var $fileData:FileData in $vect) 
-				{
-					read($fileData);
-				}
-				return;
-				trace(this.bytes.length);
-				this.bytes.compress(CompressionAlgorithm.DEFLATE);
-				trace(this.bytes.length);
-				(new File()).save(this.bytes, "你妹啊我擦.pp");
-				this.bytes.uncompress(CompressionAlgorithm.DEFLATE);
-				trace(this.bytes.length);
-			}
-			private var bytes:ByteArray;
-			private function read($fileData:FileData):void
-			{
-				var l:Loader = new Loader();
-				l.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete);
-				var lc:LoaderContext = new LoaderContext();
-				lc.applicationDomain = ApplicationDomain.currentDomain;
-				lc.allowCodeImport = true;
-				l.loadBytes($fileData.data as ByteArray, lc);
-				
-//				var bmp:Bitmap = new Bitmap($fileData.data as BitmapData);
-//				p.rawChildren.addChild(bmp);
-//				($fileData.data as BitmapData).lock();
-//				bytes.writeBytes(($fileData.data as BitmapData).getPixels(($fileData.data as BitmapData).rect));
-//				trace($fileData.index, $fileData.name, $fileData.extension, $fileData.data, bytes.length);
+				ToolsManager.instance.registerPlugins(new PackagePlugin());
 			}
 			
-			protected function onComplete(event:Event):void
+			protected function onMainComplete(event:FlexEvent):void
 			{
-				var loadContenInfo:LoaderInfo = event.currentTarget as LoaderInfo;
-//				var mc:MovieClip = loadContenInfo.content as MovieClip;
-//				this.addChild(mc);
-				var c:* = ApplicationDomain.currentDomain.getDefinition("1") as Class;
-				p.rawChildren.addChild(new Bitmap(new c()));
+				event.currentTarget.removeEventListener(FlexEvent.CREATION_COMPLETE, onMainComplete);
+				registerPlugins();
+				ToolsManager.instance.initPluginList();
 			}
 			
 		]]>
@@ -57,6 +39,4 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<mx:Panel id="p" x="300" y="10" width="800" height="600"/>
-	<s:Button x="29" y="25" label="按钮" click="button1_clickHandler(event)"/>
 </s:WindowedApplication>

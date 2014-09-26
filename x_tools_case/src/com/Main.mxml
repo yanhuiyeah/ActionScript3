@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 implements="com.core.IPluginContainer"
+		 width="1280" height="900">
+	<fx:Script>
+		<![CDATA[
+			import com.core.IExhibitionPlugin;
+			import com.core.IPlugin;
+			import com.core.ToolsManager;
+			import com.data.PluginData;
+			import com.view.common.PluginListItem;
+			
+			import spark.components.Button;
+			
+			public function instanllPlugins($tools:IPlugin, $exhibition:IExhibitionPlugin = null):void
+			{
+				if(toolsView.numElements > 0)
+				{
+					var oldTools:IPlugin = toolsView.getElementAt(0) as IPlugin;
+					oldTools.uninstall();
+				}
+				
+				if($tools)
+				{
+					$tools.install(toolsView);
+				}
+				
+				if(exhibitionView.numElements > 0)
+				{
+					var oldExhibition:IPlugin = exhibitionView.getElementAt(0) as IPlugin;
+					oldExhibition.uninstall();
+				}
+				
+				if($exhibition)
+				{
+					$exhibition.install(exhibitionView);
+				}
+			}
+			
+			public function initPluginList($dic:Dictionary):void
+			{
+				for each (var pd:PluginData in $dic) 
+				{
+					createItem(pd.tools.pluginName, pd.tools.pluginID);
+				}
+			}
+			
+			/**创建item  */
+			private  function createItem($lable:String, $id:String):void
+			{
+				var item:PluginListItem = new PluginListItem();
+				item.width = listView.width - 20;
+				item.label = $lable;
+				item.pluginID = $id;
+				item.addEventListener(MouseEvent.CLICK, itemClik);
+				listView.addElement(item);
+			}
+			
+			/**item clik */
+			private function itemClik(event:MouseEvent):void
+			{
+				var item:PluginListItem = event.currentTarget as PluginListItem;
+				ToolsManager.instance.usePlugin(item.pluginID);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<!--功能列表-->
+	<s:Panel x="10" y="10" width="236" height="853" fontSize="16"
+			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="功能列表">
+		<s:VGroup id="listView" width="236"
+				  paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"/>
+	</s:Panel>
+	
+	<!--操作区域-->
+	<s:Panel id="toolsView" x="254" y="10" width="1014" height="621" fontSize="16"
+			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="操作区域">
+	</s:Panel>
+	<s:Panel id="exhibitionView" x="254" y="639" width="1014" height="224" fontSize="16"
+			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="展示区域">
+	</s:Panel>
+</s:BorderContainer>
