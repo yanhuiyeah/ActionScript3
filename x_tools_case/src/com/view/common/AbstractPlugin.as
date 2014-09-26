@@ -14,6 +14,8 @@ package com.view.common
 			super();
 			horizontalCenter = 0;
 			verticalCenter = 0;
+			width = 990;
+			height = 570;
 		}
 		
 		public function get pluginID():String
@@ -53,6 +55,7 @@ package com.view.common
 		public function uninstall():void
 		{
 			if(!_installed) return;
+			_installed = false;
 			if(parent && parent is IVisualElementContainer)
 			{
 				IVisualElementContainer(parent).removeElement(this);

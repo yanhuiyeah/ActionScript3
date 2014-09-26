@@ -8,7 +8,9 @@
 			import com.Main;
 			import com.core.IPluginContainer;
 			import com.core.ToolsManager;
-			import com.view.plugins.PackagePlugin;
+			import com.file.FileProcessor;
+			import com.view.plugins.assetsPackage.PackagePlugin;
+			import com.view.plugins.xml2class.Data2Class;
 			
 			import mx.events.FlexEvent;
 
@@ -25,6 +27,7 @@
 			private function registerPlugins():void
 			{
 				ToolsManager.instance.registerPlugins(new PackagePlugin());
+				ToolsManager.instance.registerPlugins(new Data2Class());
 			}
 			
 			protected function onMainComplete(event:FlexEvent):void

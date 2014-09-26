@@ -63,6 +63,8 @@
 			{
 				var item:PluginListItem = event.currentTarget as PluginListItem;
 				ToolsManager.instance.usePlugin(item.pluginID);
+				toolsView.title = "操作区域：" + item.label;
+				exhibitionView.title = "展示区域：" + item.label;
 			}
 			
 		]]>
@@ -71,17 +73,17 @@
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<!--功能列表-->
-	<s:Panel x="10" y="10" width="236" height="853" fontSize="16"
+	<s:Panel x="10" y="10" width="236" height="853" backgroundColor="#7B7575" fontSize="16"
 			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="功能列表">
 		<s:VGroup id="listView" width="236"
 				  paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"/>
 	</s:Panel>
 	
 	<!--操作区域-->
-	<s:Panel id="toolsView" x="254" y="10" width="1014" height="621" fontSize="16"
-			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="操作区域">
+	<s:Panel id="toolsView" x="254" y="10" width="1014" height="621" backgroundColor="#7B7575"
+			 fontSize="16" skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="操作区域">
 	</s:Panel>
-	<s:Panel id="exhibitionView" x="254" y="639" width="1014" height="224" fontSize="16"
+	<s:Panel id="exhibitionView" x="254" y="639" width="1014" height="224" fontSize="16" backgroundColor="#7B7575"
 			 skinClass="spark.skins.spark.PanelSkin" textAlign="center" title="展示区域">
 	</s:Panel>
 </s:BorderContainer>
