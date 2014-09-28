@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="530" height="640" backgroundColor="#DFE7E9" borderVisible="true"
+		 chromeColor="#A2B6CA" fontFamily="中易黑体" fontSize="14" fontStyle="normal"
+		 fontWeight="normal" lineThrough="false" textAlign="center" textDecoration="none"
+		 title="新建ActionScript类" creationComplete="createComplete(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.codeTemplete.core.ClassCodeBlock;
+			import com.codeTemplete.core.CodeBlock;
+			import com.codeTemplete.core.ICodeBlock;
+			import com.codeTemplete.core.ParamCodeBlock;
+			import com.codeTemplete.data.TempleteCodeData;
+			import com.codeTemplete.manager.ClassCodeKey;
+			import com.codeTemplete.manager.ClassTempleteConfig;
+			import com.file.FileProcessor;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			/**关闭本身  */
+			private function closeSelf(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			/**创建完成  */
+			private function createComplete(event:FlexEvent):void
+			{
+			}
+			
+			/**保存class  */
+			private function saveClass(event:MouseEvent):void
+			{
+				
+				var dataList:TempleteCodeData = new TempleteCodeData();
+				dataList.array = [];
+				
+				for(var i:int = 0; i < 5; i++)
+				{
+					var data:TempleteCodeData = new TempleteCodeData();
+					data.name = "$param" + i;
+					data.type = "String";
+					data.value = "test" + i;
+					dataList.array.push(data);
+				}
+				
+				var coder:ICodeBlock = new ParamCodeBlock();
+				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.PARAM_TEMPLETE);	
+				coder.encoder(dataList);
+				
+				
+//				var coder:ICodeBlock = new CodeBlock();
+//				
+//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.PACKAGE_TEMPLETE);
+//				coder.encoder([packageTF.text]);
+//				var packageCode:String = coder.codeBlock;
+//				
+//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.IMPORT_TEMPLETE);
+//				coder.encoder(["com.codeTemplete.core.ICodeBlock"]);
+//				var importCode:String = coder.codeBlock;
+//				
+//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CLASS_TEMPLETE);
+//				coder.encoder(["yeah", "public", classNameTF.text]);
+//				var classCode:String = coder.codeBlock;
+//				
+//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CONSTRUCTOR_TEMPLETE);
+//				coder.encoder([classNameTF.text, "super();"]);
+//				var constructorCode:String = coder.codeBlock;
+//				
+//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CLASSFILE_TEMPLETE);
+//				coder.encoder([packageCode, importCode, classCode, constructorCode]);
+//				
+				FileProcessor.instance.save(coder.codeBlock, classNameTF.text + ".as");
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Label x="9" y="89" text="源文件夹(U):"/>
+	<s:Label x="9" y="130" text="包(K):"/>
+	<s:Label x="93" y="90" width="297" text="com" textAlign="left"/>
+	<s:Button x="449" y="86" label="浏览(R)"/>
+	<s:Button x="449" y="127" label="浏览(O)"/>
+	<s:Button x="449" y="315" label="浏览(W)"/>
+	<s:Button x="451" y="357" label="添加(A)"/>
+	<s:Label x="12" y="360" text="接口(T):"/>
+	<s:TextInput id="packageTF" x="95" y="126" width="338" text="com" textAlign="left"/>
+	<s:Label x="9" y="187" text="名称(N):"/>
+	<s:Label x="9" y="239" text="修饰符:"/>
+	<s:Label x="10" y="320" text="超类(S):"/>
+	<s:TextInput id="classNameTF" x="95" y="183" width="338" text="NewClass" textAlign="left"/>
+	<s:TextInput x="95" y="315" width="338" textAlign="left"/>
+	<s:RadioButton x="95" y="237" label="public(P)" selected="true"/>
+	<s:RadioButton x="187" y="237" label="internal(P)"/>
+	<s:CheckBox x="95" y="275" label="dynamic(D)"/>
+	<s:CheckBox x="193" y="275" label="final(F)"/>
+	<s:TextArea x="95" y="357" width="338" height="101" editable="false" textAlign="left"/>
+	<s:Button x="354" y="559" width="75" label="完成" click="saveClass(event)"/>
+	<s:Button x="451" y="559" width="71" label="取消" click="closeSelf(event)"/>
+	<s:Button x="485" y="-27" width="37" label="X" chromeColor="#FE7881" click="closeSelf(event)"/>
+</s:Panel>

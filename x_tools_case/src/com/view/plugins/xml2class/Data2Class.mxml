@@ -118,15 +118,15 @@
 //				exportNameTF.text = className;
 //			}
 //			
-//			override public function get pluginID():String
-//			{
-//				return "data2Class";
-//			}
-//			
-//			override public function get pluginName():String
-//			{
-//				return "配置文件生成类";
-//			}
+			override public function get pluginID():String
+			{
+				return "data2Class";
+			}
+			
+			override public function get pluginName():String
+			{
+				return "配置文件生成类";
+			}
 //			
 //			/**文件拖拽完成  */
 //			private function fileDragComplete(event:NativeDragEvent):void

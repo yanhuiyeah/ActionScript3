@@ -10,6 +10,7 @@
 			import com.core.ToolsManager;
 			import com.file.FileProcessor;
 			import com.view.plugins.assetsPackage.PackagePlugin;
+			import com.view.plugins.code.CodeBlockPlugin;
 			import com.view.plugins.xml2class.Data2Class;
 			
 			import mx.events.FlexEvent;
@@ -26,6 +27,7 @@
 			/**注册插件  */
 			private function registerPlugins():void
 			{
+				ToolsManager.instance.registerPlugins(new CodeBlockPlugin());
 				ToolsManager.instance.registerPlugins(new PackagePlugin());
 				ToolsManager.instance.registerPlugins(new Data2Class());
 			}

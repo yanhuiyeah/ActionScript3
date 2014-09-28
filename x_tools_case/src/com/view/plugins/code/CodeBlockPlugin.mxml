@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:AbstractPlugin xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:common="com.view.common.*"
+					   xmlns:code="com.view.plugins.code.*"
+					   width="990" height="570" creationComplete="createComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.codeTemplete.core.ClassCodeBlock;
+			import com.codeTemplete.core.ICodeBlock;
+			import com.codeTemplete.manager.ClassTempleteConfig;
+			import com.file.FileProcessor;
+			import com.file.data.FileData;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			/**创建完成 */
+			private function createComplete(event:FlexEvent):void
+			{
+			}
+			
+			override public function get pluginID():String
+			{
+				return "CodeBlockPlugin";
+			}
+			
+			override public function get pluginName():String
+			{
+				return "代码块";
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				FileProcessor.instance.open(complete, 0);
+			}
+			
+			private function complete($vect:Vector.<FileData>):void
+			{
+//				var xml:XML = XML($vect[0].data);
+//				xml = xml.template.(@name == "class")[0];
+//				trace(xml.toString());
+//				var coder:ICodeBlock = new ClassCodeBlock();
+//				coder.templete = xml;
+//				coder.encoder(["yeah", "public", "Test"]);
+////				tf.text = xml.toString();
+//				trace(coder.codeBlock);
+//				var bytes:ByteArray = new ByteArray();
+////				bytes.writeUTF(coder.codeBlock);
+//				bytes.writeMultiByte(coder.codeBlock, "gb2312");
+//				FileProcessor.instance.save(bytes, "Test.as");
+			}
+			
+			/**创建面板  */
+			private var createView:CreateClassView;
+			
+			/**创建类  */
+			private function createClass(event:MouseEvent):void
+			{
+				if(!createView)
+				{
+					createView = new CreateClassView();
+				}
+				
+				PopUpManager.addPopUp(createView, this, true);
+				PopUpManager.centerPopUp(createView);
+			}
+			
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Button x="30" y="27" label="创建类" click="createClass(event)"/>
+</common:AbstractPlugin>
