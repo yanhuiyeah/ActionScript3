@@ -11,9 +11,11 @@ package com.codeTemplete.core
 			super();
 		}
 		
-		override protected function onEncoder($params:Array):String
-		{
-			return null;
-		}
+//		override protected function onEncoder($params:Array):String
+//		{
+//			var code:String = templete.toString();
+//			while
+//			return null;
+//		}
 	}
 }

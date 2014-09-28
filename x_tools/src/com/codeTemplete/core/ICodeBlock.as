@@ -1,5 +1,7 @@
 package com.codeTemplete.core
 {
+	import com.codeTemplete.data.TempleteCodeData;
+
 	/**
 	 *代码块接口 
 	 * @author yeah
@@ -19,10 +21,10 @@ package com.codeTemplete.core
 		
 		/**
 		 *编写代码
-		 * @param $params	参数
-		 * @return 				编译后的代码块文本
+		 * @param $param	参数:(代码替换数据)
+		 * @return 				
 		 */		
-		function encoder($params:Array):String;
+		function encoder($param:TempleteCodeData):String;
 		
 		/**
 		 *擦除代码 

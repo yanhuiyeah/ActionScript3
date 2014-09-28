@@ -11,17 +11,17 @@ package com.codeTemplete.core
 			super();
 		}
 		
-		override protected function onEncoder($params:Array):String
-		{
-			if(!templete) return "";
-			var code:String = templete.valueOf();
-			
-			for (var i:int = 0; i < $params.length; i++) 
-			{
-				code = code.replace(/\$\{.+\}/, $params[i].toString())
-			}
-			
-			return code;
-		}
+//		override protected function onEncoder($params:Array):String
+//		{
+//			if(!templete) return "";
+//			var code:String = templete.valueOf();
+//			
+//			for (var i:int = 0; i < $params.length; i++) 
+//			{
+//				code = code.replace(/\$\{.+\}/, $params[i].toString())
+//			}
+//			
+//			return code;
+//		}
 	}
 }

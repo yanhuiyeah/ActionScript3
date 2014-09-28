@@ -7,12 +7,17 @@ package com.codeTemplete.manager
 	 */	
 	public class ClassCodeKey
 	{
+		/**完整的文件代码块模板*/		
+		public static const INTEGRATED_TEMPLETE:String = "integrated";
 		
-		/**类代码块模板*/		
-		public static const CLASS_TEMPLETE:String = "class";
+		/**import代码块模板*/		
+		public static const IMPORT_TEMPLETE:String = "import";
 		
-		/**接口代码块模板*/		
-		public static const INTERFACE_TEMPLETE:String = "interface";
+		/**构造函数代码块模板*/		
+		public static const CONSTRUCTOR_TEMPLETE:String = "constructor";
+		
+		/**参数代码块模板*/		
+		public static const PARAM_TEMPLETE:String = "param";
 		
 		
 		
