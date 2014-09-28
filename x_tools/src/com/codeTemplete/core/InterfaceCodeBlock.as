@@ -18,7 +18,7 @@ package com.codeTemplete.core
 			
 			for (var i:int = 0; i < $params.length; i++) 
 			{
-				code = code.replace("/\$\{([a-z]*.([a-z])*)\}/", $params[i].toString())
+				code = code.replace(/\$\{.+\}/, $params[i].toString())
 			}
 			
 			return code;
