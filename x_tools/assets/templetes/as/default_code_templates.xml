@@ -4,19 +4,35 @@
 
 <templates>
 
-<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_package" deleted="false" description="%ASCodeTemplate.Class_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.class" name="class">/**&#13;
- * @author ${user}&#13;
- */&#13;
-${specifier:values(public, private, protected)} class ${enclosing_type}&#13;
+<!-- 完成的文件模版-->
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script" deleted="false" description="%ASCodeTemplate.Package_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.package" name="integrated">package ${enclosing_package};&#13;
 {&#13;
-	${cursor}&#13;
+	/**&#13;
+ 	 * @author ${user}&#13;
+ 	 */&#13;
+	${modify} ${codeType} ${name}&#13;
+	{&#13;
+		public function ${name}(${params})&#13;
+		{&#13;
+			${cursor}&#13;
+		}&#13;
+	}	&#13;
 }</template>
 
+<!-- import代码块 -->
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Constructor_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.constructor" name="import">
+import ${enclosing_type};</template>
+
+<!--构造函数代码块 -->
 <template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Constructor_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.constructor" name="constructor">public function ${enclosing_type}() &#13;
 {&#13;
 	${cursor}&#13;
 }</template>
 
+<!--参数代码块 -->
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Constructor_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.constructor" name="param">${name}:${type}${value}</template>
+
+<!--do函数代码块 -->
 <template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.Do_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.do" name="do">do &#13;
 {&#13;
 	${line_selection}${cursor}&#13;

@@ -6,7 +6,7 @@
 <template name="%ASFileTemplates.NewASFile.Name" id="com.adobe.flexide.as.core.filetemplates.new_actionscript_file" 
 description="%ASFileTemplates.NewASFile.Description" context="new_actionscript_file" enabled="true"
 ><![CDATA[// ActionScript file]]></template>
-<template name="%ASFileTemplates.NewASClass.Name" id="com.adobe.flexide.as.core.filetemplates.new_actionscript_class" 
+<template name="classFile" id="com.adobe.flexide.as.core.filetemplates.new_actionscript_class" 
 description="%ASFileTemplates.NewASClass.Description" context="new_actionscript_class" enabled="true"
 ><![CDATA[${package_declaration}
 {
@@ -16,7 +16,7 @@ description="%ASFileTemplates.NewASClass.Description" context="new_actionscript_
 		${class_body}
 	}
 }]]></template>
-<template name="%ASFileTemplates.NewASInterface.Name" id="com.adobe.flexide.as.core.filetemplates.new_actionscript_interface" 
+<template name="interfaceFile" id="com.adobe.flexide.as.core.filetemplates.new_actionscript_interface" 
 description="%ASFileTemplates.NewASInterface.Description" context="new_actionscript_interface" enabled="true"
 ><![CDATA[${package_declaration}
 {
