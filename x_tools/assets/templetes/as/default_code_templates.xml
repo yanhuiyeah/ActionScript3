@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 默认代码模板 -->
+
+<templates>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_package" deleted="false" description="%ASCodeTemplate.Class_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.class" name="class">/**&#13;
+ * @author ${user}&#13;
+ */&#13;
+${specifier:values(public, private, protected)} class ${enclosing_type}&#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Constructor_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.constructor" name="constructor">public function ${enclosing_type}() &#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.Do_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.do" name="do">do &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+} while(${condition:local_var(Boolean)});</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script" deleted="false" description="%ASCodeTemplate.CustomEventClass_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.eventBody" name="event body">public static const ${type_const}:String = "${type_const_value}";
+
+public function ${enclosing_type}(type:String, ${cursor}bubbles:Boolean = ${bubbles:values(false,true)}, cancelable:Boolean = ${cancel:values(false,true)})
+{
+	super(type, bubbles, cancelable);
+}
+override public function clone():Event
+{
+	return new ${enclosing_type}(type, bubbles, cancelable);
+}
+override public function toString():String
+{
+	return formatToString("${enclosing_type}", "type", "bubbles", "cancelable",
+	"eventPhase");
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.ForEach_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.fore" name="fore">for each (var ${index}:int in ${array}) &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+}
+</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.For_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.fori" name="fori">for (var ${index}:int = 0; ${index} &lt; ${array}.length; ${index}++) &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+}
+</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script" deleted="false" description="%ASCodeTemplate.Function_Description" enabled="true"  id="com.adobe.flexide.as.core.codetemplates.function" name="function">${specifier:values(private, public, protected)} function ${fname}():${type:values(void,String,Number,Boolean,Object)}
+{
+	${line_selection}${cursor}
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Getter_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.getter" name="getter">${specifier:values(public, private, protected)} function get ${property}():${Type:values(String,Number,Boolean)} &#13;
+{&#13;
+	${cursor}&#13;
+	return ${Type};&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.Http_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.HTTPService" name="HTTPService">${:import(mx.rpc.http.HTTPService,mx.rpc.events.ResultEvent,mx.rpc.events.FaultEvent)}
+var ${service}:HTTPService = new HTTPService();
+${service}.addEventListener(ResultEvent.RESULT,${onResult});
+${service}.addEventListener(FaultEvent.FAULT,${onFault});
+${service}.destination = "${destination}";
+${service}.resultFormat = "${resultFormat:values(object,array,xml,e4x,flashvars,text)}";
+var ${parms}:Object = {};
+${parms}["${parm1}"] = "${parm}";
+${service}.send(${parms});
+${service}.showBusyCursor = ${bool:values(true,false)}; 
+${cursor}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.If_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.if" name="if">if (${condition:local_var(Boolean)}) &#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.If_Else_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.ifElseIf" name="if else if">if (${condition1:local_var(Boolean)}) 
+{
+	${cursor}
+}
+else if (${condition2:local_var(Boolean)}) 
+{
+	
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script" deleted="false" description="%ASCodeTemplate.Package_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.package" name="package">package ${enclosing_package}&#13;
+{&#13;
+	/**&#13;
+ 	 * @author ${user}&#13;
+ 	 */&#13;
+	public class ${enclosing_type}&#13;
+	{&#13;
+		public function ${enclosing_type}()&#13;
+		{&#13;
+			${cursor}&#13;
+		}&#13;
+	}	&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Property_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.property" name="property">private var _${name}:${Type};
+public function get ${name}():${Type} { return _${name}; }
+
+public function set ${name}(${value}:${Type}):void
+{
+	if (_${name} == ${value})
+		return;
+	_${name} = value;
+}
+${cursor}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.RemoteObject_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.remoteObject" name="RemoteObject">${:import(mx.rpc.remoting.RemoteObject,mx.rpc.remoting.Operation,mx.rpc.events.ResultEvent,mx.rpc.events.FaultEvent)}
+${ro:var(mx.rpc.remoting.RemoteObject)} = new RemoteObject();
+${ro}.destination = "${myService}";
+${ro}.addEventListener(FaultEvent.FAULT,${onFault});
+				
+var ${op}:Operation = new Operation(${ro}, "${myOperation}");  
+${op}.addEventListener(ResultEvent.RESULT, ${onOpResult});
+${op}.addEventListener(FaultEvent.FAULT,${onOpFault});
+${cursor}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.RemoteObjectCF_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.remoteObjectCF" name="RemoteObject with CF Endpoint">${:import(mx.rpc.remoting.RemoteObject,mx.rpc.remoting.Operation,mx.rpc.events.ResultEvent,mx.rpc.events.FaultEvent)}
+${ro:var(mx.rpc.remoting.RemoteObject)} = new RemoteObject();
+${ro}.endpoint="${endpoint:values('http://localhost:8500/flex2gateway')}";				
+${ro}.source = "${myCFservice}";
+${ro}.destination = "ColdFusion";
+${ro}.addEventListener(FaultEvent.FAULT, ${onFault});
+				
+var ${op}:Operation = new Operation(${ro}, "${myOperation}");  
+${op}.addEventListener(ResultEvent.RESULT, ${onOpResult});
+${op}.addEventListener(FaultEvent.FAULT, ${onOpFault});
+${cursor}
+</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.RemoteObjectJava_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.remoteObjectJava" name="RemoteObject with Java Endpoint ">${:import(mx.rpc.remoting.RemoteObject,mx.rpc.remoting.Operation,mx.rpc.events.ResultEvent,mx.rpc.events.FaultEvent)}
+${ro:var(mx.rpc.remoting.RemoteObject)} = new RemoteObject();
+${ro}.endpoint="${endpoint:values('http://localhost:8080/mywebapp/messagebroker/amf')}";
+${ro}.destination = "${myService}";
+${ro}.addEventListener(FaultEvent.FAULT,${onFault});
+				
+var ${op}:Operation = new Operation(${ro}, "${myOperation}");  
+${op}.addEventListener(ResultEvent.RESULT,${onOpResult});
+${op}.addEventListener(FaultEvent.FAULT,${onOpFault});
+${cursor}
+</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.RemoteObjectPHP_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.remoteObjectPHP" name="RemoteObject with PHP endpoint">${:import(mx.rpc.remoting.RemoteObject,mx.rpc.remoting.Operation,mx.rpc.events.ResultEvent,mx.rpc.events.FaultEvent)}
+${ro:var(mx.rpc.remoting.RemoteObject)} = new RemoteObject();
+${ro}.endpoint = "${endpoint:values('http://localhost/amfphp/gateway.php')}";
+${ro}.source = "${myPHPservice}";
+${ro}.destination = "amfphp";
+${ro}.addEventListener(FaultEvent.FAULT,${onFault});
+
+var ${op}:Operation = new Operation(${ro}, "${myOperation}");  
+${op}.addEventListener(ResultEvent.RESULT, ${onOpResult});
+${op}.addEventListener(FaultEvent.FAULT, ${onOpFault});
+${cursor}
+</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.Setter_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.setter" name="setter">${specifier:values(public, protected, private)} function set ${property}(${value}:${Type:values(String,Number,Boolean)}):void &#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.Switch_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.switch" name="switch">switch(${expression})&#13;
+{&#13;
+	case ${result}:&#13;
+	{&#13;
+		${cursor}&#13;
+		break;&#13;
+	}&#13;
+	&#13;
+	default:&#13;
+	{&#13;
+		break;&#13;
+	}&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_type_members" deleted="false" description="%ASCodeTemplate.ToString_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.toString" name="toString">override public function toString() : String &#13;
+{&#13;
+	return "${enclosing_package_and_type}";&#13;
+}&#13;
+${cursor}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.TraceMethod_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.traceMethod" name="trace current method">trace("${enclosing_type}.${enclosing_method}(${enclosing_method_arguments})");&#13;
+${cursor}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script_statement" deleted="false" description="%ASCodeTemplate.TryCatch_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.tryCatch" name="try/catch">try&#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+} &#13;
+catch(${error}:${Error}) &#13;
+{&#13;
+	&#13;
+}</template>
+
+<template autoinsert="true" context="com.adobe.flexide.as.core.codetemplates.action_script" deleted="false" description="%ASCodeTemplate.Vector_Description" enabled="true" id="com.adobe.flexide.as.core.codetemplates.vector" name="vector">var ${name}:Vector.&lt;${type}&gt; = new Vector.&lt;${type}&gt;();&#13;
+${cursor}</template>
+
+</templates>

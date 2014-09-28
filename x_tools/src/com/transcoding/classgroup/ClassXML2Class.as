@@ -22,6 +22,11 @@ package com.transcoding.classgroup
 		
 		override public function transcoding($data:Object):Object
 		{
+			
+			
+			//==========================
+			/***仿照创建一个类的方式去实现界面*/
+			
 			if(!checkDataType($data))
 			{
 				this._transcodeData = null;
