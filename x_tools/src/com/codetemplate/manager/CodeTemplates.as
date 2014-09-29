@@ -30,6 +30,7 @@ package com.codetemplate.manager
 		 */		
 		public function regiterCodeTemplete($id:String, $templete:XML, $language:String):void
 		{
+			trace($id);
 			var key:String = $language + "#" + $id;
 			codeTempleteDic[key] = $templete;
 		}
