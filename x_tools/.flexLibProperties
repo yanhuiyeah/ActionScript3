@@ -2,7 +2,11 @@
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
     <classEntry path="com.ToolsUtil"/>
-    <classEntry path="com.data2class.ClassExporter"/>
+    <classEntry path="com.codetemplate.core.ICodeBlock"/>
+    <classEntry path="com.codetemplate.manager.CodeTemplateID"/>
+    <classEntry path="com.codetemplate.core.CodeBlock"/>
+    <classEntry path="com.codetemplate.manager.CodeTemplates"/>
+    <classEntry path="com.codeTemplete.core.ClassCodeBlock"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

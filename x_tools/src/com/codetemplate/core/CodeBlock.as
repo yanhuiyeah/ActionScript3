@@ -1,6 +1,6 @@
-package com.codeTemplete.core
+package com.codetemplate.core
 {
-	import com.codeTemplete.data.TempleteCodeData;
+	import com.codetemplate.data.TemplateCodeData;
 
 	/**
 	 *代码模板基类 
@@ -13,12 +13,12 @@ package com.codeTemplete.core
 		}
 		
 		private var _templete:XML;
-		public function get templete():XML
+		public function get template():XML
 		{
 			return _templete;
 		}
 		
-		public function set templete($value:XML):void
+		public function set template($value:XML):void
 		{
 			if(this._templete == $value) return;
 			this._templete = $value;
@@ -36,12 +36,12 @@ package com.codeTemplete.core
 			_codeBlock = "";
 		}
 		
-		final public function encoder($param:TempleteCodeData):String
+		final public function encoder($param:TemplateCodeData):String
 		{
-			if(!templete) return "";
-			if(!checkTemplete())
+			if(!template) return "";
+			if(!checkTemplate())
 			{
-				throw new Error("模板类型"+templete.@name+"不适用于当前代码块!");
+				throw new Error("模板类型"+template.@name+"不适用于当前代码块!");
 			}
 			_codeBlock = onEncoder($param);
 			return _codeBlock;
@@ -51,11 +51,11 @@ package com.codeTemplete.core
 		 * 具体编码逻辑[子类可以覆盖]
 		 * @return 编码后的代码块
 		 */		
-		protected function onEncoder($param:TempleteCodeData):String
+		protected function onEncoder($param:TemplateCodeData):String
 		{
 			if(!$param || !$param.array) return "";
 			
-			var code:String = templete.valueOf();
+			var code:String = template.valueOf();
 			var dataList:Array = $param.array;
 			var len:int = dataList.length;
 			for (var i:int = 0; i < len; i++) 
@@ -80,7 +80,7 @@ package com.codeTemplete.core
 		/**
 		 *检测模板是否适用于当前 
 		 */		
-		protected function checkTemplete():Boolean
+		protected function checkTemplate():Boolean
 		{
 			return true;	
 		}

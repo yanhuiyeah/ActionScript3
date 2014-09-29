@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ActionScript代码模板 -->
+<templates language="ActionScript3">
+
+<!-- 文件模板-->
+<template id="fileTeplete" name="类模板">
+package ${package};&#13;
+{&#13;
+	${importTemplete}&#13;
+	
+	/**&#13;
+ 	 * @author ${user}&#13;
+ 	 */&#13;
+	${modifiers} ${type} ${name} ${extendsTemplete} ${implementsTemplete}&#13;
+	{&#13;
+		${constructorTemplete}&#13;
+		
+		${body}&#13;
+	}	&#13;
+}</template>
+
+<!-- import模板 ${enclosing_type}：具体包结构——com.xx.aa.bb -->
+<template id="importTemplete" name="导入模板 ">import ${enclosing_type};</template>
+
+<!-- extends代码块 ${enclosing_type} ——将要继承的类-->
+<template id="extendsTemplete" name="继承模板">extends ${enclosing_type};</template>
+
+<!-- implements代码块 ${enclosing_type} ——将要实现的接口 Iaa,Ibb,... -->
+<template id="implementsTemplete" name="实现接口模板">implements ${enclosing_type};</template>
+
+<!--参数代码块 -->
+<template id="paramTemplete" name="参数代码块">${name}:${type}${value}</template>
+
+<!--构造函数代码块 ${name} 名称  ${paramTemplete}参数结构体-->
+<template id="constructorTemplete" name="构造函数模板">public function ${name}(${paramTemplete}) &#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<!--函数代码块 ${name} 名称  ${paramTemplete}参数结构体 ${return} 返回值-->
+<template id="constructorTemplete" name="构造函数模板">public function ${name}(${paramTemplete}):${return}&#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<!-- @@@@@@@@@@@方法模板start@@@@@@@@@@@ -->
+
+<template id="functionTemplete" name="function">${namespace} ${modifiers}function ${method_name}(${params}):${return_type}&#13;
+{&#13;
+	// TODO Auto Generated method stub&#13;
+	${body_statement}${cursor}&#13;
+}</template>
+
+<template id="getterTemplete" name="getter">${metadata}&#13;
+${asdoc}&#13;
+${namespace} ${modifiers}function get ${method_name}()${return_type}&#13;
+{&#13;
+	return ${property};&#13;
+}</template>
+
+<template id="setterTemplete" name="setter">${asdoc}&#13;
+${namespace} ${modifiers}function set ${method_name}(value${argument_type}):void&#13;
+{&#13;
+	${property} = value;&#13;
+}</template>
+
+<!-- @@@@@@@@@@@方法模板end@@@@@@@@@@@ -->
+
+<!-- @@@@@@@@@@@循环遍历start@@@@@@@@@@@ -->
+
+<!--fore循环 -->
+<template id="foreTemplete" name="fore">for each (var ${index}:int in ${array}) &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+}
+</template>
+
+<!--fori循环 -->
+<template id="foriTemplete" name="fori">for (var ${index}:int = 0; ${index} &lt; ${array}.length; ${index}++) &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+}
+</template>
+
+<!--switch代码块 -->
+<template id="switchTemplete" name="switch">switch(${expression})&#13;
+{&#13;
+	case ${result}:&#13;
+	{&#13;
+		${cursor}&#13;
+		break;&#13;
+	}&#13;
+	&#13;
+	default:&#13;
+	{&#13;
+		break;&#13;
+	}&#13;
+}</template>
+
+<!--do函数代码块 -->
+<template id="doTemplete" name="do">do &#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+} while(${condition:local_var(Boolean)});</template>
+
+<!-- @@@@@@@@@@@循环遍历end@@@@@@@@@@@ -->
+
+<!-- @@@@@@@@@@@条件判断start@@@@@@@@@@@ -->
+
+<!--if判断代码块 -->
+<template id="ifTemplete" name="if">if (${condition:local_var(Boolean)}) &#13;
+{&#13;
+	${cursor}&#13;
+}</template>
+
+<!--else if判断代码块 -->
+<template id="elseifTemplete" name="else if">else if (${condition2:local_var(Boolean)}) 
+{
+}</template>
+
+<!-- @@@@@@@@@@@条件判断end@@@@@@@@@@@ -->
+
+<template id="com.adobe.flexide.as.core.codetemplates.tryCatch" name="try/catch">try&#13;
+{&#13;
+	${line_selection}${cursor}&#13;
+} &#13;
+catch(${error}:${Error}) &#13;
+{&#13;
+	&#13;
+}</template>
+
+</templates>

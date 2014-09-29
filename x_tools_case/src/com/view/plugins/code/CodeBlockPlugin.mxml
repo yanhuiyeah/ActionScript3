@@ -7,9 +7,7 @@
 					   width="990" height="570" creationComplete="createComplete(event)">
 	<fx:Script>
 		<![CDATA[
-			import com.codeTemplete.core.ClassCodeBlock;
-			import com.codeTemplete.core.ICodeBlock;
-			import com.codeTemplete.manager.ClassTempleteConfig;
+			import com.codetemplate.core.ICodeBlock;
 			import com.file.FileProcessor;
 			import com.file.data.FileData;
 			

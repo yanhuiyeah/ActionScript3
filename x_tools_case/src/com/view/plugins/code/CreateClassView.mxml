@@ -9,13 +9,10 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.codeTemplete.core.ClassCodeBlock;
-			import com.codeTemplete.core.CodeBlock;
-			import com.codeTemplete.core.ICodeBlock;
-			import com.codeTemplete.core.ParamCodeBlock;
-			import com.codeTemplete.data.TempleteCodeData;
-			import com.codeTemplete.manager.ClassCodeKey;
-			import com.codeTemplete.manager.ClassTempleteConfig;
+			import com.codetemplate.core.CodeBlock;
+			import com.codetemplate.core.ICodeBlock;
+			import com.codetemplate.core.ParamCodeBlock;
+			import com.codetemplate.manager.CodeTemplates;
 			import com.file.FileProcessor;
 			
 			import mx.events.FlexEvent;
@@ -30,51 +27,34 @@
 			/**创建完成  */
 			private function createComplete(event:FlexEvent):void
 			{
+				CodeTemplates.instance;
 			}
 			
 			/**保存class  */
 			private function saveClass(event:MouseEvent):void
 			{
 				
-				var dataList:TempleteCodeData = new TempleteCodeData();
-				dataList.array = [];
+//				var dataList:TemplateCodeData = new TemplateCodeData();
+//				dataList.array = [];
+//				
+//				for(var i:int = 0; i < 5; i++)
+//				{
+//					var data:TemplateCodeData = new TemplateCodeData();
+//					data.name = "$param" + i;
+//					data.type = "String";
+//					data.value = "test" + i;
+//					dataList.array.push(data);
+//				}
 				
-				for(var i:int = 0; i < 5; i++)
-				{
-					var data:TempleteCodeData = new TempleteCodeData();
-					data.name = "$param" + i;
-					data.type = "String";
-					data.value = "test" + i;
-					dataList.array.push(data);
-				}
+//				var coder:ICodeBlock = new ParamCodeBlock();
+//				coder.templete = ClassTempleteConfig.instance.getCodeTemplete(ClassCodeID.PARAM_TEMPLETE);	
+//				coder.encoder(dataList);
 				
-				var coder:ICodeBlock = new ParamCodeBlock();
-				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.PARAM_TEMPLETE);	
-				coder.encoder(dataList);
+//				var xml:XML = new XML("<Root/>");
+//				xml.test = coder.codeBlock;
+//				trace(xml.toString());
 				
-				
-//				var coder:ICodeBlock = new CodeBlock();
-//				
-//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.PACKAGE_TEMPLETE);
-//				coder.encoder([packageTF.text]);
-//				var packageCode:String = coder.codeBlock;
-//				
-//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.IMPORT_TEMPLETE);
-//				coder.encoder(["com.codeTemplete.core.ICodeBlock"]);
-//				var importCode:String = coder.codeBlock;
-//				
-//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CLASS_TEMPLETE);
-//				coder.encoder(["yeah", "public", classNameTF.text]);
-//				var classCode:String = coder.codeBlock;
-//				
-//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CONSTRUCTOR_TEMPLETE);
-//				coder.encoder([classNameTF.text, "super();"]);
-//				var constructorCode:String = coder.codeBlock;
-//				
-//				coder.templete = ClassTempleteConfig.instance.getTempleteConfig(ClassCodeKey.CLASSFILE_TEMPLETE);
-//				coder.encoder([packageCode, importCode, classCode, constructorCode]);
-//				
-				FileProcessor.instance.save(coder.codeBlock, classNameTF.text + ".as");
+//				FileProcessor.instance.save(coder.codeBlock, classNameTF.text + ".as");
 			}
 			
 		]]>
