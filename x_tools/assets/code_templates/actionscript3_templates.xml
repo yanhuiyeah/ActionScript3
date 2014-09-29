@@ -4,15 +4,15 @@
 
 
 <!-- 文件模板-->
-<template id="file" name="类模板">
-package ${package};&#13;
+<template id="file" name="文件模板">
+package ${enclosing_type};&#13;
 {&#13;
 	${import}&#13;
 	
 	/**&#13;
- 	 * @author ${user}&#13;
+ 	 * @author ${enclosing_type}&#13;
  	 */&#13;
-	${modifiers} ${type} ${name} ${extends} ${implements}&#13;
+	${modifiers} ${type} ${enclosing_type} ${extends} ${implements}&#13;
 	{&#13;
 		${constructor}&#13;
 		
@@ -20,17 +20,17 @@ package ${package};&#13;
 	}	&#13;
 }</template>
 
-<!-- import模板 ${enclosing_type}：具体包结构——com.xx.aa.bb -->
+<!-- import com.cn.beijing.chaoyang.guanzhuang.jia5; -->
 <template id="import" name="导入模板 ">import ${enclosing_type};</template>
 
-<!-- extends代码块 ${enclosing_type} ——将要继承的类-->
+<!-- extends Class-->
 <template id="extends" name="继承模板">extends ${enclosing_type};</template>
 
-<!-- implements代码块 ${enclosing_type} ——将要实现的接口 Iaa,Ibb,... -->
+<!-- implements IInterface1, IInterface2, IInterface3.... -->
 <template id="implements" name="实现接口模板">implements ${enclosing_type};</template>
 
-<!--参数代码块 -->
-<template id="params" name="参数代码块">${name}:${type}${value}</template>
+<!-- name:type=value -->
+<template id="params" name="参数代码块">${enclosing_type}:${enclosing_type}${enclosing_type}</template>
 
 <!-- @@@@@@@@@@@方法模板start@@@@@@@@@@@ -->
 

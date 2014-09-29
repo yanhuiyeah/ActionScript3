@@ -7,6 +7,7 @@
     <classEntry path="com.codetemplate.core.CodeBlock"/>
     <classEntry path="com.codetemplate.manager.CodeTemplates"/>
     <classEntry path="com.codeTemplete.core.ClassCodeBlock"/>
+    <classEntry path="com.codetemplate.data.CodeTemplateData"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
