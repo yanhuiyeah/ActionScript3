@@ -1,6 +1,7 @@
 package com.codetemplate.core
 {
-	import com.codetemplate.data.TemplateCodeData;
+	import com.codetemplate.data.CodeTemplateData;
+	import com.codetemplate.data.CodeTemplateInfo;
 
 	/**
 	 *代码块接口 
@@ -15,16 +16,20 @@ package com.codetemplate.core
 		function set template($value:XML):void;
 		
 		/**
-		 *获取代码块
+		 *获取模板信息 
+		 */		
+		function get tempateInfo():CodeTemplateInfo;
+		
+		/**
+		 *获取代码块 
 		 */		
 		function get codeBlock():String;
 		
 		/**
-		 *编写代码
-		 * @param $param	参数:(代码替换数据)
-		 * @return 				
+		 *编码
+		 * @param $params	  参数数组
 		 */		
-		function encoder($param:TemplateCodeData):String;
+		function encoder($params:Array):void;
 		
 		/**
 		 *擦除代码 

@@ -18,7 +18,7 @@ package com.codetemplate.data
 		/**
 		 *放入模板 参数 
 		 * @param $replacekey			模板中可替换的key（根据正则过滤后）
-		 * @param $value					替换成$value
+		 * @param $value					替换的字符串
 		 */		
 		public function pushTemplateParam($replacekey:String, $value:String):void
 		{
@@ -53,7 +53,7 @@ package com.codetemplate.data
 		 *设置子模板 参数 
 		 * @param $templateID	子模板的id
 		 * @param $replacekey		模板中可替换的key（根据正则过滤后）
-		 * @param $value				替换成$value
+		 * @param $value				替换的字符串
 		 */		
 		public function setChildTemplateParam($templateID:String, $replacekey:String, $value:String):void
 		{

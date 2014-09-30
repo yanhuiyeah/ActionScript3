@@ -8,6 +8,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.codetemplate.core.ICodeBlock;
+			import com.codetemplate.professional.ParamCodeBlock;
 			import com.file.FileProcessor;
 			import com.file.data.FileData;
 			
@@ -29,27 +30,6 @@
 				return "代码块";
 			}
 			
-			protected function button1_clickHandler(event:MouseEvent):void
-			{
-				FileProcessor.instance.open(complete, 0);
-			}
-			
-			private function complete($vect:Vector.<FileData>):void
-			{
-//				var xml:XML = XML($vect[0].data);
-//				xml = xml.template.(@name == "class")[0];
-//				trace(xml.toString());
-//				var coder:ICodeBlock = new ClassCodeBlock();
-//				coder.templete = xml;
-//				coder.encoder(["yeah", "public", "Test"]);
-////				tf.text = xml.toString();
-//				trace(coder.codeBlock);
-//				var bytes:ByteArray = new ByteArray();
-////				bytes.writeUTF(coder.codeBlock);
-//				bytes.writeMultiByte(coder.codeBlock, "gb2312");
-//				FileProcessor.instance.save(bytes, "Test.as");
-			}
-			
 			/**创建面板  */
 			private var createView:CreateClassView;
 			
@@ -67,10 +47,23 @@
 			
 			
 			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var codeBlock:ICodeBlock = new ParamCodeBlock();
+				for (var i:int = 0; i < 5; i++) 
+				{
+					codeBlock.encoder(["name" + i, "String", i.toString()]);
+				}
+				trace(codeBlock.codeBlock);
+				codeArea.textDisplay.appendText(codeBlock.codeBlock);
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
 	<s:Button x="30" y="27" label="创建类" click="createClass(event)"/>
+	<s:Button x="851" y="47" width="112" label="添加参数代码" click="button1_clickHandler(event)"/>
+	<s:TextArea id="codeArea" x="169" y="44" width="581" height="437"/>
 </common:AbstractPlugin>

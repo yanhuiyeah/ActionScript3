@@ -10,6 +10,10 @@ package com.codetemplate.manager
 	 */	
 	public class CodeTemplates
 	{
+		/**
+		 *当前语言 
+		 */		
+		public static var currentLanguage:String = "ActionScript3";
 		
 		/***ActionScript3代码模板表*/		
 		[Embed("../assets/code_templates/actionscript3_templates.xml", mimeType="application/octet-stream")]
@@ -30,7 +34,6 @@ package com.codetemplate.manager
 		 */		
 		public function regiterCodeTemplete($id:String, $templete:XML, $language:String):void
 		{
-			trace($id);
 			var key:String = $language + "#" + $id;
 			codeTempleteDic[key] = $templete;
 		}
@@ -46,7 +49,7 @@ package com.codetemplate.manager
 		{
 			if(!$language)
 			{
-				$language = defaultLanguage;
+				$language = currentLanguage;
 			}
 			
 			var key:String = $language + "#" + $id;
@@ -74,15 +77,12 @@ package com.codetemplate.manager
 			return language;
 		}
 		
-		/**默认语言*/
-		private var defaultLanguage:String = "";
-		
 		/**
 		 *初始化 
 		 */		
 		private function int():void
 		{
-			defaultLanguage = paseTemplete(new XML(new actionscript3_templates()));
+			currentLanguage = paseTemplete(new XML(new actionscript3_templates()));
 			this.actionscript3_templates = null;
 		}
 

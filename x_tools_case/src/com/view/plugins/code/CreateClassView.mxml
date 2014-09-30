@@ -11,8 +11,8 @@
 		<![CDATA[
 			import com.codetemplate.core.CodeBlock;
 			import com.codetemplate.core.ICodeBlock;
-			import com.codetemplate.core.ParamCodeBlock;
 			import com.codetemplate.manager.CodeTemplates;
+			import com.codetemplate.professional.ParamCodeBlock;
 			import com.file.FileProcessor;
 			
 			import mx.events.FlexEvent;
