@@ -3,7 +3,7 @@
 <templates language="ActionScript3">
 
 
-<!-- 文件模板 如果模板可重复 delim表示间隔符(如：, ; \n )-->
+<!-- 文件模板 如果模板可重复 delim表示间隔符(如：, ; &#13; )-->
 <template id="file" name="文件模板" delim=""  header="">
 package ${package};&#13;
 {&#13;
@@ -20,33 +20,36 @@ package ${package};&#13;
 }</template>
 
 <!-- import com.cn.beijing.chaoyang.guanzhuang.jia5; -->
-<template id="import" name="导入模板 " delim="\n "  header="">import ${package};</template>
+<template id="import" name="导入模板 " delim="&#13;"  header="">import ${package};</template>
 
 <!-- extends Class-->
 <template id="extends" name="继承模板" delim=", " header="extends">${class}</template>
 
 <!-- implements IInterface1, IInterface2, IInterface3.... -->
-<template id="implements" name="实现接口模板" delim="," header="implements">${interface};</template>
+<template id="implements" name="实现接口模板" delim=", " header="implements">${interface}</template>
 
 <!-- name:type=value -->
 <template id="params" name="参数代码块" delim=", " header="">${name}:${type}${value}</template>
 
+<!-- name:type=value -->
+<template id="statement" name="声明" delim=";&#13;" header="">${namespace} ${modifiers} var ${statement_name}:${type} ${value}</template>
+
 <!-- @@@@@@@@@@@方法模板start@@@@@@@@@@@ -->
 
-<template id="function" name="function" delim="&#13;" header="">${namespace} ${modifiers}function ${method_name}(${params}):${return_type}&#13;
-{&#13;
-	// TODO Auto Generated method stub&#13;
-	${body_statement}${cursor}&#13;
+<template id="function" name="function" delim="&#13;" header="">${namespace} ${modifiers} function ${method_name}(${params})${return_type}
+{
+	// TODO Auto Generated method stub&
+	${body_statement}${cursor}
 }</template>
 
-<template id="getter" name="getter" delim="\n " header="">${metadata}&#13;
+<template id="getter" name="getter" delim="&#13;" header="">${metadata}&#13;
 ${asdoc}&#13;
 ${namespace} ${modifiers}function get ${method_name}()${return_type}&#13;
 {&#13;
 	return ${property};&#13;
 }</template>
 
-<template id="setter" name="setter" delim="\n " header="">${asdoc}&#13;
+<template id="setter" name="setter" delim="&#13;" header="">${asdoc}&#13;
 ${namespace} ${modifiers}function set ${method_name}(value${argument_type}):void&#13;
 {&#13;
 	${property} = value;&#13;
@@ -57,21 +60,21 @@ ${namespace} ${modifiers}function set ${method_name}(value${argument_type}):void
 <!-- @@@@@@@@@@@循环遍历start@@@@@@@@@@@ -->
 
 <!--fore循环 -->
-<template id="fore" name="fore" delim="\n " header="">for each (var ${index}:int in ${array}) &#13;
+<template id="fore" name="fore" delim="&#13;" header="">for each (var ${index}:int in ${array}) &#13;
 {&#13;
 	${line_selection}${cursor}&#13;
 }
 </template>
 
 <!--fori循环 -->
-<template id="fori" name="fori" delim="\n " header="">for (var ${index}:int = 0; ${index} &lt; ${array}.length; ${index}++) &#13;
+<template id="fori" name="fori" delim="&#13;" header="">for (var ${index}:int = 0; ${index} &lt; ${array}.length; ${index}++) &#13;
 {&#13;
 	${line_selection}${cursor}&#13;
 }
 </template>
 
 <!--switch代码块 -->
-<template id="switch" name="switch" delim="\n " header="">switch(${expression})&#13;
+<template id="switch" name="switch" delim="&#13;" header="">switch(${expression})&#13;
 {&#13;
 	case ${result}:&#13;
 	{&#13;
@@ -86,7 +89,7 @@ ${namespace} ${modifiers}function set ${method_name}(value${argument_type}):void
 }</template>
 
 <!--do函数代码块 -->
-<template id="do" name="do" delim="\n " header="">do &#13;
+<template id="do" name="do" delim="&#13;" header="">do &#13;
 {&#13;
 	${line_selection}${cursor}&#13;
 } while(${condition:local_var(Boolean)});</template>
@@ -96,14 +99,14 @@ ${namespace} ${modifiers}function set ${method_name}(value${argument_type}):void
 <!-- @@@@@@@@@@@条件判断start@@@@@@@@@@@ -->
 
 <!--if判断代码块 -->
-<template id="if" name="if" delim="\n " header="">if (${condition:local_var(Boolean)}) &#13;
+<template id="if" name="if" delim="&#13;" header="">if (${condition:local_var(Boolean)}) &#13;
 {&#13;
 	${cursor}&#13;
 }</template>
 
 <!-- @@@@@@@@@@@条件判断end@@@@@@@@@@@ -->
 
-<template id="tryCatch" name="tryCatch" delim="\n " header="">try&#13;
+<template id="tryCatch" name="tryCatch" delim="&#13;" header="">try&#13;
 {&#13;
 	${line_selection}${cursor}&#13;
 } &#13;

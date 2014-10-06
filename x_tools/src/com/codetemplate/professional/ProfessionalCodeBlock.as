@@ -19,14 +19,24 @@ package com.codetemplate.professional
 			throw new Error("set template(), 已经弃用!");
 		}
 		
-		public function ProfessionalCodeBlock()
+		
+		
+		public function ProfessionalCodeBlock($templateID:String = null)
 		{
-			super.template = CodeTemplates.instance.getCodeTemplete(getTemplateID());
+			this.templateID = $templateID;
+			super.template = CodeTemplates.instance.getCodeTemplete(templateID == null ? getTemplateID() : templateID);
 		}
+		
+		/**代码模版id*/
+		private var templateID:String;
 		
 		protected function getTemplateID():String
 		{
-			throw new IllegalOperationError("抽象方法必须覆盖");
+			if(!templateID)
+			{
+				throw new IllegalOperationError("必须重写getTemplateID()方法或者通过构造函数确定模版id");
+			}
+			return templateID;
 		}
 	}
 }

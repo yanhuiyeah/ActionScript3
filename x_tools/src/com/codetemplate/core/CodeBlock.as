@@ -51,7 +51,7 @@ package com.codetemplate.core
 		{
 			if(codeHistoryChanged)
 			{
-				_codeBlock = tempateInfo.header +codeHistory.join(tempateInfo.delim);
+				_codeBlock = tempateInfo.header + " " + codeHistory.join(tempateInfo.delim);
 				codeHistoryChanged = false;
 			}
 			return _codeBlock;
@@ -66,8 +66,12 @@ package com.codetemplate.core
 		final public function encoder($params:Array):void
 		{
 			if(!template) return;
-			codeHistoryChanged = true;
-			codeHistory.push(onEncoder($params));
+			var encoderStr:String = onEncoder($params);
+			if(codeHistory.indexOf(encoderStr)==-1)
+			{
+				codeHistoryChanged = true;
+				codeHistory.push(encoderStr);
+			}
 		}
 		
 		/**

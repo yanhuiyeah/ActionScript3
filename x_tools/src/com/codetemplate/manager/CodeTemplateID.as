@@ -29,6 +29,9 @@ package com.codetemplate.manager
 		/**function模板id*/
 		public static const FUNCTION_ID:String = "function";
 		
+		/**变量声明模板id*/
+		public static const STATEMENT_ID:String = "statement";
+		
 		/**getter模板id*/
 		public static const GETTER_ID:String = "getter";
 		

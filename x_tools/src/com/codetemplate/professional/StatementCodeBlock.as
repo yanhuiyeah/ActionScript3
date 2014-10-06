@@ -1,22 +1,16 @@
 package com.codetemplate.professional
 {
-	import com.codetemplate.data.CodeTemplateData;
 	import com.codetemplate.manager.CodeTemplateID;
 
 	/**
-	 *参数代码块<br> 
-	 * 调用encoder([参数名称, 参数类型, 参数默认值])<br>
-	 * @example 实例
-	 * <listing>
-	 * encoder(["test", "String", "a"]);	encoder(["test", "String", "null"]); encoder(["test", "String"]);
-	 * </listing>
+	 *声明 
 	 * @author yeah
 	 */	
-	public class ParamCodeBlock extends ProfessionalCodeBlock
+	public class StatementCodeBlock extends ProfessionalCodeBlock
 	{
-		public function ParamCodeBlock()
+		public function StatementCodeBlock()
 		{
-			super(CodeTemplateID.PARAMS_ID);
+			super(CodeTemplateID.STATEMENT_ID);
 		}
 		
 		override protected function template2code($templateText:String, $param:Object):String
