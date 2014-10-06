@@ -15,6 +15,7 @@
 			import com.codetemplate.professional.ParamCodeBlock;
 			import com.file.FileProcessor;
 			
+			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
@@ -33,29 +34,22 @@
 			/**保存class  */
 			private function saveClass(event:MouseEvent):void
 			{
+				if(!_codeBlock)
+				{
+					Alert.show("不要胡乱操作，请先设置codeBlock");
+					return;
+				}
 				
-//				var dataList:TemplateCodeData = new TemplateCodeData();
-//				dataList.array = [];
-//				
-//				for(var i:int = 0; i < 5; i++)
-//				{
-//					var data:TemplateCodeData = new TemplateCodeData();
-//					data.name = "$param" + i;
-//					data.type = "String";
-//					data.value = "test" + i;
-//					dataList.array.push(data);
-//				}
-				
-//				var coder:ICodeBlock = new ParamCodeBlock();
-//				coder.templete = ClassTempleteConfig.instance.getCodeTemplete(ClassCodeID.PARAM_TEMPLETE);	
-//				coder.encoder(dataList);
-				
-//				var xml:XML = new XML("<Root/>");
-//				xml.test = coder.codeBlock;
-//				trace(xml.toString());
-				
-//				FileProcessor.instance.save(coder.codeBlock, classNameTF.text + ".as");
+				FileProcessor.instance.save(_codeBlock.codeBlock, classNameTF.text + ".as");
 			}
+			
+			private var _codeBlock:ICodeBlock;
+
+			public function set codeBlock(value:ICodeBlock):void
+			{
+				_codeBlock = value;
+			}
+
 			
 		]]>
 	</fx:Script>

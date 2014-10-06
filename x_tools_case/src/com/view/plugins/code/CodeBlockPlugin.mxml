@@ -8,7 +8,11 @@
 	<fx:Script>
 		<![CDATA[
 			import com.codetemplate.core.ICodeBlock;
+			import com.codetemplate.manager.CodeTemplateID;
+			import com.codetemplate.professional.FunctionCodeBlock;
 			import com.codetemplate.professional.ParamCodeBlock;
+			import com.codetemplate.professional.ProfessionalCodeBlock;
+			import com.codetemplate.professional.StatementCodeBlock;
 			import com.file.FileProcessor;
 			import com.file.data.FileData;
 			
@@ -29,33 +33,87 @@
 			{
 				return "代码块";
 			}
+		
+			/**代码快  */
+			private var codeBlock:ICodeBlock;
+			
+			/**创建参数代码快  */
+			private function createParamCode(event:MouseEvent):void
+			{
+				codeBlock = new ParamCodeBlock();
+				for (var i:int = 0; i < 6; i++) 
+				{
+					codeBlock.encoder(["name" + i, "String", i>2?i.toString():(i>4?"null":"")]);
+				}
+				codeArea.text += codeBlock.codeBlock;
+			}
+			
+			/**创建函数代码快  */
+			private function createFunctionCode(event:MouseEvent):void
+			{
+				codeBlock = new FunctionCodeBlock();
+				for (var i:int = 0; i < 6; i++) 
+				{
+					codeBlock.encoder(["x_lib", "private", "function" + i, "", "void", "i = " + i + ";"]);
+				}
+				codeArea.text += codeBlock.codeBlock;
+			}
+			
+			private function createProfessionalCodeBlock($id:String, $param:Array):void
+			{
+				codeBlock = new ProfessionalCodeBlock($id);
+				for (var i:int = 0; i < 6; i++) 
+				{
+					codeBlock.encoder($param);
+				}
+				codeArea.text += codeBlock.codeBlock;
+			}
+			
+			/**创建导入代码快  */
+			private function createImportCode(event:MouseEvent):void
+			{
+				createProfessionalCodeBlock(CodeTemplateID.IMPORT_ID, ["com.xlib.test"]);
+			}
+			
+			/**创建继承代码快  */
+			private function createExtendsCode(event:MouseEvent):void
+			{
+				createProfessionalCodeBlock(CodeTemplateID.EXTENDS_ID, ["Sprite"]);
+			}
+			
+			/**创建接口代码快  */
+			private function createInterfaceCode(event:MouseEvent):void
+			{
+				createProfessionalCodeBlock(CodeTemplateID.IMPLEMENTS_ID, ["IEventDispatcher"]);
+			}
+			
+			/**创建声明代码快  */
+			private function createStatementCode(event:MouseEvent):void
+			{
+				codeBlock = new StatementCodeBlock();
+				for (var i:int = 0; i < 6; i++) 
+				{
+					codeBlock.encoder(["x_lib", "public", "name" + i, "Array", i > 3 ? "[]":""]);
+				}
+				codeArea.text += codeBlock.codeBlock;
+			}
 			
 			/**创建面板  */
 			private var createView:CreateClassView;
 			
-			/**创建类  */
-			private function createClass(event:MouseEvent):void
+			/**导出类  */
+			private function exportClass(event:MouseEvent):void
 			{
+				if(!codeBlock) return;
+				
 				if(!createView)
 				{
 					createView = new CreateClassView();
+					createView.codeBlock = codeBlock;
 				}
 				
 				PopUpManager.addPopUp(createView, this, true);
 				PopUpManager.centerPopUp(createView);
-			}
-			
-			
-			
-			protected function button1_clickHandler(event:MouseEvent):void
-			{
-				var codeBlock:ICodeBlock = new ParamCodeBlock();
-				for (var i:int = 0; i < 5; i++) 
-				{
-					codeBlock.encoder(["name" + i, "String", i.toString()]);
-				}
-				trace(codeBlock.codeBlock);
-				codeArea.textDisplay.appendText(codeBlock.codeBlock);
 			}
 			
 		]]>
@@ -63,7 +121,21 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:Button x="30" y="27" label="创建类" click="createClass(event)"/>
-	<s:Button x="851" y="47" width="112" label="添加参数代码" click="button1_clickHandler(event)"/>
-	<s:TextArea id="codeArea" x="169" y="44" width="581" height="437"/>
+
+	<!--代码区域-->
+	<mx:TextArea id="codeArea" x="22" y="24" width="770" height="496" editable="false"
+				 mouseEnabled="false" selectable="false" textAlign="left" wordWrap="false"/>
+	
+	<!--操作区-->
+	<s:Button x="820" y="47" width="143" label="添加参数代码" click="createParamCode(event)"/>
+	<s:Button x="820" y="80" width="143" label="添加函数代码" click="createFunctionCode(event)"/>
+	<s:Button x="820" y="113" width="143" label="添加导入代码" click="createImportCode(event)"/>
+	<s:Button x="822" y="146" width="143" label="添加继承代码" click="createExtendsCode(event)"/>
+	<s:Button x="822" y="179" width="143" label="添加接口代码" click="createInterfaceCode(event)"/>
+	<s:Button x="822" y="212" width="143" label="添加声明代码" click="createStatementCode(event)"/>
+	<s:Button x="824" y="503" label="导出" click="exportClass(event)"/>
+	
+	<!--警告区域-->
+	<s:Label x="22" y="528" width="770" height="30" color="#FA0404" fontSize="16" fontWeight="bold"
+			 text="点击导出可导出具体类，可在导出面板修改类名包明等信息" textAlign="center" verticalAlign="middle"/>
 </common:AbstractPlugin>

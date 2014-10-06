@@ -66,6 +66,7 @@ package com.core
 			}
 			
 			container.initPluginList(pluginDic);
+			usePlugin("CodeBlockPlugin");
 		}
 		
 		/**
