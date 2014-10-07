@@ -9,6 +9,7 @@
 		<![CDATA[
 			import com.codetemplate.core.ICodeBlock;
 			import com.codetemplate.manager.CodeTemplateID;
+			import com.codetemplate.professional.FileCodeBlock;
 			import com.codetemplate.professional.FunctionCodeBlock;
 			import com.codetemplate.professional.ParamCodeBlock;
 			import com.codetemplate.professional.ProfessionalCodeBlock;
@@ -98,6 +99,26 @@
 				codeArea.text += codeBlock.codeBlock;
 			}
 			
+			/**创建类代码  */
+			private function createClassCode($event:MouseEvent):void
+			{
+				codeBlock = new FileCodeBlock();
+				var fcb:FileCodeBlock = codeBlock as FileCodeBlock;
+				fcb.changeExtends("Sprite");
+				fcb.changeModifiers("private");
+				fcb.changePackage("com.test");
+				fcb.changeType("class");
+				
+				fcb.addImport("com.cn.xlib.yoursister1");
+				fcb.addImport("com.cn.xlib.yoursister2");
+				fcb.addImport("com.cn.xlib.yoursister3");
+				
+				fcb.addImplements("IEventDispatch");
+				fcb.addImplements("ICodeBlock");
+				
+				codeArea.text = fcb.codeBlock;
+			}
+			
 			/**创建面板  */
 			private var createView:CreateClassView;
 			
@@ -133,6 +154,7 @@
 	<s:Button x="822" y="146" width="143" label="添加继承代码" click="createExtendsCode(event)"/>
 	<s:Button x="822" y="179" width="143" label="添加接口代码" click="createInterfaceCode(event)"/>
 	<s:Button x="822" y="212" width="143" label="添加声明代码" click="createStatementCode(event)"/>
+	<s:Button x="823" y="245" width="143" label="添加文件代码" click="createClassCode(event)"/>
 	<s:Button x="824" y="503" label="导出" click="exportClass(event)"/>
 	
 	<!--警告区域-->

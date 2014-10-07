@@ -44,14 +44,14 @@ package com.codetemplate.core
 		}
 		
 		private var codeHistory:Array = [];
-		private var codeHistoryChanged:Boolean = false;
-		private var _codeBlock:String = "";
+		x_tools_internal var codeHistoryChanged:Boolean = false;
+		x_tools_internal var _codeBlock:String = "";
 		
 		public function get codeBlock():String
 		{
 			if(codeHistoryChanged)
 			{
-				_codeBlock = tempateInfo.header + " " + codeHistory.join(tempateInfo.delim);
+				_codeBlock = tempateInfo.header + "" + codeHistory.join(tempateInfo.delim);
 				codeHistoryChanged = false;
 			}
 			return _codeBlock;

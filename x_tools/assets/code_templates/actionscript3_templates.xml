@@ -3,9 +3,9 @@
 <templates language="ActionScript3">
 
 
-<!-- 文件模板 如果模板可重复 delim表示间隔符(如：, ; &#13; )-->
+<!-- 文件模板 如果模板可重复 delim表示间隔符(如：, ; &#13; &#09;)-->
 <template id="file" name="文件模板" delim=""  header="">
-package ${package};&#13;
+package ${package}&#13;
 {&#13;
 	${import}&#13;
 	
@@ -23,13 +23,13 @@ package ${package};&#13;
 <template id="import" name="导入模板 " delim="&#13;"  header="">import ${package};</template>
 
 <!-- extends Class-->
-<template id="extends" name="继承模板" delim=", " header="extends">${class}</template>
+<template id="extends" name="继承模板" delim=",&#09;" header="extends ">${class}</template>
 
 <!-- implements IInterface1, IInterface2, IInterface3.... -->
-<template id="implements" name="实现接口模板" delim=", " header="implements">${interface}</template>
+<template id="implements" name="实现接口模板" delim=",&#09;" header="implements ">${interface}</template>
 
 <!-- name:type=value -->
-<template id="params" name="参数代码块" delim=", " header="">${name}:${type}${value}</template>
+<template id="params" name="参数代码块" delim=",&#09;" header="">${name}:${type}${value}</template>
 
 <!-- name:type=value -->
 <template id="statement" name="声明" delim=";&#13;" header="">${namespace} ${modifiers} var ${statement_name}:${type} ${value}</template>
