@@ -13,9 +13,9 @@ package xlib.framework.core
 	public class LazyDispatcher implements IEventDispatcher
 	{
 		
-		protected var _dispatcher:EventDispatcher;
+		protected var _dispatcher:IEventDispatcher;
 		
-		public function LazyDispatcher($dispatcher:EventDispatcher = null)
+		public function LazyDispatcher($dispatcher:IEventDispatcher = null)
 		{
 			this._dispatcher = $dispatcher;
 		}

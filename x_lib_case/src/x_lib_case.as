@@ -15,6 +15,7 @@ package
 	{
 		public function x_lib_case()
 		{
+			
 			total = getTimer();
 			ttt = total;
 //			var s:Shape = new Shape();

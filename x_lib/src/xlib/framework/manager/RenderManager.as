@@ -6,6 +6,8 @@ package xlib.framework.manager
 	
 	import xlib.framework.core.Global;
 	import xlib.framework.core.IInvalidateElement;
+	import xlib.framework.events.TickEvent;
+	import xlib.framework.events.UIEvent;
 	import xlib.framework.manager.supportClasses.IRenderManager;
 	import xlib.framework.manager.supportClasses.RenderQueue;
 	
@@ -82,6 +84,23 @@ package xlib.framework.manager
 		private function validateProperties():void
 		{
 			if(!propertiesDirty) return;
+			
+			var element:IInvalidateElement = propertiesQueue.shift();
+			while(element)
+			{
+				element.validateProperties();
+				if(!element.updateCompletePendingFlag)
+				{
+					element.updateCompletePendingFlag = true;
+					completeQueue.push(element);
+				}
+				element = propertiesQueue.shift();
+			}
+			
+			if(propertiesQueue.isEmperty())
+			{
+				propertiesDirty = false;
+			}
 		}
 		
 		/**
@@ -89,7 +108,24 @@ package xlib.framework.manager
 		 */		
 		private function validateSize():void
 		{
+			if(!sizeDirty) return;
 			
+			var element:IInvalidateElement = sizeQueue.pop();
+			while(element)
+			{
+				element.validateSize();
+				if(!element.updateCompletePendingFlag)
+				{
+					element.updateCompletePendingFlag = true;
+					completeQueue.push(element);
+				}
+				element = sizeQueue.pop();
+			}
+			
+			if(sizeQueue.isEmperty())
+			{
+				sizeDirty = false;
+			}
 		}
 		
 		/**
@@ -97,7 +133,24 @@ package xlib.framework.manager
 		 */		
 		private function validateDisplayList():void
 		{
+			if(!displayListDirty) return;
 			
+			var element:IInvalidateElement = displayListQueue.shift();
+			while(element)
+			{
+				element.validateDisplayList();
+				if(!element.updateCompletePendingFlag)
+				{
+					element.updateCompletePendingFlag = true;
+					completeQueue.push(element);
+				}
+				element = displayListQueue.shift();
+			}
+			
+			if(displayListQueue.isEmperty())
+			{
+				displayListDirty = false;
+			}
 		}
 		
 		public function validateNow():void
@@ -114,7 +167,29 @@ package xlib.framework.manager
 				return;
 			}
 			
+			invalidateDirty = false;
 			
+			var element:IInvalidateElement = completeQueue.pop();
+			while(element)
+			{
+				if(!element.initialized)
+				{
+					element.initialized = true;
+				}
+				
+				if(element.hasEventListener(UIEvent.UPDATE_COMPLETE))
+				{
+					element.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));	
+				}
+				
+				element.updateCompletePendingFlag = false;
+				element = completeQueue.pop();
+			}
+			
+			if(this.hasEventListener(UIEvent.UPDATE_COMPLETE))
+			{
+				this.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
+			}
 		}
 		
 		/**
@@ -137,10 +212,10 @@ package xlib.framework.manager
 		private function invalidate():void
 		{
 			if(invalidateDirty) return;
-			Global.instance.stage.addEventListener(Event.RENDER, validate);
-			Global.instance.stage.addEventListener(Event.ENTER_FRAME, validate);
-			Global.instance.stage.invalidate();
 			invalidateDirty = true;
+			Global.instance.stage.addEventListener(Event.RENDER, validate);
+			Global.instance.tick.addEventListener(TickEvent.FRAME_TICK, validate);
+			Global.instance.stage.invalidate();
 		}
 		
 		/**
@@ -150,7 +225,7 @@ package xlib.framework.manager
 		private function validate($e:Event):void
 		{
 			Global.instance.stage.removeEventListener(Event.RENDER, validate);
-			Global.instance.stage.removeEventListener(Event.ENTER_FRAME, validate);
+			Global.instance.tick.removeEventListener(TickEvent.FRAME_TICK, validate);
 			validateNow();
 			invalidateDirty = false;
 		}
