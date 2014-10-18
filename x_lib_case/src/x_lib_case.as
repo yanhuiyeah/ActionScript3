@@ -8,6 +8,8 @@ package
 	
 	import xlib.framework.core.Global;
 	import xlib.framework.xlib_internal;
+	import xlib.modules.IModuleInfo;
+	import xlib.modules.ModuleManager;
 	
 	use namespace xlib_internal;
 	[SWF(frameRate="25")]
@@ -16,6 +18,11 @@ package
 		public function x_lib_case()
 		{
 			
+			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
+			moduleInfo.addEventListener(Event.COMPLETE, onComplete);
+			moduleInfo.loadModule();
+			
+			return;
 			total = getTimer();
 			ttt = total;
 //			var s:Shape = new Shape();
@@ -34,6 +41,11 @@ package
 //			Global.instance.tick.doDuration(testssss, 200);
 			Global.instance.tick.doDuration(testssss, 300);
 			
+		}
+		
+		private function onComplete($e:Event):void
+		{
+			trace("onComplete");
 		}
 		
 		private var ttt:int;
