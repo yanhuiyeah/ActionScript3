@@ -28,13 +28,16 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="/x_lib/bin/x_lib.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
   <applications>
     <application path="x_lib_case.as"/>
   </applications>
-  <modules/>
+  <modules>
+    <module application="src/x_lib_case.as" destPath="ModuleDemo.swf" optimize="true" sourcePath="src/ModuleDemo.as"/>
+  </modules>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

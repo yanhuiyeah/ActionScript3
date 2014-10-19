@@ -1,9 +1,11 @@
 package
 {
+	import flash.display.DisplayObject;
 	import flash.display.Shader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.getTimer;
 	
 	import xlib.framework.core.Global;
@@ -21,43 +23,28 @@ package
 			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
 			moduleInfo.addEventListener(Event.COMPLETE, onComplete);
 			moduleInfo.loadModule();
-			
-			return;
-			total = getTimer();
-			ttt = total;
-//			var s:Shape = new Shape();
-//			s.addEventListener(Event.ENTER_FRAME, testssss);
-//			return;
-			Global.instance.initGlobal(stage);
-			
-//			for(var i:int = 0; i < 100; i++)
-//			{
-//				Global.instance.tick.doDuration(function (str:String):void
-//				{
-//					trace(str, getTimer());
-//				}, 100, 1, [i]);
-//			}
-//			Global.instance.tick.doDuration(testssss, 100);
-//			Global.instance.tick.doDuration(testssss, 200);
-			Global.instance.tick.doDuration(testssss, 300);
-			
 		}
 		
 		private function onComplete($e:Event):void
 		{
+			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
+			this.addChild(moduleInfo.module as DisplayObject);
 			trace("onComplete");
+			stage.addEventListener(MouseEvent.CLICK, onclick);
 		}
 		
-		private var ttt:int;
-		private var total:int;
-		private var i:int;
-		private function testssss($e:Event = null):void
+		protected function onclick(event:MouseEvent):void
 		{
-			i++;
-			var c:int = getTimer();
-			var delay:int = (c - total)/i;
-			trace("平均：", delay, "当前：", c - ttt);
-			ttt = c;
+			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
+			moduleInfo.addEventListener(Event.UNLOAD, onUnload);
+			moduleInfo.unloadModule();
+		}
+		
+		private function onUnload($e:Event):void
+		{
+			trace("unloadModule");
+			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
+			this.removeChild(moduleInfo.module as DisplayObject);
 		}
 	}
 }

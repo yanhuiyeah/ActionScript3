@@ -2,6 +2,7 @@ package xlib.modules
 {
 	import flash.display.Loader;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
@@ -12,13 +13,11 @@ package xlib.modules
 	import flash.system.SecurityDomain;
 	import flash.utils.ByteArray;
 	
-	import xlib.framework.core.LazyDispatcher;
-	
 	/**
 	 *模块信息 
 	 * @author yeah
 	 */	
-	public class ModuleInfo extends LazyDispatcher implements IModuleInfo
+	public class ModuleInfo extends EventDispatcher implements IModuleInfo
 	{
 		public function ModuleInfo($url:String, $dispatcher:IEventDispatcher=null)
 		{
@@ -89,10 +88,13 @@ package xlib.modules
 		public function unloadModule():void
 		{
 			destroyLoader();
+			
 			if(loaded)
 			{
 				this.dispatchEvent(new Event(Event.UNLOAD));
 			}
+			
+			_loaded = false;
 			
 			if(_module)
 			{
@@ -106,12 +108,12 @@ package xlib.modules
 		 */		
 		private function onLoad($e:Event):void
 		{
-			dispatchEvent($e);
 			if($e.type == Event.COMPLETE)
 			{
-				_module = $e.currentTarget as IModule;
+				_module = $e.currentTarget.content as IModule;
 				destroyLoader();
 			}
+			dispatchEvent($e);
 		}
 		
 		/**
@@ -120,8 +122,6 @@ package xlib.modules
 		private function destroyLoader():void
 		{
 			if(!loader) return;
-			
-			_loaded = false;
 			
 			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onLoad);
 			loader.contentLoaderInfo.removeEventListener(ProgressEvent.PROGRESS, onLoad);

@@ -9,6 +9,9 @@ package
 		public function ModuleDemo()
 		{
 			super();
+			this.graphics.beginFill(0x0000ff);
+			this.graphics.drawRect(0, 0, 100,100);
+			this.graphics.endFill();
 			trace("ModuleDemo");
 		}
 	}
