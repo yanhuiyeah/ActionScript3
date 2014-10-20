@@ -6,6 +6,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
 	import xlib.framework.core.Global;
@@ -19,7 +20,15 @@ package
 	{
 		public function x_lib_case()
 		{
-			
+			var bytes:ByteArray = new ByteArray();
+			trace(bytes.position);
+			bytes.writeInt(10);
+			trace(bytes.position);
+			bytes.position = 0;
+			trace(bytes.position);
+			bytes.readInt();
+			trace(bytes.position);
+			return;
 			var moduleInfo:IModuleInfo = ModuleManager.instance.getModule("ModuleDemo.swf");
 			moduleInfo.addEventListener(Event.COMPLETE, onComplete);
 			moduleInfo.loadModule();
