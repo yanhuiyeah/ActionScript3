@@ -4,6 +4,8 @@ package xlib.framework.core
 	import flash.events.EventDispatcher;
 	import flash.events.IEventDispatcher;
 	
+	import xlib.framework.manager.PoolStorage;
+	
 	/**
 	 * LazyDispatcher<br>
 	 * a.构造函数没有参数：只有在LazyDispatcher的实例添加监听时才会动态创建EventDispatcher<br>
@@ -12,18 +14,42 @@ package xlib.framework.core
 	 */	
 	public class LazyDispatcher implements IEventDispatcher
 	{
+		private var _dispatcher:IEventDispatcher;
 		
-		protected var _dispatcher:IEventDispatcher;
+		public function get dispatcher():IEventDispatcher
+		{
+			return _dispatcher;
+		}
+
+		public function set dispatcher(value:IEventDispatcher):void
+		{
+			_dispatcher = value;
+		}
 		
-		public function LazyDispatcher($dispatcher:IEventDispatcher = null)
+		private var _autoCreate:Boolean = false;
+
+		public function get autoCreate():Boolean
+		{
+			return _autoCreate;
+		}
+
+		public function set autoCreate(value:Boolean):void
+		{
+			_autoCreate = value;
+		}
+
+		
+		public function LazyDispatcher($dispatcher:IEventDispatcher = null, $autoCreate:Boolean = true)
 		{
 			this._dispatcher = $dispatcher;
+			this._autoCreate = $autoCreate;
 		}
 		
 		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void
 		{
 			if(!_dispatcher)
 			{
+				if(!autoCreate) return;
 				_dispatcher = new EventDispatcher();
 			}
 			_dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
@@ -62,6 +88,27 @@ package xlib.framework.core
 				return _dispatcher.willTrigger(type);
 			}
 			return false;
+		}
+		
+		/**
+		 *销毁（回收） 
+		 */		
+		public function desroty():void
+		{
+			reset();
+			PoolStorage.instance.push(this, this["constructor"]);
+		}
+		
+		/**
+		 *重置 
+		 */		
+		protected function reset():void
+		{
+			if(dispatcher)
+			{
+				dispatcher = null;
+			}
+			autoCreate = false;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package xlib.framework.manager
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
+	
 	import xlib.framework.manager.supportClasses.UniqueStorage;
 	
 
@@ -24,7 +25,7 @@ package xlib.framework.manager
 		 * @param $key 		某类型的key  存储格式pool[key] = new UniqueStorage(true);
 		 * 								如果为null则自动设置为$object的类的完全限定名
 		 */		
-		public function push($item:Object, $key:String = null):void
+		public function push($item:Object, $key:Object = null):void
 		{
 			if(!$key)
 			{
@@ -52,7 +53,7 @@ package xlib.framework.manager
 		 * @param $key	池子key
 		 * @return 
 		 */		
-		public function pull($key:String):Object
+		public function pull($key:Object):Object
 		{
 			if(has($key))
 			{
@@ -68,7 +69,7 @@ package xlib.framework.manager
 		 * @param $key
 		 * @return 
 		 */		
-		public function pop($key:String):Object
+		public function pop($key:Object):Object
 		{
 			if(has($key))
 			{
@@ -90,7 +91,7 @@ package xlib.framework.manager
 		 * @param $key
 		 * @return 
 		 */		
-		public function has($key:String):Boolean
+		public function has($key:Object):Boolean
 		{
 			return ($key in pool);
 		}
@@ -112,7 +113,7 @@ package xlib.framework.manager
 		 * @param $key
 		 * @return 
 		 */		
-		public function getLength($key:String):int
+		public function getLength($key:Object):int
 		{
 			if(has($key))
 			{
@@ -126,7 +127,7 @@ package xlib.framework.manager
 		 *清除对象池中$key类型的对象
 		 * @param $key某个类型  如果=null 则清除全部
 		 */		
-		public function clean($key:String = null):void
+		public function clean($key:Object = null):void
 		{
 			if($key != null && has($key))
 			{

@@ -55,18 +55,11 @@ package xlib.framework.manager
 			return _interval;
 		}
 		
-		/**
-		 *销毁 
-		 * @param  $clearDispatcher 是否清除disptcher
-		 */		
-		public function destory($clearDispatcher:Boolean = true):void
+		override protected function reset():void
 		{
-			if(!_dispatcher) return;
-			_dispatcher.removeEventListener(Event.ENTER_FRAME, enterFrame);
-			if($clearDispatcher)
-			{
-				_dispatcher = null;
-			}
+			if(!dispatcher) return;
+			dispatcher.removeEventListener(Event.ENTER_FRAME, enterFrame);
+			super.reset();
 		}
 		
 		public function Tick($dispatcher:EventDispatcher = null)
@@ -79,7 +72,7 @@ package xlib.framework.manager
 			_lastTime = getTimer();
 			$dispatcher.addEventListener(Event.ENTER_FRAME, enterFrame);
 			
-			super($dispatcher);
+			super($dispatcher, false);
 		}
 		
 		/**

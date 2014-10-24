@@ -2,7 +2,7 @@ package xlib.framework.manager.supportClasses
 {
 	import flash.events.IEventDispatcher;
 	
-	import xlib.framework.core.IInvalidateElement;
+	import xlib.framework.core.interfaces.IInvalidateElement;
 	
 	
 	/**

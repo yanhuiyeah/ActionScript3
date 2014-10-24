@@ -5,7 +5,7 @@ package xlib.framework.manager
 	import flash.events.IEventDispatcher;
 	
 	import xlib.framework.core.Global;
-	import xlib.framework.core.IInvalidateElement;
+	import xlib.framework.core.interfaces.IInvalidateElement;
 	import xlib.framework.events.TickEvent;
 	import xlib.framework.events.UIEvent;
 	import xlib.framework.manager.supportClasses.IRenderManager;

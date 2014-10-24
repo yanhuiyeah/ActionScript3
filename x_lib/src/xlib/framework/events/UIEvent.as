@@ -12,7 +12,7 @@ package xlib.framework.events
 		/**
 		 *初始化完成
 		 */		
-		public static const INITIALIZE:String = "initialize";
+		public static const INITIALIZED:String = "initialized";
 		
 		/**
 		 *生效机制 三个阶段全部完成 
