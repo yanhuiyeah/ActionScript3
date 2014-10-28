@@ -1,5 +1,7 @@
 package xlib.framework.core
 {
+	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	import xlib.framework.core.interfaces.IInvalidateElement;
@@ -12,6 +14,8 @@ package xlib.framework.core
 	[Event(name="initialized", type="xlib.framework.events.UIEvent")]
 	/**本次延时生效更新完成*/
 	[Event(name="updateComplete", type="xlib.framework.events.UIEvent")]
+	/**尺寸变更*/
+	[Event(name="resize", type="xlib.framework.events.UIEvent")]
 	
 	/**
 	 *可延时生效的Element
@@ -22,10 +26,29 @@ package xlib.framework.core
 		public function UIInvalidate()
 		{
 			super();
+			if(!stage)
+			{
+				this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
+			}
+			else
+			{
+				preInit();
+			}
 		}
 
-		/***测量宽度*/		
-		xlib_internal var measuredWidth:Number = NaN;
+		private var _measuredWidth:Number = 0;
+
+		
+		public function get measuredWidth():Number
+		{
+			return _measuredWidth;
+		}
+		
+		public function set measuredWidth(value:Number):void
+		{
+			_measuredWidth = value;
+		}
+
 		/**外部显示设置的宽度*/
 		xlib_internal var expliciteWidth:Number = NaN;
 		
@@ -45,19 +68,23 @@ package xlib.framework.core
 			invalidateDisplayList();
 		}
 		
-		/**
-		 *根据优先级获取宽度 
-		 * expliciteWidth > measuredWidth;
-		 * @return 
-		 */		
-		protected function get priorityWidth():Number
+		public function get priorityWidth():Number
 		{
 			var pw:Number = isNaN(expliciteWidth) ? measuredWidth : expliciteHeight;
 			return !isNaN(pw) ? pw : 0;
 		}
 
-		/***测量高度*/		
-		xlib_internal var measuredHeight:Number = NaN;
+		private var _measuredHeight:Number = NaN;
+		public function get measuredHeight():Number
+		{
+			return _measuredHeight;
+		}
+
+		public function set measuredHeight(value:Number):void
+		{
+			_measuredHeight = value;
+		}
+
 		/**外部显示设置的高度*/
 		xlib_internal var expliciteHeight:Number = NaN;
 		
@@ -77,12 +104,7 @@ package xlib.framework.core
 			invalidateDisplayList();
 		}
 		
-		/**
-		 *根据优先级获取高度
-		 * expliciteHeight > measuredHeight;
-		 * @return 
-		 */		
-		protected function get priorityHeight():Number
+		public function get priorityHeight():Number
 		{
 			var pw:Number = isNaN(expliciteHeight) ? measuredHeight : expliciteHeight;
 			return !isNaN(pw) ? pw : 0;
@@ -148,7 +170,10 @@ package xlib.framework.core
 		{
 			if(propertiesDirty) return;
 			propertiesDirty = true;
-			Global.instance.renderManager.invalidateProperties(this);
+			if(stage)
+			{
+				Global.instance.renderManager.invalidateProperties(this);
+			}
 		}
 		
 		private var sizeDirty:Boolean = false;
@@ -156,7 +181,10 @@ package xlib.framework.core
 		{
 			if(sizeDirty) return;
 			sizeDirty = true;
-			Global.instance.renderManager.invalidateSize(this);
+			if(stage)
+			{
+				Global.instance.renderManager.invalidateSize(this);
+			}
 		}
 		
 		private var displayListDirty:Boolean = false;
@@ -164,7 +192,10 @@ package xlib.framework.core
 		{
 			if(displayListDirty) return;
 			displayListDirty = true;
-			Global.instance.renderManager.invalidateDisplayList(this);
+			if(stage)
+			{
+				Global.instance.renderManager.invalidateDisplayList(this);
+			}
 		}
 		
 		public function validateProperties():void
@@ -192,7 +223,6 @@ package xlib.framework.core
 			if(measureSize())
 			{
 				invalidateDisplayList();
-//				invalidateParent();
 			}
 			sizeDirty = false;
 		}
@@ -268,19 +298,6 @@ package xlib.framework.core
 		{
 		}
 		
-//		/**
-//		 *父容器 尺寸测量和显示列表更新 失效 
-//		 */		
-//		protected function invalidateParent():void
-//		{
-//			var p:IInvalidateElement = parent as IInvalidateElement;
-//			if(p)
-//			{
-//				p.invalidateSize();
-//				p.invalidateDisplayList();
-//			}
-//		}
-		
 		/**
 		 * 设置宽高<br>
 		 *调用此方法设置宽高不会进行测量，并且不会改变explicitWidth、explicitHeight;
@@ -307,6 +324,85 @@ package xlib.framework.core
 				invalidateDisplayList();
 				this.dispatchEvent(new UIEvent(UIEvent.RESIZE));
 			}
+		}
+		
+		/**
+		 *初始化完成之前 
+		 */		
+		private function preInit():void
+		{
+			propertiesDirty = sizeDirty = displayListDirty = true;
+			createChildren();
+			childrenCreated();
+			checkInvalidate();
+		}
+
+		/**
+		 *添加到舞台 
+		 */		
+		private function add2stage(event:Event):void
+		{
+			preInit();
+		}
+		
+		/**
+		 *检测失效 
+		 */		
+		private function checkInvalidate():void
+		{
+			if(propertiesDirty)
+			{
+				Global.instance.renderManager.invalidateProperties(this);
+			}
+			
+			if(sizeDirty)
+			{
+				Global.instance.renderManager.invalidateSize(this);
+			}
+			
+			if(displayListDirty)
+			{
+				Global.instance.renderManager.invalidateDisplayList(this);
+			}
+		}
+		
+		
+		/**
+		 *子显示对象创建完成 
+		 */		
+		protected function childrenCreated():void
+		{
+		}
+
+		/**
+		 *创建子显示对象 
+		 */		
+		protected function createChildren():void
+		{
+		}
+		
+		/**
+		 *子项被添加时设置其nestLevel
+		 * @param $child
+		 */		
+		private function addingChild($child:IInvalidateElement):void
+		{
+			if($child)
+			{
+				$child.nestLevel = nestLevel + 1;
+			}
+		}
+		
+		override public function addChild(child:DisplayObject):DisplayObject
+		{
+			addingChild(child as IInvalidateElement);
+			return super.addChild(child);
+		}
+		
+		override public function addChildAt(child:DisplayObject, index:int):DisplayObject
+		{
+			addingChild(child as IInvalidateElement);
+			return super.addChildAt(child, index);
 		}
 	}
 }

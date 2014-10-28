@@ -1,15 +1,19 @@
 package xlib.framework
 {
-	import flash.display.Sprite;
+	import xlib.framework.core.Component;
+	import xlib.framework.core.Global;
+	
+	use namespace xlib_internal;
 	
 	/**
-	 *测试用 
+	 *application
 	 * @author yeah
 	 */	
-	public class Application extends Sprite
+	public class Application extends Component
 	{
 		public function Application()
 		{
+			Global.instance.initGlobal(stage);
 			super();
 		}
 	}

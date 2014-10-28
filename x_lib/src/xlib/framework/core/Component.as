@@ -1,9 +1,11 @@
 package xlib.framework.core
 {
 	import xlib.framework.core.interfaces.IComponent;
+	import xlib.framework.theme.ThemeUtil;
 	
 	/**
-	 *组件基类 
+	 *组件基类 （不是容器，尽量不要添加子现实对象;容器请使用Container）<br>
+	 * 无鼠标事件
 	 * @author yeah
 	 */	
 	public class Component extends UILayout implements IComponent
@@ -11,8 +13,10 @@ package xlib.framework.core
 		public function Component()
 		{
 			super();
+			mouseEnabled = mouseChildren = false;
 		}
 		
+		private var enabledChanged:Boolean = false;
 		private var _enabled:Boolean = true;
 		public function get enabled():Boolean
 		{
@@ -33,6 +37,9 @@ package xlib.framework.core
 				super.mouseEnabled = false;
 				super.mouseChildren = false;
 			}
+			
+			enabledChanged = true;
+			invalidateProperties();
 		}
 		
 		private var _mouseEnabled:Boolean = true;
@@ -60,6 +67,17 @@ package xlib.framework.core
 		public function set toolTips($value:Object):void
 		{
 			this.toolTips = $value;
+		}
+		
+		override protected function commitProperties():void
+		{
+			super.commitProperties();
+			if(enabledChanged)
+			{
+				//test
+				this.transform.colorTransform = enabled ? ThemeUtil.defaultTransform : 	ThemeUtil.fadeTransform;			
+				enabledChanged = false;
+			}
 		}
 		
 	}

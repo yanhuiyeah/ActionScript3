@@ -39,6 +39,29 @@ package xlib.framework.core.interfaces
 		function set updateCompletePendingFlag($value:Boolean):void;
 		function get updateCompletePendingFlag():Boolean;
 		
+		/***测量宽度*/
+		function get measuredWidth():Number;
+		function set measuredWidth($value:Number):void;
+		
+		/***测量高度*/
+		function get measuredHeight():Number;
+		function set measuredHeight($value:Number):void;
+		
+		/**
+		 *根据优先级获取宽度 
+		 * 布局宽度>expliciteWidth > measuredWidth;
+		 * @return 
+		 */	
+		function get priorityWidth():Number;
+		
+		
+		/**
+		 *根据优先级获取高度
+		 * 布局高度 > expliciteHeight > measuredHeight;
+		 * @return 
+		 */		
+		function get priorityHeight():Number;
+		
 		//=======================invalidate================================
 		/**
 		 *属性提交失效 

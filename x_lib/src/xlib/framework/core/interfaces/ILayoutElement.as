@@ -73,5 +73,8 @@ package xlib.framework.core.interfaces
 		 * @param $y
 		 */		
 		function setLayoutPosition($x:Number, $y:Number):void;
+		
+		function get x():Number;
+		function get y():Number;
 	}
 }

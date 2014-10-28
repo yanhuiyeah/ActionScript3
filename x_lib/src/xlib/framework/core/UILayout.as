@@ -6,6 +6,9 @@ package xlib.framework.core
 	
 	use namespace xlib_internal;
 	
+	/**移动*/
+	[Event(name="move", type="xlib.framework.events.UIEvent")]
+	
 	/**
 	 *可参与布局的ui 
 	 * @author yeah
@@ -85,7 +88,7 @@ package xlib.framework.core
 		private var _verticalCenter:Number = NaN;
 		public function get verticalCenter():Number
 		{
-			return verticalCenter;
+			return _verticalCenter;
 		}
 		
 		public function set verticalCenter($value:Number):void
@@ -138,9 +141,21 @@ package xlib.framework.core
 		private var layoutHeightSet:Boolean = false;
 		public function setLayoutSize($width:Number, $height:Number):void
 		{
+			_width = $width;
+			_height = $height;
 			layoutWidthSet = !isNaN($width);
 			layoutHeightSet = !isNaN($height);
 			setActualSize(priorityWidth, priorityHeight);
+		}
+		
+		override public function get priorityWidth():Number
+		{
+			return layoutWidthSet ? _width : super.priorityWidth;
+		}
+		
+		override public function get priorityHeight():Number
+		{
+			return layoutHeightSet ? _height:super.priorityHeight;
 		}
 		
 		public function setLayoutPosition($x:Number, $y:Number):void

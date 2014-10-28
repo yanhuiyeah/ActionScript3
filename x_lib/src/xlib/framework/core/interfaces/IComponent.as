@@ -4,7 +4,7 @@ package xlib.framework.core.interfaces
 	 *component接口 
 	 * @author yeah
 	 */	
-	public interface IComponent
+	public interface IComponent extends IInvalidateElement, ILayoutElement
 	{
 		/**
 		 *组建是否激活 
