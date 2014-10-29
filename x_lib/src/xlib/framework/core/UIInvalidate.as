@@ -326,11 +326,14 @@ package xlib.framework.core
 			}
 		}
 		
+		private var preInitCalled:Boolean = false;
+		
 		/**
 		 *初始化完成之前 
 		 */		
 		private function preInit():void
 		{
+			preInitCalled = true;
 			propertiesDirty = sizeDirty = displayListDirty = true;
 			createChildren();
 			childrenCreated();
@@ -342,7 +345,14 @@ package xlib.framework.core
 		 */		
 		private function add2stage(event:Event):void
 		{
-			preInit();
+			if(preInitCalled)
+			{
+				checkInvalidate();
+			}
+			else
+			{
+				preInit();
+			}
 		}
 		
 		/**
