@@ -2,7 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	
-	import xlib.modules.IModule;
+	import xlib.extension.modules.IModule;
 	
 	public class ModuleDemo extends Sprite implements IModule
 	{

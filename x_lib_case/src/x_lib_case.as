@@ -11,8 +11,8 @@ package
 	
 	import xlib.framework.core.Global;
 	import xlib.framework.xlib_internal;
-	import xlib.modules.IModuleInfo;
-	import xlib.modules.ModuleManager;
+	import xlib.extension.modules.IModuleInfo;
+	import xlib.extension.modules.ModuleManager;
 	
 	use namespace xlib_internal;
 	[SWF(frameRate="25")]
