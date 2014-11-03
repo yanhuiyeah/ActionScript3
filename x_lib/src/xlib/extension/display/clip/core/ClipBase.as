@@ -1,9 +1,12 @@
 package xlib.extension.display.clip.core
 {
+	import flash.display.Bitmap;
 	import flash.geom.Point;
 	
 	import xlib.extension.display.clip.insterfaces.IClip;
 	import xlib.extension.display.clip.insterfaces.IClipData;
+	import xlib.extension.display.clip.insterfaces.IFrameData;
+	import xlib.framework.manager.TickManager;
 	
 	/**
 	 *clip基类 
@@ -68,6 +71,31 @@ package xlib.extension.display.clip.core
 		
 		public function pause():void
 		{
+		}
+		
+		private var bit:Bitmap;
+		
+		override protected function onRender($frameData:IFrameData):void
+		{
+			var obj:* = $frameData;
+			obj = obj.data;
+			if(!bit)
+			{
+				bit = new Bitmap();
+				this.addChild(bit);
+			}
+			bit.bitmapData = obj;
+			trace(this.frameLabel, this.frameIndex, this.repeatTimes);
+		}
+		
+		override protected function registerTimer($enterFrame:Function):void
+		{
+			TickManager.instance.doDuration($enterFrame, this.frameDuration);	
+		}
+		
+		override protected function unRegisterTimer($enterFrame:Function):void
+		{
+			TickManager.instance.clean($enterFrame);
 		}
 	}
 }

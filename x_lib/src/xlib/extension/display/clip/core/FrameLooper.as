@@ -92,7 +92,7 @@ package xlib.extension.display.clip.core
 			}
 		}
 		
-		private var _frameIndex:int = 0;
+		private var _frameIndex:int = -1;
 		public function get frameIndex():int
 		{
 			return _frameIndex;
@@ -117,14 +117,28 @@ package xlib.extension.display.clip.core
 			return _isRunning;
 		}
 		
+//		private var _useHang:Boolean = true;
+//		public function get useHang():Boolean
+//		{
+//			return _useHang;
+//		}
+//
+//		public function set useHang(value:Boolean):void
+//		{
+//			if(useHang == value) return;
+//			_useHang = value;
+//		}
+
+		
 		public function destroy():void
 		{
 			halt();
 			frameDuration = 0;
 			_repeatTimes = 0;
 			_totalFrames = 0;
-			_frameIndex = 0;
+			_frameIndex = -1;
 			preTime = 0;
+			_isNotHang = false;
 		}
 		
 		/**真正开始之前的时间*/
@@ -135,24 +149,56 @@ package xlib.extension.display.clip.core
 		{
 			if(isRunning) return;
 			_isRunning = true;
-			if(!stage)
+			_isNotHang = false
+			preTime = 0;
+			if(!checkHang() && !stage)
 			{
-				preTime = getTimer();					
 				this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
 			}
-			else
-			{
-				preTime = 0;	
-				onReady();
-			}
 		}
-
+		
 		/***停止*/		
 		protected function halt():void
 		{
 			if(!isRunning) return;
 			_isRunning = false;
-			onReady();
+			checkHang();
+		}
+		
+		/**是否是挂起（运行，但是不计算不渲染）状态*/
+		private var _isNotHang:Boolean = false;
+		
+		/**
+		 *检测挂起（运行，但是不计算不渲染）状态
+		 * @return false 挂起 true 正常执行
+		 */		
+		protected function checkHang():Boolean
+		{
+//			var flag:Boolean = useHang ? isNotHang():true;
+			var flag:Boolean = isNotHang();
+			if(flag != _isNotHang)
+			{
+				if(flag)
+				{
+					registerTimer(enterFrame);
+				}
+				else
+				{
+					preTime = getTimer();
+					unRegisterTimer(enterFrame);
+				}
+				_isNotHang = flag;
+			}
+			return _isNotHang;
+		}
+		
+		/**
+		 *是否不是挂起（运行，但是不计算不渲染）状态
+		 * @return 
+		 */		
+		protected function isNotHang():Boolean
+		{
+			return _isRunning && stage!=null;
 		}
 		
 		/**
@@ -161,27 +207,16 @@ package xlib.extension.display.clip.core
 		private function add2stage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, add2stage);
-			
 			if(frameRate == -1)
 			{
 				frameRate = stage.frameRate;
 			}
-			
 			if(!isRunning) return;
-			
-			onReady();
+			checkHang();
 		}
 		
 		/**
-		 *准备完成
-		 */		
-		private function onReady():void
-		{
-			registerTimer(enterFrame);
-		}
-		
-		/**
-		 *注册计时器 
+		 *注册计时器 （抽象方法子类必须重写）
 		 * @$executeFrames 在注册计时器之前应该执行的帧数
 		 */		
 		protected function registerTimer($enterFrame:Function):void
@@ -190,7 +225,7 @@ package xlib.extension.display.clip.core
 		}
 		
 		/**
-		 *解除注册计时器 
+		 *解除注册计时器 (抽象方法，子类必须重写并继承)
 		 */		
 		protected function unRegisterTimer($enterFrame:Function):void
 		{
@@ -200,30 +235,21 @@ package xlib.extension.display.clip.core
 		/**
 		 * 每帧function
 		 */		
-		protected function enterFrame():void
+		private function enterFrame():void
 		{
-			var addFrame:int;
+			var addFrame:int = 1;
 			if(preTime > 0)
 			{
 				preTime = getTimer() - preTime;
 				addFrame = Math.round(preTime/frameDuration);
 				preTime = 0;
 			}
-			else
-			{
-				addFrame = 1;
-			}
-			
 			var tempFrame:int = frameIndex + addFrame;
-			var flag:int = totalFrames-1;
-			if(tempFrame < flag)
+			frameIndex = tempFrame%totalFrames;
+			var addRepeat:int = tempFrame/totalFrames;
+			if(addRepeat > 0)
 			{
-				frameIndex = tempFrame;
-			}
-			else
-			{
-				frameIndex = tempFrame % flag;
-				setReaptTimes(repeatTimes + tempFrame/flag);
+				setReaptTimes(repeatTimes + addRepeat);
 			}
 		}
 		

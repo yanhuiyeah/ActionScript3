@@ -28,6 +28,7 @@ package xlib.extension.display.clip.data
 		{
 			super($dispatcher, $autoCreate);
 			cacheData = new Dictionary();
+			_frameLabels = new Vector.<String>();
 		}
 		
 		private var _totalFrame:int;

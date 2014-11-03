@@ -2,6 +2,8 @@ package components
 {
 	import components.items.ComponentOBJ;
 	
+	import flash.events.MouseEvent;
+	
 	import xlib.framework.Application;
 	import xlib.framework.components.Container;
 	import xlib.framework.manager.layout.DefaultLayout;
@@ -34,6 +36,14 @@ package components
 			a.height = 100;
 			a.verticalCenter = 0;
 			c.addChild(a);
+			
+			stage.addEventListener(MouseEvent.CLICK, onClick);
+		}
+		
+		protected function onClick(event:MouseEvent):void
+		{
+			this.removeChild(c);
+			c = null;
 		}
 	}
 }

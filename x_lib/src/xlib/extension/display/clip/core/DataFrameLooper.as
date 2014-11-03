@@ -36,8 +36,9 @@ package xlib.extension.display.clip.core
 			_source = $value;
 			if(_source)
 			{
-				if(source.hasFrameLabel(frameLabel))
+				if(source.frameLabels.length > 0)
 				{
+					frameLabel = source.frameLabels[0];
 					_totalFrames = source.getFrameCount(frameLabel);
 				}
 			}
@@ -55,9 +56,15 @@ package xlib.extension.display.clip.core
 		{
 			if(this._frameLabel == $value) return;
 			this._frameLabel = $value;
-			if(_source && source.hasFrameLabel(frameLabel))
+			
+			if(source && source.frameLabels.length > 0)
 			{
+				if(!source.hasFrameLabel(frameLabel))
+				{
+					_frameLabel = source.frameLabels[0];
+				}
 				_totalFrames = source.getFrameCount(frameLabel);
+				frameIndex = 0;
 			}
 			dataChanged = true;
 			invalidateProperties();

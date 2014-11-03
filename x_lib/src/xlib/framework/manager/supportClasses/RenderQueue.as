@@ -1,7 +1,9 @@
 package xlib.framework.manager.supportClasses
 {
 	import flash.utils.Dictionary;
+	
 	import xlib.framework.core.interfaces.IInvalidateElement;
+	import xlib.framework.manager.PoolStorage;
 
 	/**
 	 *渲染队列 （参与布局三阶段的IInvalidateElement队列）
