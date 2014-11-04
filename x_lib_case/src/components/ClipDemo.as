@@ -1,6 +1,7 @@
 package components
 {
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	import xlib.extension.display.clip.core.ClipBase;
 	import xlib.framework.Application;
@@ -21,6 +22,7 @@ package components
 		{
 			super.createChildren();
 			clip = new ClipBase();
+//			clip.pivot = new Point(424, 342);
 			clip.frameDuration = 200;
 			clip.source = new cd();
 			clip.frameLabel = "3000";
@@ -75,7 +77,7 @@ class cd extends ClipData
 			var vect:Vector.<IFrameData> = new Vector.<IFrameData>();
 			for (var i:int = 0; i < 6; i++) 
 			{
-				var d:fd = new fd();
+				var d:FrameData = new FrameData();
 				d.data = (new (this["img" +j+"000" + i] as Class)()).bitmapData;
 				vect.push(d);
 			}
@@ -110,14 +112,4 @@ class cd extends ClipData
 	private var img60004:Class;
 	[Embed(source="../assets/clip/60005.png")]
 	private var img60005:Class;
-}
-
-class fd extends FrameData
-{
-	public function fd()
-	{
-		super();
-	}
-	
-	public var data:BitmapData;
 }
