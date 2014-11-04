@@ -1,9 +1,13 @@
 package components
 {
+	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
+	import xlib.extension.display.clip.Clip;
 	import xlib.extension.display.clip.core.ClipBase;
+	import xlib.extension.display.clip.events.ClipEvent;
+	import xlib.extension.display.clip.insterfaces.IClip;
 	import xlib.framework.Application;
 	
 	public class ClipDemo extends Application
@@ -11,7 +15,7 @@ package components
 		
 		
 		
-		private var clip:ClipBase;
+		private var clip:IClip;
 		
 		public function ClipDemo()
 		{
@@ -21,21 +25,44 @@ package components
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			clip = new ClipBase();
+			clip = new Clip();
+			clip.addEventListener(ClipEvent.COMPLETE, onClipEvent);
+			clip.addEventListener(ClipEvent.FRAME, onClipEvent);
+			clip.addEventListener(ClipEvent.REPEAT, onClipEvent);
 //			clip.pivot = new Point(424, 342);
 			clip.frameDuration = 200;
+//			clip.repeat = 30;
+			clip.autoPlay = true;
+//			clip.autoRemoved = true;
 			clip.source = new cd();
-			clip.frameLabel = "3000";
-			this.addChild(clip);
-			clip.play();
+			this.addChild(clip as DisplayObject);
+//			clip.play("3000");
 			stage.addEventListener(MouseEvent.CLICK, onClik);
 		}
 		
+		protected function onClipEvent(event:ClipEvent):void
+		{
+			trace(event.type, clip.frameIndex,  clip.frameLabel,  clip.repeatTimes,  clip.repeat);
+		}
+		
+		private var flag:Boolean = false;
 		protected function onClik(event:MouseEvent):void
 		{
-			clip.frameLabel = clip.frameLabel == "3000" ? "6000":"3000";	
+			if(!(clip as DisplayObject).parent)
+			{
+				this.addChild(clip as DisplayObject);
+			}
+			else
+			{
+				this.removeChild(clip as DisplayObject);
+			}return;
+			
+//			this.addChild(clip as DisplayObject);return;
+//			clip.frameLabel = clip.frameLabel == "3000" ? "6000":"3000";	
 //			this.removeChild(clip);
 //			clip = null;
+			flag = !flag;
+			flag ?clip.pause():clip.resume();
 		}		
 		
 		

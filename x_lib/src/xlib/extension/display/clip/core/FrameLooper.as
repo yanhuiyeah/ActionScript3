@@ -139,6 +139,7 @@ package xlib.extension.display.clip.core
 			_frameIndex = -1;
 			preTime = 0;
 			_isNotHang = false;
+			hasStage = false;
 		}
 		
 		/**真正开始之前的时间*/
@@ -151,9 +152,18 @@ package xlib.extension.display.clip.core
 			_isRunning = true;
 			_isNotHang = false
 			preTime = 0;
-			if(!checkHang() && !stage)
+			hasStage = stage != null;
+			if(!checkHang())
 			{
-				this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
+				preTime = getTimer();
+				if(!stage)
+				{
+					this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
+				}
+			}
+			else
+			{
+				this.addEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
 			}
 		}
 		
@@ -198,9 +208,11 @@ package xlib.extension.display.clip.core
 		 */		
 		protected function isNotHang():Boolean
 		{
-			return _isRunning && stage!=null;
+//			return _isRunning && stage!=null;
+			return _isRunning && hasStage;
 		}
 		
+		private var hasStage:Boolean = false;
 		/**
 		 *添加到舞台 
 		 */		
@@ -211,8 +223,23 @@ package xlib.extension.display.clip.core
 			{
 				frameRate = stage.frameRate;
 			}
+			hasStage = true;
 			if(!isRunning) return;
 			checkHang();
+			this.addEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
+		}
+		
+		/**
+		 *从舞台移除 
+		 * @param $event
+		 */		
+		private function removeFstage($event:Event):void
+		{
+			hasStage = false;
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
+			if(!isRunning) return;
+			checkHang();
+			this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
 		}
 		
 		/**
@@ -235,7 +262,7 @@ package xlib.extension.display.clip.core
 		/**
 		 * 每帧function
 		 */		
-		private function enterFrame():void
+		protected function enterFrame():void
 		{
 			var addFrame:int = 1;
 			if(preTime > 0)
@@ -246,10 +273,14 @@ package xlib.extension.display.clip.core
 			}
 			var tempFrame:int = frameIndex + addFrame;
 			frameIndex = tempFrame%totalFrames;
-			var addRepeat:int = tempFrame/totalFrames;
-			if(addRepeat > 0)
+			
+			if(tempFrame > totalFrames)
 			{
-				setReaptTimes(repeatTimes + addRepeat);
+				setReaptTimes(repeatTimes + tempFrame/(totalFrames - 1));
+			}
+			else if(frameIndex == totalFrames - 1)
+			{
+				setReaptTimes(repeatTimes + 1);
 			}
 		}
 		
@@ -260,7 +291,7 @@ package xlib.extension.display.clip.core
 		{
 		}
 		
-		/**循环一次*/
+		/**循环一次, 暂时有点问题*/
 		protected function onRepeat():void
 		{
 		}

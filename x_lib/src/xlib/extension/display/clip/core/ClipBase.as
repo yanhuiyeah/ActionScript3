@@ -1,20 +1,16 @@
 package xlib.extension.display.clip.core
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.sampler.getSize;
-	import flash.utils.getTimer;
 	
-	import xlib.extension.display.clip.data.FrameData;
 	import xlib.extension.display.clip.insterfaces.IClip;
 	import xlib.extension.display.clip.insterfaces.IClipData;
 	import xlib.extension.display.clip.insterfaces.IFrameData;
-	import xlib.framework.manager.TickManager;
 	
 	/**
-	 *clip基类 
+	 *clip基类(抽象类)<br>
+	 * 需重写onRender方法，渲染IFramedata<br>
+	 * 需重写registerTimer注册计时器
+	 * 需重写unRegisterTimer解除注册的计时器
 	 * @author yeah
 	 */	
 	public class ClipBase extends DataFrameLooper implements IClip
@@ -24,31 +20,37 @@ package xlib.extension.display.clip.core
 			super($source);
 		}
 		
+		private var _autoPlay:Boolean = false;
 		public function get autoPlay():Boolean
 		{
-			return false;
+			return _autoPlay;
 		}
 		
 		public function set autoPlay($value:Boolean):void
 		{
+			_autoPlay = true;
 		}
 		
+		private var _autoRemoved:Boolean = false;
 		public function get autoRemoved():Boolean
 		{
-			return false;
+			return _autoRemoved;
 		}
 		
 		public function set autoRemoved($value:Boolean):void
 		{
+			this._autoRemoved = $value;
 		}
 		
+		private var _autoDestroy:Boolean = false;
 		public function get autoDestroy():Boolean
 		{
-			return false;
+			return _autoDestroy;
 		}
 		
 		public function set autoDestroy($value:Boolean):void
 		{
+			this._autoDestroy = $value;
 		}
 		
 		private var _pivot:Point;
@@ -65,72 +67,64 @@ package xlib.extension.display.clip.core
 			y = y;
 		}
 		
-		public function play($frameIndex:int=-1, $frameLabel:String=null):void
+		override public function set source($value:IClipData):void
+		{
+			super.source = $value;
+			if(source && autoPlay && !isRunning)
+			{
+				play();
+			}
+		}
+		
+		public function play($frameLabel:String=null):void
 		{
 			if(!source)
 			{
 				throw new Error("还没有设置source");
 			}
+			
+			if($frameLabel)
+			{
+				this.frameLabel = $frameLabel;
+			}
 			execute();
 		}
 		
-		public function stop($frameIndex:int=-1):void
+		public function stop():void
 		{
 			halt();
+			if(autoRemoved)
+			{
+				removeSelf();
+			}
 		}
 		
 		public function pause():void
 		{
+			if(!isRunning) return;
+			unRegisterTimer(enterFrame);
 		}
 		
-		override protected function onRender($frameData:IFrameData):void
+		public function resume():void
 		{
-			var fd:FrameData = $frameData as FrameData;
-			if(!fd) return;
-			
-			var p:Point = fd.offset;
-			var posx:int;
-			var posy:int;
-			if(p)
-			{
-				posx = p.x;
-				posy = p.y;
-			}
-			this.graphics.clear();
-			this.graphics.beginBitmapFill(fd.data as BitmapData, getMatrix(p));
-			this.graphics.drawRect(posx, posy, fd.data.width, fd.data.height);
-			this.graphics.endFill();
+			if(!isRunning) return;
+			registerTimer(enterFrame);
 		}
 		
-		private var matrix:Matrix;
 		/**
-		 *获取渲染matrix
-		 * @param $offset
-		 * @return 
+		 *移除自己 
 		 */		
-		private function getMatrix($offset:Point):Matrix
+		private function removeSelf():void
 		{
-			if($offset)
+			if(parent)
 			{
-				if(!matrix)
-				{
-					matrix = new Matrix();
-				}
-				matrix.identity();
-				matrix.translate($offset.x, $offset.y);
-				return matrix;
+				parent.removeChild(this);
 			}
-			return null;
-		}
-		
-		override protected function registerTimer($enterFrame:Function):void
-		{
-			TickManager.instance.doDuration($enterFrame, this.frameDuration);	
-		}
-		
-		override protected function unRegisterTimer($enterFrame:Function):void
-		{
-			TickManager.instance.clean($enterFrame);
+			
+			if(autoDestroy)
+			{
+				destroy();
+			}
 		}
 		
 		private var explicitX:Number = NaN;
@@ -166,10 +160,5 @@ package xlib.extension.display.clip.core
 		{
 			return isNaN(explicitY)? 0 : explicitY;
 		}
-		
-//		override protected function updateDisplayList($width:Number, $height:Number):void
-//		{
-//			super.updateDisplayList($width, $height);
-//		}
 	}
 }

@@ -3,7 +3,7 @@ package xlib.extension.display.clip.insterfaces
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	
-	public interface IClip extends IEventDispatcher
+	public interface IClip extends IDataFrameLooper
 	{
 		/**
 		 *是否自动播放 默认false<br>
@@ -11,7 +11,7 @@ package xlib.extension.display.clip.insterfaces
 		function get autoPlay():Boolean;
 		function set autoPlay($value:Boolean):void;
 		
-		/**stop后是否从显示列表中自动移除，默认为false*/
+		/**stop或者播放完成后是否从显示列表中自动移除，默认为false*/
 		function get autoRemoved():Boolean;
 		function set autoRemoved($value:Boolean):void;
 		
@@ -28,20 +28,23 @@ package xlib.extension.display.clip.insterfaces
 		
 		/**
 		 *播放 
-		 * @param $frameIndex 将要播放的起始帧		-1表示当前帧
 		 * @param $frameLabel 将要播放的帧标签		null表示当前标签
 		 */		
-		function play($frameIndex:int = -1, $frameLabel:String = null):void;
+		function play($frameLabel:String = null):void;
 		
 		/**
 		 *停止 
-		 * @param $frameIndex 	停止到某帧		-1停止到当前帧
 		 */		
-		function stop($frameIndex:int = -1):void;
+		function stop():void;
 		
 		/**
 		 *暂停 
 		 */		
 		function pause():void;
+		
+		/**
+		 *恢复 
+		 */		
+		function resume():void;
 	}
 }
