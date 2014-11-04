@@ -6,6 +6,10 @@ package xlib.extension.display.clip.data
 	import xlib.extension.display.clip.insterfaces.IFrameData;
 	import xlib.framework.core.LazyDispatcher;
 	
+	/**
+	 *帧默认数据 
+	 * @author yeah
+	 */	
 	public class FrameData extends LazyDispatcher implements IFrameData
 	{
 		public function FrameData($dispatcher:IEventDispatcher=null, $autoCreate:Boolean=true)
@@ -13,22 +17,39 @@ package xlib.extension.display.clip.data
 			super($dispatcher, $autoCreate);
 		}
 		
+		private var _offset:Point;
 		public function get offset():Point
 		{
-			return null;
+			return _offset;
 		}
 		
 		public function set offset($value:Point):void
 		{
+			this._offset = $value;
 		}
 		
+		private var _data:Object;
+
+		public function get data():Object
+		{
+			return _data;
+		}
+
+		public function set data(value:Object):void
+		{
+			_data = value;
+		}
+
+		
+		private var _frameIndex:int;
 		public function get frameIndex():int
 		{
-			return 0;
+			return _frameIndex;
 		}
 		
 		public function set frameIndex($value:int):void
 		{
+			_frameIndex = $value;
 		}
 		
 		public function destroy():void

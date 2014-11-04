@@ -1,8 +1,13 @@
 package xlib.extension.display.clip.core
 {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.sampler.getSize;
+	import flash.utils.getTimer;
 	
+	import xlib.extension.display.clip.data.FrameData;
 	import xlib.extension.display.clip.insterfaces.IClip;
 	import xlib.extension.display.clip.insterfaces.IClipData;
 	import xlib.extension.display.clip.insterfaces.IFrameData;
@@ -46,13 +51,18 @@ package xlib.extension.display.clip.core
 		{
 		}
 		
+		private var _pivot:Point;
 		public function get pivot():Point
 		{
-			return null;
+			return _pivot;
 		}
 		
 		public function set pivot($value:Point):void
 		{
+			if(_pivot == $value) return;
+			_pivot = $value;
+			x = x;
+			y = y;
 		}
 		
 		public function play($frameIndex:int=-1, $frameLabel:String=null):void
@@ -73,19 +83,44 @@ package xlib.extension.display.clip.core
 		{
 		}
 		
-		private var bit:Bitmap;
-		
 		override protected function onRender($frameData:IFrameData):void
 		{
-			var obj:* = $frameData;
-			obj = obj.data;
-			if(!bit)
+			var fd:FrameData = $frameData as FrameData;
+			if(!fd) return;
+			
+			var p:Point = fd.offset;
+			var posx:int;
+			var posy:int;
+			if(p)
 			{
-				bit = new Bitmap();
-				this.addChild(bit);
+				posx = p.x;
+				posy = p.y;
 			}
-			bit.bitmapData = obj;
-			trace(this.frameLabel, this.frameIndex, this.repeatTimes);
+			this.graphics.clear();
+			this.graphics.beginBitmapFill(fd.data as BitmapData, getMatrix(p));
+			this.graphics.drawRect(posx, posy, fd.data.width, fd.data.height);
+			this.graphics.endFill();
+		}
+		
+		private var matrix:Matrix;
+		/**
+		 *获取渲染matrix
+		 * @param $offset
+		 * @return 
+		 */		
+		private function getMatrix($offset:Point):Matrix
+		{
+			if($offset)
+			{
+				if(!matrix)
+				{
+					matrix = new Matrix();
+				}
+				matrix.identity();
+				matrix.translate($offset.x, $offset.y);
+				return matrix;
+			}
+			return null;
 		}
 		
 		override protected function registerTimer($enterFrame:Function):void
@@ -97,5 +132,44 @@ package xlib.extension.display.clip.core
 		{
 			TickManager.instance.clean($enterFrame);
 		}
+		
+		private var explicitX:Number = NaN;
+		override public function set x(value:Number):void
+		{
+			if(explicitX == value && !isNaN(explicitX)) return;
+			explicitX = value;
+			if(pivot)
+			{
+				value -= pivot.x;
+			}
+			super.x = value;
+		}
+		
+		override public function get x():Number
+		{
+			return isNaN(explicitX)? 0 : explicitX;
+		}
+		
+		private var explicitY:Number = NaN;
+		override public function set y(value:Number):void
+		{
+			if(explicitY == value && !isNaN(explicitY)) return;
+			explicitY = value;
+			if(pivot)
+			{
+				value -= pivot.y;
+			}
+			super.y = value;
+		}
+		
+		override public function get y():Number
+		{
+			return isNaN(explicitY)? 0 : explicitY;
+		}
+		
+//		override protected function updateDisplayList($width:Number, $height:Number):void
+//		{
+//			super.updateDisplayList($width, $height);
+//		}
 	}
 }

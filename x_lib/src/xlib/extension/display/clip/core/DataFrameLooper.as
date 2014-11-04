@@ -104,7 +104,7 @@ package xlib.extension.display.clip.core
 		}
 
 		/**
-		 *渲染 
+		 *渲染（子类可重写渲染方式）
 		 */		
 		protected function onRender($frameData:IFrameData):void
 		{

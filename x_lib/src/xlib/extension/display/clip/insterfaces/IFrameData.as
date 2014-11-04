@@ -10,17 +10,17 @@ package xlib.extension.display.clip.insterfaces
 	public interface IFrameData extends IEventDispatcher
 	{
 		/**
-		 * 偏移量（在每一帧对齐结束后位置偏移量。在原来位置的基础上+-而不是直接赋值） 
-		 * @return 
-		 */		
-		function get offset():Point;
-		function set offset($value:Point):void;
-		
-		/**
 		 *本帧在序列帧中的索引 （仅用于排序，此值不可信）
 		 */		
 		function get frameIndex():int;
 		function set frameIndex($value:int):void;
+		
+		/**
+		 *数据 
+		 * @return 
+		 */		
+		function get data():Object;
+		function set data($value:Object):void;
 		
 		/**
 		 *销毁
