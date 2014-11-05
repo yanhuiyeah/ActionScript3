@@ -34,7 +34,7 @@ package components
 
 
 
-
+//================================================
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 

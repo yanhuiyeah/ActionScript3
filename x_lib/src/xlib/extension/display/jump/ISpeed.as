@@ -1,5 +1,7 @@
 package xlib.extension.display.jump
 {
+	import flash.display.DisplayObject;
+
 	public interface ISpeed
 	{
 		
@@ -30,6 +32,12 @@ package xlib.extension.display.jump
 		 */		
 		function get verticalDirection():int;
 		function set verticalDirection($value:int):void;
+		
+		/**
+		 *返回本身 
+		 * @return 
+		 */		
+		function get self():DisplayObject;
 		
 		
 	}

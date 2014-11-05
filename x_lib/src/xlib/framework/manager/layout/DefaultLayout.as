@@ -142,7 +142,7 @@ package xlib.framework.manager.layout
 				}
 				else
 				{
-					elementY = element.x;
+					elementY = element.y;
 				}
 				
 				element.setLayoutSize(elementW, elementH);
