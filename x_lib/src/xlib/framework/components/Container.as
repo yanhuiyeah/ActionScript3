@@ -5,6 +5,7 @@ package xlib.framework.components
 	import xlib.framework.components.interfaces.ILayout;
 	import xlib.framework.core.Component;
 	import xlib.framework.core.interfaces.ILayoutElement;
+	import xlib.framework.manager.layout.DefaultLayout;
 	
 	/**
 	 *容器接口 
@@ -104,6 +105,12 @@ package xlib.framework.components
 		public function get numElements():int
 		{
 			return numChildren;
+		}
+		
+		override protected function createChildren():void
+		{
+			super.createChildren();
+			this.layout = new DefaultLayout();
 		}
 		
 		override protected function measure():void

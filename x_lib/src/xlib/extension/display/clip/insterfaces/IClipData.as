@@ -34,6 +34,13 @@ package xlib.extension.display.clip.insterfaces
 		function addFrames($frames:Vector.<IFrameData>, $frameLabel:String = "main"):void;
 		
 		/**
+		 *添加帧数据 
+		 * @param $frameData
+		 * @param $frameLabel
+		 */		
+		function addFrame($frameData:IFrameData, $frameLabel:String = "main"):void;
+		
+		/**
 		 *根据帧标签移除帧数据 
 		 * @param $frameLabel	帧标签，如果是null 则移除所有
 		 * @return 						被移除的帧数据列表

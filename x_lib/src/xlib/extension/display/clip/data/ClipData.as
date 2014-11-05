@@ -74,6 +74,27 @@ package xlib.extension.display.clip.data
 			_totalFrame += $frames.length;
 		}
 		
+		public function addFrame($frameData:IFrameData, $frameLabel:String = "main"):void
+		{
+			if(!$frameLabel)
+			{
+				throw new Error("帧标签不能为空！");
+			}
+			
+			var vector:Vector.<IFrameData> = getFrames($frameLabel);
+			if(!vector)
+			{
+				cacheData[$frameLabel] = new <IFrameData>[$frameData];
+				_frameLabels.push($frameLabel);
+			}
+			else
+			{
+				vector.push($frameData);
+			}
+			
+			_totalFrame++;
+		}
+		
 		public function removeFrames($frameLabel:String="main"):Vector.<IFrameData>
 		{
 			var vector:Vector.<IFrameData>;
@@ -140,7 +161,7 @@ package xlib.extension.display.clip.data
 		{
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			_totalFrame = 0;
 			_frameLabels.length = 0;

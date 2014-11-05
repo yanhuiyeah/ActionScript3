@@ -52,8 +52,11 @@ package xlib.extension.display.clip.data
 			_frameIndex = $value;
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
+			this.data = null;
+			this.frameIndex = 0;
+			this.offset = null;
 		}
 	}
 }

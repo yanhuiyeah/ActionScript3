@@ -23,10 +23,20 @@ package xlib.extension.display.clip.events
 		 */		
 		public static const REPEAT:String = "repeat";
 		
+		/**
+		 * 数据准备完成
+		 */		
+		public static const FRAME_DATA_IS_READY:String = "frame_data_is_ready";
 		
-		public function ClipEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		/**
+		 *附带的数据 
+		 */		
+		public var data:Object;
+		
+		public function ClipEvent(type:String, $data:Object = null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
+			this.data = $data;
 		}
 	}
 }

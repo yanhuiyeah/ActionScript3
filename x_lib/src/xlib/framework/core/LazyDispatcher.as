@@ -93,7 +93,7 @@ package xlib.framework.core
 		/**
 		 *销毁（回收） 
 		 */		
-		public function desroty():void
+		public function destroy():void
 		{
 			reset();
 			PoolStorage.instance.push(this, this["constructor"]);

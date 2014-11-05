@@ -160,5 +160,17 @@ package xlib.extension.display.clip.core
 		{
 			return isNaN(explicitY)? 0 : explicitY;
 		}
+		
+		override protected function isNotHang():Boolean
+		{
+			return super.isNotHang() && visible;
+		}
+		
+		override public function set visible(value:Boolean):void
+		{
+			if(super.visible == value) return;
+			super.visible = value;
+			checkHang();
+		}
 	}
 }

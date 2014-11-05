@@ -1,5 +1,6 @@
 package xlib.framework
 {
+	import xlib.framework.components.Container;
 	import xlib.framework.core.Component;
 	import xlib.framework.core.Global;
 	
@@ -9,7 +10,7 @@ package xlib.framework
 	 *application
 	 * @author yeah
 	 */	
-	public class Application extends Component
+	public class Application extends Container
 	{
 		public function Application()
 		{
