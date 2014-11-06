@@ -29,6 +29,7 @@ package components
 			(clip as DisplayObject).scaleX = (clip as DisplayObject).scaleY = .3;
 			clip.play("walk");
 			clip.go();
+			clip.horizontal.forward = false;
 			
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyup);
@@ -39,7 +40,6 @@ package components
 			switch(event.keyCode)
 			{
 				case Keyboard.SPACE:
-					clip.y = 600;
 					clip.vertical.speed = 30;
 					clip.vertical.forward = true;
 					break;
@@ -48,6 +48,9 @@ package components
 					break;
 				case Keyboard.RIGHT:
 					clip.horizontal.forward = false;
+					break;
+				case Keyboard.ENTER:
+					clip.y = 600;
 					break;
 			}
 		}
