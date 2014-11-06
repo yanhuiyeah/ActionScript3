@@ -1,10 +1,13 @@
 package components
 {
 	import flash.display.DisplayObject;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.ui.Keyboard;
 	
 	import xlib.extension.display.clip.events.ClipEvent;
 	import xlib.extension.display.clip.insterfaces.IClip;
-	import xlib.extension.display.jump.Speed;
+	import xlib.extension.display.jump.MovingItem;
 	import xlib.framework.Application;
 	import xlib.framework.core.Component;
 	
@@ -14,17 +17,44 @@ package components
 		{
 			super();
 		}
-		private var clip:Speed;
+		private var clip:MovingItem;
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			clip = new Speed();
+			clip = new MovingItem();
 			clip.frameDuration = 200;
 			clip.source = new cd3();
 			clip.addEventListener(ClipEvent.FRAME, onframe);
 			this.addChild(clip as DisplayObject);
 			(clip as DisplayObject).scaleX = (clip as DisplayObject).scaleY = .3;
 			clip.play("walk");
+			clip.go();
+			
+			stage.addEventListener(MouseEvent.CLICK, onClick);
+			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyup);
+		}
+		
+		protected function onKeyup(event:KeyboardEvent):void
+		{
+			switch(event.keyCode)
+			{
+				case Keyboard.SPACE:
+					clip.y = 600;
+					clip.vertical.speed = 30;
+					clip.vertical.forward = true;
+					break;
+				case Keyboard.LEFT:
+					clip.horizontal.forward = true;
+					break;
+				case Keyboard.RIGHT:
+					clip.horizontal.forward = false;
+					break;
+			}
+		}
+		
+		protected function onClick(event:MouseEvent):void
+		{
+			
 		}
 		
 		protected function onframe(event:ClipEvent):void
