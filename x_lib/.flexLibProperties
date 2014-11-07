@@ -3,6 +3,28 @@
   <includeClasses>
     <classEntry path="xlib.framework.core.UniqueStorage"/>
     <classEntry path="xlib.framework.core.RenderQueue"/>
+    <classEntry path="xlib.framework.core.interfaces.IComponent"/>
+    <classEntry path="xlib.framework.core.UISprite"/>
+    <classEntry path="xlib.framework.core.UIInvalidate"/>
+    <classEntry path="xlib.framework.core.interfaces.ILayoutElement"/>
+    <classEntry path="xlib.framework.core.UILayout"/>
+    <classEntry path="xlib.framework.core.Component"/>
+    <classEntry path="xlib.framework.theme.ThemeUtil"/>
+    <classEntry path="xlib.framework.components.interfaces.IContainer"/>
+    <classEntry path="xlib.framework.components.interfaces.ILayout"/>
+    <classEntry path="xlib.framework.components.Container"/>
+    <classEntry path="xlib.framework.manager.layout.LayoutBase"/>
+    <classEntry path="xlib.framework.manager.layout.DefaultLayout"/>
+    <classEntry path="xlib.extension.display.clip.insterfaces.IFrameLooper"/>
+    <classEntry path="xlib.extension.display.clip.core.FrameLooper"/>
+    <classEntry path="xlib.extension.display.clip.insterfaces.IDataFrameLooper"/>
+    <classEntry path="xlib.extension.display.clip.core.ClipBase"/>
+    <classEntry path="xlib.extension.display.clip.data.FrameData"/>
+    <classEntry path="xlib.extension.display.clip.data.ClipParserData"/>
+    <classEntry path="xlib.extension.display.jump.IMovingElement"/>
+    <classEntry path="xlib.extension.display.jump.IMoving"/>
+    <classEntry path="xlib.extension.display.jump.MovingElement"/>
+    <classEntry path="xlib.extension.display.jump.MovingItem"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

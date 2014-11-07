@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:fab5aca498d0f8e75d318a746eb13d18$ -->
+<TextureAtlas imagePath="antiHero.png">
+    <SubTexture name="walk_01" x="2" y="2" width="300" height="311"/>
+    <SubTexture name="walk_02" x="304" y="2" width="300" height="336"/>
+    <SubTexture name="walk_03" x="606" y="2" width="300" height="311"/>
+    <SubTexture name="lanza" x="606" y="2" width="300" height="311"/>
+    <SubTexture name="walk_04" x="2" y="340" width="300" height="336"/>
+    <SubTexture name="hurt" x="304" y="340" width="264" height="344"/>
+    <SubTexture name="idle_03" x="570" y="340" width="264" height="344"/>
+    <SubTexture name="idle_02" x="2" y="686" width="264" height="344"/>
+    <SubTexture name="idle_01" x="268" y="686" width="264" height="344"/>
+    <SubTexture name="duck" x="268" y="686" width="264" height="344"/>
+    <SubTexture name="jump" x="534" y="686" width="264" height="344"/>
+    <SubTexture name="die" x="534" y="686" width="264" height="344"/>
+</TextureAtlas>
