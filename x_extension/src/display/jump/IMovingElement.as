@@ -7,11 +7,11 @@ package display.jump
 	public interface IMovingElement
 	{
 		/**
-		 *是否是向前的 
+		 *变化比率（1向前， -1 向后） 
 		 * @return 
 		 */		
-		function get forward():Boolean;
-		function set forward($value:Boolean):void;
+		function get rate():int;
+		function set rate($value:int):void;
 		
 		/**
 		 *速度 
@@ -27,5 +27,10 @@ package display.jump
 		function get accelerate():int;
 		function set accelerate($value:int):void;
 		
+		/**
+		 *计算当前速度 并返回带方向的速度值
+		 * @return
+		 */		
+		function calculateSpeed():int;
 	}
 }

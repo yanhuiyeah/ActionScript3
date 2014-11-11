@@ -46,10 +46,11 @@ package display.jump
 		public function go():void
 		{
 			vertical = new MovingElement();
-			vertical.accelerate = 1;
+			vertical.accelerate = 2;
 			vertical.speed = 0;
 			
 			horizontal = new MovingElement();
+			horizontal.rate = 1;
 			horizontal.speed = 3;
 			TickManager.instance.doFrame(run, 1);
 		}
@@ -67,14 +68,10 @@ package display.jump
 			
 			if(vertical.speed <= 0)
 			{
-				vertical.forward = false;
+				vertical.rate = 1;
 			}
-			var flag:int = vertical.forward ? -1 : 1;
-			vertical.speed += flag*vertical.accelerate;
-			this.y += vertical.speed * flag;
-			
-			flag = horizontal.forward ? -1 : 1;
-			this.x += horizontal.speed * flag;
+			this.y += vertical.calculateSpeed();
+			this.x += horizontal.calculateSpeed();
 		}
 	}
 }

@@ -11,16 +11,16 @@ package display.jump
 		{
 		}
 		
-		private var _forward:Boolean = true;
-		public function get forward():Boolean
+		private var _rate:int = 1;
+		public function get rate():int
 		{
-			return _forward;
+			return _rate;
 		}
 		
-		public function set forward($value:Boolean):void
+		public function set rate($value:int):void
 		{
-			if($value == _forward) return;
-			_forward = $value;
+			if($value == _rate) return;
+			_rate = $value;
 		}
 		
 		private var _speed:int;
@@ -45,6 +45,12 @@ package display.jump
 		{
 			if(_accelerate == $value) return;
 			_accelerate = $value;
+		}
+		
+		public function calculateSpeed():int
+		{
+			speed += rate * accelerate;
+			return rate *speed;
 		}
 	}
 }
