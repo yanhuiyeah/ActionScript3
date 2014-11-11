@@ -14,6 +14,19 @@ package display.jump
 		function set rate($value:int):void;
 		
 		/**
+		 *速度最大值，speed达到此值方向改变 (默认-1，无限制)
+		 */		
+		function get maxSpeed():int;
+		function set maxSpeed($value:int):void;
+		
+		/**
+		 *速度最小值 ，speed达到此值方向改变 (默认-1，无限制)
+		 * @return 
+		 */		
+		function get miniSpeed():int;
+		function set miniSpeed($value:int):void;
+		
+		/**
 		 *速度 
 		 * @return 
 		 */		

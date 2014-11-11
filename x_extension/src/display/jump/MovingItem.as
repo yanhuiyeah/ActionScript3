@@ -48,10 +48,14 @@ package display.jump
 			vertical = new MovingElement();
 			vertical.accelerate = 2;
 			vertical.speed = 0;
+			vertical.miniSpeed = 0;
 			
 			horizontal = new MovingElement();
 			horizontal.rate = 1;
 			horizontal.speed = 3;
+			horizontal.accelerate = 1;
+			horizontal.maxSpeed = 10;
+			horizontal.miniSpeed = 0;
 			TickManager.instance.doFrame(run, 1);
 		}
 		
@@ -65,12 +69,7 @@ package display.jump
 			{
 				throw new Error("呵呵!");
 			}
-			
-			if(vertical.speed <= 0)
-			{
-				vertical.rate = 1;
-			}
-			this.y += vertical.calculateSpeed();
+//			this.y += vertical.calculateSpeed();
 			this.x += horizontal.calculateSpeed();
 		}
 	}

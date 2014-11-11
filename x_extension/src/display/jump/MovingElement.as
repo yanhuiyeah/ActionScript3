@@ -50,7 +50,48 @@ package display.jump
 		public function calculateSpeed():int
 		{
 			speed += rate * accelerate;
-			return rate *speed;
+			var newRate:int = rate;
+			if(maxSpeed != -1 && speed >= maxSpeed)
+			{
+				newRate = -rate;
+				speed = maxSpeed;
+			}
+			
+			if(miniSpeed != -1 && speed <= miniSpeed)
+			{
+				newRate = -rate;
+				speed = miniSpeed;
+			}
+			
+			var s:int = rate * speed;
+			rate = newRate;
+			return s;
 		}
+		
+		private var _maxSpeed:int = -1;
+
+		public function get maxSpeed():int
+		{
+			return _maxSpeed;
+		}
+
+		public function set maxSpeed(value:int):void
+		{
+			_maxSpeed = value;
+		}
+		
+		private var _miniSpeed:int = -1;
+
+		public function get miniSpeed():int
+		{
+			return _miniSpeed;
+		}
+
+		public function set miniSpeed(value:int):void
+		{
+			_miniSpeed = value;
+		}
+
+
 	}
 }
