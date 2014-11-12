@@ -92,6 +92,11 @@ package display.clip.core
 			}
 		}
 		
+		/**
+		 *已经执行的帧数 
+		 */		
+		private var executeFrames:int = 0;
+		
 		private var _frameIndex:int = -1;
 		public function get frameIndex():int
 		{
@@ -117,22 +122,10 @@ package display.clip.core
 			return _isRunning;
 		}
 		
-//		private var _useHang:Boolean = true;
-//		public function get useHang():Boolean
-//		{
-//			return _useHang;
-//		}
-//
-//		public function set useHang(value:Boolean):void
-//		{
-//			if(useHang == value) return;
-//			_useHang = value;
-//		}
-
-		
 		public function destroy():void
 		{
 			halt();
+			executeFrames = 0;
 			frameDuration = 0;
 			_repeatTimes = 0;
 			_totalFrames = 0;
@@ -182,9 +175,8 @@ package display.clip.core
 		 *检测挂起（运行，但是不计算不渲染）状态
 		 * @return false 挂起 true 正常执行
 		 */		
-		protected function checkHang():Boolean
+		final protected function checkHang():Boolean
 		{
-//			var flag:Boolean = useHang ? isNotHang():true;
 			var flag:Boolean = isNotHang();
 			if(flag != _isNotHang)
 			{
@@ -208,7 +200,6 @@ package display.clip.core
 		 */		
 		protected function isNotHang():Boolean
 		{
-//			return _isRunning && stage!=null;
 			return _isRunning && hasStage;
 		}
 		
@@ -272,6 +263,16 @@ package display.clip.core
 				preTime = 0;
 			}
 			var tempFrame:int = frameIndex + addFrame;
+			
+			executeFrames += addFrame;
+			
+			
+			if(totalFrames < 1)
+			{
+				frameIndex = tempFrame;
+				return;
+			}
+			
 			frameIndex = tempFrame%totalFrames;
 			
 			if(tempFrame > totalFrames)

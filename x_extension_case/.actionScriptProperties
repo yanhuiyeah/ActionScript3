@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="demo/JumpDemo.as" projectUUID="cb6001a7-a728-4a0c-9b51-b461ad56afa8" version="10">
+<actionScriptProperties analytics="false" mainApplicationPath="demo/FrameLoopersDemo.as" projectUUID="cb6001a7-a728-4a0c-9b51-b461ad56afa8" version="10">
   <compiler additionalCompilerArguments="-locale en_US -default-size 1280 800" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
@@ -34,6 +34,7 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="demo/FrameLoopersDemo.as"/>
     <application path="demo/JumpDemo.as"/>
     <application path="x_extention_case.as"/>
   </applications>

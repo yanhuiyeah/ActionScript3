@@ -37,15 +37,8 @@ package display.clip.insterfaces
 		function get frameIndex():int;
 		function set frameIndex($value:int):void;
 		
-		/***当前循环列表帧数*/		
-		function get totalFrames():int;
-		
 		/***当前运行状态*/		
 		function get isRunning():Boolean;
-		
-		/**后台运行时（比如没有在显示列表、或者visble=false）是否挂起（挂起指的是只运行不计算不渲染）*/
-//		function get useHang():Boolean;
-//		function set useHang($value:Boolean):void;
 		
 		/***销毁**/		
 		function destroy():void;
