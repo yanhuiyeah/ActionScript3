@@ -39,7 +39,7 @@ package display.clip.core
 				if(source.frameLabels.length > 0)
 				{
 					frameLabel = source.frameLabels[0];
-					_totalFrames = source.getFrameCount(frameLabel);
+					loopFrames = source.getFrameCount(frameLabel);
 				}
 			}
 			dataChanged = true;
@@ -63,8 +63,8 @@ package display.clip.core
 				{
 					_frameLabel = source.frameLabels[0];
 				}
-				_totalFrames = source.getFrameCount(frameLabel);
-				frameIndex = 0;
+				loopFrames = source.getFrameCount(frameLabel);
+				nextFI = 0;
 			}
 			dataChanged = true;
 			invalidateProperties();

@@ -1,6 +1,6 @@
 package demo
 {
-	import display.clip.core.FrameLoopers;
+	import display.clip.core.FrameLooper;
 	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -25,28 +25,36 @@ package demo
 			this.graphics.endFill();
 			
 			loopers = new fl();
-			loopers.loopFrames = 5;
+			loopers.loopFrames = 3;
 			loopers.frameDuration = 200;
-			loopers.repeat = 2;
-//			this.addChild(loopers);
+			loopers.repeat = 35;
+			this.addChild(loopers);
 			loopers.gotoAndPlay();
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		protected function onClick(event:Event):void
 		{
-			this.addChild(loopers);
+//			if(loopers.parent)
+//			{
+//				loopers.parent.removeChild(loopers);
+//			}
+//			else
+//			{
+//				this.addChild(loopers);
+//			}
+			loopers.isPlaying ? loopers.pause():loopers.resume();
 		}
 	}
 }
 
 
-import display.clip.core.FrameLoopers;
+import display.clip.core.FrameLooper;
 
 import xlib.framework.manager.TickManager;
 
 
-class fl extends FrameLoopers
+class fl extends FrameLooper
 {
 	public function fl()
 	{

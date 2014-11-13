@@ -36,15 +36,5 @@ package display.clip.insterfaces
 		 *停止 
 		 */		
 		function stop():void;
-		
-		/**
-		 *暂停 
-		 */		
-		function pause():void;
-		
-		/**
-		 *恢复 
-		 */		
-		function resume():void;
 	}
 }

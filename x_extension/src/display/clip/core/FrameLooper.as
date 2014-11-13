@@ -1,15 +1,15 @@
 package display.clip.core
 {
+	import display.clip.insterfaces.IFrameLooper;
+	
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
 	import flash.utils.getTimer;
 	
-	import display.clip.insterfaces.IFrameLooper;
 	import xlib.framework.core.Component;
 	
 	/**
-	 *帧循环器（抽象类） <br>
-	 * 子类调用execute执行循环，halt()停止
+	 *帧循环器 （抽象类）
 	 * @author yeah
 	 */	
 	public class FrameLooper extends Component implements IFrameLooper
@@ -17,6 +17,94 @@ package display.clip.core
 		public function FrameLooper()
 		{
 			super();
+			this.mouseEnabled = this.mouseChildren = false;
+			checkStageEvent();
+		}
+		
+		/**
+		 *监听舞台 
+		 */		
+		private function checkStageEvent():void
+		{
+			if(autoHang)
+			{
+				this.addEventListener(Event.ADDED_TO_STAGE, stageEventHandler);
+				this.addEventListener(Event.REMOVED_FROM_STAGE, stageEventHandler);
+			}
+			else
+			{
+				this.removeEventListener(Event.ADDED_TO_STAGE, stageEventHandler);
+				this.removeEventListener(Event.REMOVED_FROM_STAGE, stageEventHandler);
+			}
+		}
+		
+		private var hasStage:Boolean = false;
+		/**
+		 *添加或移除舞台 
+		 * @param $e
+		 */		
+		private function stageEventHandler($e:Event):void
+		{
+			hasStage = $e.type == Event.ADDED_TO_STAGE;
+			checkPlayState();
+		}
+		
+		private var _autoHang:Boolean = true;
+		public function get autoHang():Boolean
+		{
+			return _autoHang;
+		}
+
+		public function set autoHang(value:Boolean):void
+		{
+			if(_autoHang == value) return;
+			_autoHang = value;
+			checkStageEvent();
+		}
+		
+		private var _loopFrames:int;
+		public function get loopFrames():int
+		{
+			return _loopFrames;
+		}
+		
+		public function set loopFrames($value:int):void
+		{
+			if(_loopFrames == $value) return;
+			_loopFrames = $value;
+		}
+		
+		private var _repeat:int = -1;
+		public function get repeat():int
+		{
+			return _repeat;
+		}
+		
+		public function set repeat($value:int):void
+		{
+			if(_repeat == $value) return;
+			_repeat = $value;
+		}
+		
+		private var _repeatTimes:int;
+		public function get repeatTimes():int
+		{
+			return _repeatTimes;
+		}
+		
+		private function setRepeatTimes($value:int):void
+		{
+			if(_repeatTimes == $value) return;
+			_repeatTimes = $value;
+			if(loopFrames > 0 && frameIndex == loopFrames-1)
+			{
+				onRepeat();
+				if(_repeatTimes == repeat)
+				{
+					gotoAndStop(this.frameIndex);
+					onComplete();
+				}
+			}
 		}
 		
 		private var _frameRate:uint = 0;
@@ -31,7 +119,7 @@ package display.clip.core
 			_frameRate = $value;
 			_frameDuration = Math.floor(1000/_frameRate);
 		}
-	
+		
 		/**外部显示设置的帧间隔时间*/
 		private var explicitFrameDuration:uint = 0;
 		private var _frameDuration:uint = 0;
@@ -52,7 +140,7 @@ package display.clip.core
 			}
 			else if(stage)
 			{
-				_frameRate = stage.frameRate;
+				frameRate = stage.frameRate;
 			}
 			else
 			{
@@ -60,248 +148,216 @@ package display.clip.core
 			}
 		}
 		
-		private var _repeat:int = -1;
-		public function get repeat():int
-		{
-			return _repeat;
-		}
-		
-		public function set repeat($value:int):void
-		{
-			if(_repeat == $value) return;
-			_repeat = $value;
-		}
-		
-		private var _repeatTimes:int = 0;
-		public function get repeatTimes():int
-		{
-			return _repeatTimes;
-		}
-		
-		/**
-		 *设置当前循环次数 
-		 * @param $repeatTimes -1则_repeatTimes+=1
-		 */		
-		private function setReaptTimes($repeatTimes:int = -1):void
-		{
-			_repeatTimes = $repeatTimes == -1 ? _repeatTimes + 1 : $repeatTimes;
-			onRepeat();
-			if(repeat != -1 && _repeatTimes >= repeat)
-			{
-				onEnd();
-			}
-		}
-		
-		/**
-		 *已经执行的帧数 
-		 */		
-		private var executeFrames:int = 0;
-		
 		private var _frameIndex:int = -1;
 		public function get frameIndex():int
 		{
 			return _frameIndex;
 		}
-
-		public function set frameIndex(value:int):void
+		
+		private function setFrameIndex($value:int):void
 		{
-			if(frameIndex == value) return;
-			_frameIndex = value;
+			if(_frameIndex == $value) return;
+			_frameIndex = $value;
 			onFrame();
 		}
 		
-		protected var _totalFrames:int = 0;
-		public function get totalFrames():int
+		private var _isPlaying:Boolean = false;
+		public function get isPlaying():Boolean
 		{
-			return _totalFrames;
+			return _isPlaying;
 		}
 		
-		private var _isRunning:Boolean = false;
-		public function get isRunning():Boolean
+		public function gotoAndPlay($frameIndex:int = 0):void
 		{
-			return _isRunning;
+			if(isPlaying) return;
+			var ready:Boolean = isReady();
+			if(ready)
+			{
+				_isPlaying = true;
+				register(true);
+			}
+			else
+			{
+				playWithoutFrame();
+			}
+		}
+		
+		public function gotoAndStop($frameIndex:int = -1):void
+		{
+			if(!isPlaying) return;
+			_isPlaying = false;
+			register(false);
+			if(loopFrames > 0)
+			{
+				nextFI = $frameIndex > -1 ? $frameIndex:loopFrames-1;
+			}
+			frameHandler();
+		}
+		
+		public function pause():void
+		{
+			gotoAndStop(this.frameIndex);
+		}
+		
+		public function resume():void
+		{
+			gotoAndPlay(this.frameIndex);
 		}
 		
 		public function destroy():void
 		{
-			halt();
-			executeFrames = 0;
+			gotoAndStop();
+			_loopFrames = 0;
 			frameDuration = 0;
-			_repeatTimes = 0;
-			_totalFrames = 0;
 			_frameIndex = -1;
-			preTime = 0;
-			_isNotHang = false;
-			hasStage = false;
+			nextFI = 0;
+			repeat = -1;
+			_repeatTimes = 0;
+			loopFrames = 0;
+		}
+		
+		/**
+		 *下一帧的index索引 
+		 */		
+		protected var nextFI:int;
+		/**
+		 *每帧运行 
+		 */		
+		private function frameHandler():void
+		{
+			if(preTime > 0)
+			{
+				preTime = getTimer() - preTime;
+				if(preTime > frameDuration)
+				{
+					nextFI += Math.round(preTime/frameDuration);
+				}
+				preTime = 0;
+			}
+			
+			if(nextFI < loopFrames-1)
+			{
+				setFrameIndex(nextFI);
+			}
+			else
+			{
+				var currentRT:int = nextFI / (loopFrames -1) + _repeatTimes;
+				if(repeat != -1 && currentRT >= repeat)
+				{
+					nextFI = loopFrames -1;
+					currentRT = repeat;
+				}
+				else
+				{
+					nextFI %= loopFrames;
+				}
+				setFrameIndex(nextFI);
+				setRepeatTimes(currentRT);
+			}
+			
+			nextFI = ++nextFI % loopFrames;
 		}
 		
 		/**真正开始之前的时间*/
 		private var preTime:int = 0;
 		
-		/**执行*/
-		protected function execute():void
+		private var _isReady:Boolean = false;
+		/**
+		 *播放但是不执行帧 
+		 */		
+		final protected function playWithoutFrame():void
 		{
-			if(isRunning) return;
-			_isRunning = true;
-			_isNotHang = false
-			preTime = 0;
-			hasStage = stage != null;
-			if(!checkHang())
+			_isPlaying = true;
+			preTime = getTimer();
+			register(false);
+		}
+		
+		final protected function checkPlayState():void
+		{
+			var ready:Boolean = isReady();
+			if(_isReady == ready) return;
+			_isReady = ready;
+			if(!isPlaying) return;
+			if(_isReady)
 			{
-				preTime = getTimer();
-				if(!stage)
-				{
-					this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
-				}
+				register(true);
 			}
 			else
 			{
-				this.addEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
+				playWithoutFrame();
 			}
 		}
 		
-		/***停止*/		
-		protected function halt():void
-		{
-			if(!isRunning) return;
-			_isRunning = false;
-			checkHang();
-		}
-		
-		/**是否是挂起（运行，但是不计算不渲染）状态*/
-		private var _isNotHang:Boolean = false;
-		
 		/**
-		 *检测挂起（运行，但是不计算不渲染）状态
-		 * @return false 挂起 true 正常执行
-		 */		
-		final protected function checkHang():Boolean
-		{
-			var flag:Boolean = isNotHang();
-			if(flag != _isNotHang)
-			{
-				if(flag)
-				{
-					registerTimer(enterFrame);
-				}
-				else
-				{
-					preTime = getTimer();
-					unRegisterTimer(enterFrame);
-				}
-				_isNotHang = flag;
-			}
-			return _isNotHang;
-		}
-		
-		/**
-		 *是否不是挂起（运行，但是不计算不渲染）状态
+		 *播放准备条件 （子类可新增）
 		 * @return 
 		 */		
-		protected function isNotHang():Boolean
+		protected function isReady():Boolean
 		{
-			return _isRunning && hasStage;
-		}
-		
-		private var hasStage:Boolean = false;
-		/**
-		 *添加到舞台 
-		 */		
-		private function add2stage(event:Event):void
-		{
-			this.removeEventListener(Event.ADDED_TO_STAGE, add2stage);
-			if(frameRate == -1)
+			if(!autoHang)
 			{
-				frameRate = stage.frameRate;
+				return frameDuration > 0;
 			}
-			hasStage = true;
-			if(!isRunning) return;
-			checkHang();
-			this.addEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
+			return hasStage;
 		}
 		
 		/**
-		 *从舞台移除 
-		 * @param $event
-		 */		
-		private function removeFstage($event:Event):void
-		{
-			hasStage = false;
-			this.removeEventListener(Event.REMOVED_FROM_STAGE, removeFstage);
-			if(!isRunning) return;
-			checkHang();
-			this.addEventListener(Event.ADDED_TO_STAGE, add2stage);
-		}
-		
-		/**
-		 *注册计时器 （抽象方法子类必须重写）
-		 * @$executeFrames 在注册计时器之前应该执行的帧数
-		 */		
-		protected function registerTimer($enterFrame:Function):void
-		{
-			throw new IllegalOperationError("抽象方法必须重写");
-		}
-		
-		/**
-		 *解除注册计时器 (抽象方法，子类必须重写并继承)
-		 */		
-		protected function unRegisterTimer($enterFrame:Function):void
-		{
-			throw new IllegalOperationError("抽象方法必须重写");
-		}
-		
-		/**
-		 * 每帧function
-		 */		
-		protected function enterFrame():void
-		{
-			var addFrame:int = 1;
-			if(preTime > 0)
-			{
-				preTime = getTimer() - preTime;
-				addFrame = Math.round(preTime/frameDuration);
-				preTime = 0;
-			}
-			var tempFrame:int = frameIndex + addFrame;
-			
-			executeFrames += addFrame;
-			
-			
-			if(totalFrames < 1)
-			{
-				frameIndex = tempFrame;
-				return;
-			}
-			
-			frameIndex = tempFrame%totalFrames;
-			
-			if(tempFrame > totalFrames)
-			{
-				setReaptTimes(repeatTimes + tempFrame/(totalFrames - 1));
-			}
-			else if(frameIndex == totalFrames - 1)
-			{
-				setReaptTimes(repeatTimes + 1);
-			}
-		}
-		
-		/**
-		 *执行一帧 
+		 *运行1帧
 		 */		
 		protected function onFrame():void
 		{
-		}
-		
-		/**循环一次, 暂时有点问题*/
-		protected function onRepeat():void
-		{
+			trace(frameIndex, repeatTimes);
 		}
 		
 		/**
-		 *循环结束 
+		 *循环一次 
 		 */		
-		protected function onEnd():void
+		protected function onRepeat():void
 		{
+		}
+
+		/**
+		 *所有循环结束 
+		 */		
+		protected function onComplete():void
+		{
+		}
+		
+		private var isRegister:Boolean = false;
+		/**
+		 *注册 
+		 * @param $value
+		 */		
+		private function register($value:Boolean):void
+		{
+			if(isRegister == $value) return;
+			isRegister = $value;
+			if(isRegister)
+			{
+				registerTimer(this.frameHandler);
+			}
+			else
+			{
+				unRegisterTimer(this.frameHandler);
+			}
+		}
+		
+		/**
+		 *注册timer 
+		 * @param $frameHandler
+		 */		
+		protected function registerTimer($frameHandler:Function):void
+		{
+			throw new IllegalOperationError("抽象方法子类重写");
+		}
+		
+		/**
+		 *解除注册的timer 
+		 * @param $frameHandler
+		 */		
+		protected function unRegisterTimer($frameHandler:Function):void
+		{
+			throw new IllegalOperationError("抽象方法子类重写");
 		}
 	}
 }

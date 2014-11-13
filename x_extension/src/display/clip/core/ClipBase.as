@@ -69,11 +69,11 @@ package display.clip.core
 		
 		override public function set source($value:IClipData):void
 		{
-			super.source = $value;
-			if(source && autoPlay && !isRunning)
-			{
-				play();
-			}
+//			super.source = $value;
+//			if(source && autoPlay && !isRunning)
+//			{
+//				play();
+//			}
 		}
 		
 		public function play($frameLabel:String=null):void
@@ -87,28 +87,16 @@ package display.clip.core
 			{
 				this.frameLabel = $frameLabel;
 			}
-			execute();
+//			execute();
 		}
 		
 		public function stop():void
 		{
-			halt();
+//			halt();
 			if(autoRemoved)
 			{
 				removeSelf();
 			}
-		}
-		
-		public function pause():void
-		{
-			if(!isRunning) return;
-			unRegisterTimer(enterFrame);
-		}
-		
-		public function resume():void
-		{
-			if(!isRunning) return;
-			registerTimer(enterFrame);
 		}
 		
 		/**
@@ -161,16 +149,16 @@ package display.clip.core
 			return isNaN(explicitY)? 0 : explicitY;
 		}
 		
-		override protected function isNotHang():Boolean
+		override protected function isReady():Boolean
 		{
-			return super.isNotHang() && visible;
+			return super.isReady() && visible;
 		}
 		
 		override public function set visible(value:Boolean):void
 		{
 			if(super.visible == value) return;
 			super.visible = value;
-			checkHang();
+			checkPlayState();
 		}
 	}
 }

@@ -69,10 +69,9 @@ package display.clip
 			return null;
 		}
 		
-		override protected function onEnd():void
+		override protected function onComplete():void
 		{
-			super.onEnd();
-			stop();
+			super.onComplete();
 			this.dispatchEvent(new ClipEvent(ClipEvent.COMPLETE));
 		}
 		
