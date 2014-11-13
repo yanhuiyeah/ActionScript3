@@ -137,6 +137,7 @@ package display.clip.core
 			if(_frameDuration > 0)
 			{
 				_frameRate = Math.ceil(1000/_frameDuration);
+				checkPlayState();
 			}
 			else if(stage)
 			{
@@ -299,7 +300,7 @@ package display.clip.core
 			{
 				return frameDuration > 0;
 			}
-			return hasStage;
+			return hasStage && frameDuration > 0;
 		}
 		
 		/**

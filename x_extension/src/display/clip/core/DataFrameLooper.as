@@ -21,7 +21,6 @@ package display.clip.core
 			}
 		}
 		
-		private var sourceChanged:Boolean = false;
 		private var _source:IClipData;
 		public function get source():IClipData
 		{
@@ -31,12 +30,10 @@ package display.clip.core
 		public function set source($value:IClipData):void
 		{
 			if(_source == $value) return;
-			sourceChanged = true;
 			_source = $value;
-			invalidateProperties();
+			frameLabel = source && source.frameLabels.length > 0 ? source.frameLabels[0] : null;
 		}
 		
-		private var frameLabelChanged:Boolean = false;
 		private var _frameLabel:String = null;
 		public function get frameLabel():String
 		{
@@ -46,9 +43,8 @@ package display.clip.core
 		public function set frameLabel($value:String):void
 		{
 			if(this._frameLabel == $value) return;
-			frameLabelChanged = true;
 			this._frameLabel = $value;
-			invalidateProperties();
+			loopFrames = source.getFrameCount(frameLabel)
 		}
 		
 		private var _frameData:IFrameData;
@@ -94,25 +90,6 @@ package display.clip.core
 		override protected function commitProperties():void
 		{
 			super.commitProperties();
-			
-			if(sourceChanged)
-			{
-				if(!frameLabelChanged && source && source.frameLabels.length > 0)
-				{
-					frameLabel = source.frameLabels[0];
-				}
-				else
-				{
-					loopFrames = 0;
-				}
-				sourceChanged = false;
-			}
-			
-			if(frameLabelChanged)
-			{
-				loopFrames = source.getFrameCount(frameLabel);
-				frameLabelChanged = false;
-			}
 			
 			if(dataChanged)
 			{
