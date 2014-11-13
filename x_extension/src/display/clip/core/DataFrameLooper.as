@@ -1,10 +1,10 @@
 package display.clip.core
 {
-	import flash.errors.IllegalOperationError;
-	
 	import display.clip.insterfaces.IClipData;
 	import display.clip.insterfaces.IDataFrameLooper;
 	import display.clip.insterfaces.IFrameData;
+	
+	import flash.errors.IllegalOperationError;
 	
 	/**
 	 *带有数据源的帧循环器 
@@ -21,6 +21,7 @@ package display.clip.core
 			}
 		}
 		
+		private var sourceChanged:Boolean = false;
 		private var _source:IClipData;
 		public function get source():IClipData
 		{
@@ -30,22 +31,12 @@ package display.clip.core
 		public function set source($value:IClipData):void
 		{
 			if(_source == $value) return;
-			if(_source)
-			{
-			}
+			sourceChanged = true;
 			_source = $value;
-			if(_source)
-			{
-				if(source.frameLabels.length > 0)
-				{
-					frameLabel = source.frameLabels[0];
-					loopFrames = source.getFrameCount(frameLabel);
-				}
-			}
-			dataChanged = true;
 			invalidateProperties();
 		}
 		
+		private var frameLabelChanged:Boolean = false;
 		private var _frameLabel:String = null;
 		public function get frameLabel():String
 		{
@@ -55,18 +46,8 @@ package display.clip.core
 		public function set frameLabel($value:String):void
 		{
 			if(this._frameLabel == $value) return;
+			frameLabelChanged = true;
 			this._frameLabel = $value;
-			
-			if(source && source.frameLabels.length > 0)
-			{
-				if(!source.hasFrameLabel(frameLabel))
-				{
-					_frameLabel = source.frameLabels[0];
-				}
-				loopFrames = source.getFrameCount(frameLabel);
-				nextFI = 0;
-			}
-			dataChanged = true;
 			invalidateProperties();
 		}
 		
@@ -76,23 +57,22 @@ package display.clip.core
 			return _frameData;
 		}
 		
+		/**
+		 *设置framedata 
+		 * @param $value
+		 */		
+		private function setFrameData($value:IFrameData):void
+		{
+			if(_frameData == $value) return;
+			_frameData = $value;
+			onRender(_frameData);
+		}
+		
 		private var dataChanged:Boolean = false;
 		override protected function onFrame():void
 		{
 			dataChanged = true;
 			invalidateProperties();
-		}
-		
-		/**
-		 *设置framedata 
-		 * @param $value
-		 */		
-		private function setFrameData($value:IFrameData):Boolean
-		{
-			if(_frameData == $value) return false;
-			_frameData = $value;
-			onRender(_frameData);
-			return true;
 		}
 		
 		override public function destroy():void
@@ -115,15 +95,31 @@ package display.clip.core
 		{
 			super.commitProperties();
 			
+			if(sourceChanged)
+			{
+				if(!frameLabelChanged && source && source.frameLabels.length > 0)
+				{
+					frameLabel = source.frameLabels[0];
+				}
+				else
+				{
+					loopFrames = 0;
+				}
+				sourceChanged = false;
+			}
+			
+			if(frameLabelChanged)
+			{
+				loopFrames = source.getFrameCount(frameLabel);
+				frameLabelChanged = false;
+			}
+			
 			if(dataChanged)
 			{
-				var tempData:IFrameData;
-				if(frameLabel && source)
-				{
-					tempData = source.getFrame(frameIndex, frameLabel);
-				}
-				
-				if(setFrameData(tempData))
+				var currentData:IFrameData = source.getFrame(frameIndex, frameLabel);
+				var needMeasure:Boolean = currentData != frameData;
+				setFrameData(currentData);
+				if(needMeasure)
 				{
 					invalidateSize();
 				}

@@ -1,6 +1,8 @@
 package display.clip.insterfaces
 {
-	public interface IFrameLooper
+	import flash.events.IEventDispatcher;
+
+	public interface IFrameLooper extends IEventDispatcher
 	{
 		
 		/**
@@ -64,7 +66,7 @@ package display.clip.insterfaces
 		function gotoAndPlay($frameIndex:int = 0):void;
 		
 		/**
-		 *将播放到指定帧并停在那里；默认值-1，表示最后一帧
+		 *将播放到指定帧并停在那里；默认值-1，表示最当前帧
 		 * @param $frameIndex	指定帧
 		 */		
 		function gotoAndStop($frameIndex:int = -1):void;

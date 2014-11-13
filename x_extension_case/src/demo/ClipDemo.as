@@ -45,24 +45,19 @@ package demo
 			trace(event.type, clip.frameIndex,  clip.frameLabel,  clip.repeatTimes,  clip.repeat);
 		}
 		
-		private var flag:Boolean = false;
 		protected function onClik(event:MouseEvent):void
 		{
-			if(!(clip as DisplayObject).parent)
-			{
-				this.addChild(clip as DisplayObject);
-			}
-			else
-			{
-				this.removeChild(clip as DisplayObject);
-			}return;
+//			if(!(clip as DisplayObject).parent)
+//			{
+//				this.addChild(clip as DisplayObject);
+//			}
+//			else
+//			{
+//				this.removeChild(clip as DisplayObject);
+//			}return;
 			
-//			this.addChild(clip as DisplayObject);return;
 //			clip.frameLabel = clip.frameLabel == "3000" ? "6000":"3000";	
-//			this.removeChild(clip);
-//			clip = null;
-			flag = !flag;
-			flag ?clip.pause():clip.resume();
+			clip.isPlaying ?clip.pause():clip.resume();
 		}		
 		
 		

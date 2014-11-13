@@ -69,14 +69,14 @@ package display.clip.core
 		
 		override public function set source($value:IClipData):void
 		{
-//			super.source = $value;
-//			if(source && autoPlay && !isRunning)
-//			{
-//				play();
-//			}
+			super.source = $value;
+			if(source && autoPlay && !isPlaying)
+			{
+				play();
+			}
 		}
 		
-		public function play($frameLabel:String=null):void
+		public function play($frameIndex:int = 0, $frameLabel:String = null):void
 		{
 			if(!source)
 			{
@@ -87,12 +87,19 @@ package display.clip.core
 			{
 				this.frameLabel = $frameLabel;
 			}
-//			execute();
+			
+			gotoAndPlay(nextFI);
 		}
 		
-		public function stop():void
+		public function stop($frameIndex:int = -1, $frameLabel:String = null):void
 		{
-//			halt();
+			if($frameLabel)
+			{
+				frameLabel = $frameLabel;
+			}
+			
+			gotoAndStop($frameIndex);
+			
 			if(autoRemoved)
 			{
 				removeSelf();

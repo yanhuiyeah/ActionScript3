@@ -27,7 +27,7 @@ package demo
 			clip.addEventListener(ClipEvent.FRAME, onframe);
 			this.addChild(clip as DisplayObject);
 			(clip as DisplayObject).scaleX = (clip as DisplayObject).scaleY = .3;
-			clip.play("walk");
+			clip.play(0, "walk");
 			clip.go();
 			
 			stage.addEventListener(MouseEvent.CLICK, onClick);

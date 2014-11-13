@@ -28,13 +28,16 @@ package display.clip.insterfaces
 		
 		/**
 		 *播放 
+		 * @param $frameIndex 将要播放的帧索引		0表示第一帧
 		 * @param $frameLabel 将要播放的帧标签		null表示当前标签
 		 */		
-		function play($frameLabel:String = null):void;
+		function play($frameIndex:int = 0, $frameLabel:String = null):void;
 		
 		/**
 		 *停止 
+		 * @param $frameIndex 将要播放的帧索引		-1表示当前帧
+		 * @param $frameLabel 将要播放的帧标签		null表示当前标签
 		 */		
-		function stop():void;
+		function stop($frameIndex:int = -1, $frameLabel:String = null):void;
 	}
 }

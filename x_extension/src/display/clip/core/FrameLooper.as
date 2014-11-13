@@ -169,6 +169,7 @@ package display.clip.core
 		
 		public function gotoAndPlay($frameIndex:int = 0):void
 		{
+			nextFI = $frameIndex;
 			if(isPlaying) return;
 			var ready:Boolean = isReady();
 			if(ready)
@@ -189,7 +190,7 @@ package display.clip.core
 			register(false);
 			if(loopFrames > 0)
 			{
-				nextFI = $frameIndex > -1 ? $frameIndex:loopFrames-1;
+				nextFI = $frameIndex > -1 ? $frameIndex:frameIndex;
 			}
 			frameHandler();
 		}
@@ -306,7 +307,6 @@ package display.clip.core
 		 */		
 		protected function onFrame():void
 		{
-			trace(frameIndex, repeatTimes);
 		}
 		
 		/**
@@ -343,7 +343,7 @@ package display.clip.core
 		}
 		
 		/**
-		 *注册timer 
+		 *注册timer （注册后要求每隔frameduration执行一次$frameHandler）
 		 * @param $frameHandler
 		 */		
 		protected function registerTimer($frameHandler:Function):void
@@ -352,7 +352,7 @@ package display.clip.core
 		}
 		
 		/**
-		 *解除注册的timer 
+		 *解除registerTimer注册的timer 
 		 * @param $frameHandler
 		 */		
 		protected function unRegisterTimer($frameHandler:Function):void
