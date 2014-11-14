@@ -154,6 +154,7 @@ package xlib.framework.components
 		public function set showBorder(value:Boolean):void
 		{
 			_showBorder = value;
+			updateDisplayList(priorityWidth, priorityHeight);
 		}
 
 	}
