@@ -1,5 +1,6 @@
 package display.clip.core
 {
+	import display.clip.events.ClipEvent;
 	import display.clip.insterfaces.IClipData;
 	import display.clip.insterfaces.IDataFrameLooper;
 	import display.clip.insterfaces.IFrameData;
@@ -10,11 +11,12 @@ package display.clip.core
 	 *带有数据源的帧循环器 
 	 * @author yeah
 	 */	
-	public class DataFrameLooper extends FrameLooper implements IDataFrameLooper
+	public class DataClipLooper extends ClipLooper implements IDataFrameLooper
 	{
-		public function DataFrameLooper($source:IClipData = null)
+		public function DataClipLooper($source:IClipData = null)
 		{
 			super();
+			this.addEventListener(ClipEvent.FRAME, onFrame);
 			if($source)
 			{
 				this.source = $source;
@@ -65,18 +67,13 @@ package display.clip.core
 		}
 		
 		private var dataChanged:Boolean = false;
-		override protected function onFrame():void
+		/**
+		 *运行每帧 
+		 */		
+		private function onFrame($e:ClipEvent):void
 		{
 			dataChanged = true;
 			invalidateProperties();
-		}
-		
-		override public function destroy():void
-		{
-			super.destroy();
-			this.source = null;
-			this._frameLabel = null;
-			_frameData = null;
 		}
 
 		/**
@@ -102,6 +99,14 @@ package display.clip.core
 				}
 				dataChanged = false;
 			}
+		}
+		
+		override public function destroy():void
+		{
+			super.destroy();
+			this.source = null;
+			this._frameLabel = null;
+			_frameData = null;
 		}
 	}
 }

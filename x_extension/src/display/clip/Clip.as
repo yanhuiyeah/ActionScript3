@@ -68,33 +68,5 @@ package display.clip
 			}
 			return null;
 		}
-		
-		override protected function onComplete():void
-		{
-			super.onComplete();
-			this.dispatchEvent(new ClipEvent(ClipEvent.COMPLETE));
-		}
-		
-		override protected function onRepeat():void
-		{
-			super.onRepeat();
-			this.dispatchEvent(new ClipEvent(ClipEvent.REPEAT));
-		}
-		
-		override protected function onFrame():void
-		{
-			super.onFrame();
-			this.dispatchEvent(new ClipEvent(ClipEvent.FRAME));
-		}
-		
-		override protected function registerTimer($enterFrame:Function):void
-		{
-			TickManager.instance.doDuration($enterFrame, this.frameDuration);	
-		}
-		
-		override protected function unRegisterTimer($enterFrame:Function):void
-		{
-			TickManager.instance.clean($enterFrame);
-		}
 	}
 }

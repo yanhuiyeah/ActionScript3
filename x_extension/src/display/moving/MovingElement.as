@@ -1,4 +1,4 @@
-package display.jump
+package display.moving
 {
 	import flash.display.DisplayObject;
 	
@@ -6,33 +6,33 @@ package display.jump
 	import display.clip.insterfaces.IClipData;
 	import xlib.framework.manager.TickManager;
 	
-	public class MovingItem extends Clip implements IMoving
+	public class MovingElement extends Clip implements IMovingElement
 	{
-		public function MovingItem($source:IClipData=null)
+		public function MovingElement($source:IClipData=null)
 		{
 			super($source);
 		}
 		
 		
-		private var _horizontal:IMovingElement;
-		public function get horizontal():IMovingElement
+		private var _horizontal:IMovingData;
+		public function get horizontal():IMovingData
 		{
 			return _horizontal;
 		}
 		
-		public function set horizontal($value:IMovingElement):void
+		public function set horizontal($value:IMovingData):void
 		{
 			if(_horizontal == $value) return;
 			_horizontal = $value;
 		}
 		
-		private var _vertical:IMovingElement;
-		public function get vertical():IMovingElement
+		private var _vertical:IMovingData;
+		public function get vertical():IMovingData
 		{
 			return _vertical;
 		}
 		
-		public function set vertical($value:IMovingElement):void
+		public function set vertical($value:IMovingData):void
 		{
 			if(_vertical == $value) return;
 			_vertical = $value;
@@ -45,13 +45,12 @@ package display.jump
 		
 		public function go():void
 		{
-			vertical = new MovingElement();
+			vertical = new MovingData();
 			vertical.accelerate = 2;
 			vertical.speed = 0;
 			vertical.miniSpeed = 0;
 			
-			horizontal = new MovingElement();
-			horizontal.rate = 1;
+			horizontal = new MovingData();
 			horizontal.speed = 3;
 			horizontal.accelerate = 1;
 			horizontal.maxSpeed = 10;

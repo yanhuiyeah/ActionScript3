@@ -7,7 +7,7 @@ package demo
 	
 	import display.clip.events.ClipEvent;
 	import display.clip.insterfaces.IClip;
-	import display.jump.MovingItem;
+	import display.moving.MovingElement;
 	import xlib.framework.Application;
 	import xlib.framework.core.Component;
 	
@@ -17,11 +17,11 @@ package demo
 		{
 			super();
 		}
-		private var clip:MovingItem;
+		private var clip:MovingElement;
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			clip = new MovingItem();
+			clip = new MovingElement();
 			clip.frameDuration = 200;
 			clip.source = new cd3();
 			clip.addEventListener(ClipEvent.FRAME, onframe);
@@ -36,25 +36,25 @@ package demo
 		
 		protected function onKeyup(event:KeyboardEvent):void
 		{
-			switch(event.keyCode)
-			{
-				case Keyboard.SPACE:
-					clip.vertical.speed = 50;
-					clip.vertical.rate = -1;
-					break;
-				case Keyboard.LEFT:
-					clip.horizontal.rate = -1;
-					break;
-				case Keyboard.RIGHT:
-					clip.horizontal.rate = 1;
-					break;
-				case Keyboard.ENTER:
-					clip.y = 600;
-					clip.x = 0;
-					clip.vertical.speed = 30;
-					clip.vertical.rate = -1;
-					break;
-			}
+//			switch(event.keyCode)
+//			{
+//				case Keyboard.SPACE:
+//					clip.vertical.speed = 50;
+//					clip.vertical.rate = -1;
+//					break;
+//				case Keyboard.LEFT:
+//					clip.horizontal.rate = -1;
+//					break;
+//				case Keyboard.RIGHT:
+//					clip.horizontal.rate = 1;
+//					break;
+//				case Keyboard.ENTER:
+//					clip.y = 600;
+//					clip.x = 0;
+//					clip.vertical.speed = 30;
+//					clip.vertical.rate = -1;
+//					break;
+//			}
 		}
 		
 		protected function onClick(event:MouseEvent):void

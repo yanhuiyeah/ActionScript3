@@ -1,65 +1,38 @@
 package display.clip.core
 {
+	import display.clip.events.ClipEvent;
 	import display.clip.insterfaces.IFrameLooper;
 	
 	import flash.errors.IllegalOperationError;
-	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 	import flash.utils.getTimer;
 	
-	import xlib.framework.core.Component;
+	import xlib.framework.core.LazyDispatcher;
+	import xlib.framework.manager.TickManager;
 	
-	/**
-	 *帧循环器 （抽象类）
-	 * @author yeah
-	 */	
-	public class FrameLooper extends Component implements IFrameLooper
+	/**播放结束*/
+	[Event(name="complete", type="display.clip.events.ClipEvent")]
+	/**一个循环*/
+	[Event(name="repeat", type="display.clip.events.ClipEvent")]
+	/**每帧*/
+	[Event(name="frame", type="display.clip.events.ClipEvent")]
+	
+	public class FrameLooper extends LazyDispatcher implements IFrameLooper
 	{
-		public function FrameLooper()
+		public function FrameLooper($dispatcher:IEventDispatcher=null, $autoCreate:Boolean=true)
 		{
-			super();
-			this.mouseEnabled = this.mouseChildren = false;
-			checkStageEvent();
+			super($dispatcher, $autoCreate);
 		}
 		
-		/**
-		 *监听舞台 
-		 */		
-		private function checkStageEvent():void
+		private var _autoSuspend:Boolean = true;
+		public function get autoSuspend():Boolean
 		{
-			if(autoHang)
-			{
-				this.addEventListener(Event.ADDED_TO_STAGE, stageEventHandler);
-				this.addEventListener(Event.REMOVED_FROM_STAGE, stageEventHandler);
-			}
-			else
-			{
-				this.removeEventListener(Event.ADDED_TO_STAGE, stageEventHandler);
-				this.removeEventListener(Event.REMOVED_FROM_STAGE, stageEventHandler);
-			}
+			return _autoSuspend;
 		}
 		
-		private var hasStage:Boolean = false;
-		/**
-		 *添加或移除舞台 
-		 * @param $e
-		 */		
-		private function stageEventHandler($e:Event):void
+		public function set autoSuspend(value:Boolean):void
 		{
-			hasStage = $e.type == Event.ADDED_TO_STAGE;
-			checkPlayState();
-		}
-		
-		private var _autoHang:Boolean = true;
-		public function get autoHang():Boolean
-		{
-			return _autoHang;
-		}
-
-		public function set autoHang(value:Boolean):void
-		{
-			if(_autoHang == value) return;
-			_autoHang = value;
-			checkStageEvent();
+			_autoSuspend = value;
 		}
 		
 		private var _loopFrames:int;
@@ -98,11 +71,11 @@ package display.clip.core
 			_repeatTimes = $value;
 			if(loopFrames > 0 && frameIndex == loopFrames-1)
 			{
-				onRepeat();
+				this.dispatchEvent(new ClipEvent(ClipEvent.REPEAT));
 				if(_repeatTimes == repeat)
 				{
 					gotoAndStop(this.frameIndex);
-					onComplete();
+					this.dispatchEvent(new ClipEvent(ClipEvent.COMPLETE));
 				}
 			}
 		}
@@ -137,11 +110,7 @@ package display.clip.core
 			if(_frameDuration > 0)
 			{
 				_frameRate = Math.ceil(1000/_frameDuration);
-				checkPlayState();
-			}
-			else if(stage)
-			{
-				frameRate = stage.frameRate;
+				setSuspend(moreSuspend);
 			}
 			else
 			{
@@ -159,7 +128,7 @@ package display.clip.core
 		{
 			if(_frameIndex == $value) return;
 			_frameIndex = $value;
-			onFrame();
+			this.dispatchEvent(new ClipEvent(ClipEvent.FRAME));
 		}
 		
 		private var _isPlaying:Boolean = false;
@@ -170,10 +139,12 @@ package display.clip.core
 		
 		public function gotoAndPlay($frameIndex:int = 0):void
 		{
+			isPause = false;
 			nextFI = $frameIndex;
 			if(isPlaying) return;
-			var ready:Boolean = isReady();
-			if(ready)
+			
+			setSuspended();
+			if(!suspended)
 			{
 				_isPlaying = true;
 				register(true);
@@ -196,17 +167,22 @@ package display.clip.core
 			frameHandler();
 		}
 		
+		private var isPause:Boolean = false;
 		public function pause():void
 		{
+			if(isPause) return;
+			isPause = true;
 			gotoAndStop(this.frameIndex);
 		}
 		
 		public function resume():void
 		{
+			if(!isPause) return;
+			isPause = false;
 			gotoAndPlay(this.frameIndex);
 		}
 		
-		public function destroy():void
+		override public function destroy():void
 		{
 			gotoAndStop();
 			_loopFrames = 0;
@@ -216,6 +192,7 @@ package display.clip.core
 			repeat = -1;
 			_repeatTimes = 0;
 			loopFrames = 0;
+			moreSuspend = false;
 		}
 		
 		/**
@@ -237,33 +214,40 @@ package display.clip.core
 				preTime = 0;
 			}
 			
-			if(nextFI < loopFrames-1)
+			if(loopFrames < 1)
 			{
 				setFrameIndex(nextFI);
+				nextFI++;
 			}
 			else
 			{
-				var currentRT:int = nextFI / (loopFrames -1) + _repeatTimes;
-				if(repeat != -1 && currentRT >= repeat)
+				if(nextFI < loopFrames-1)
 				{
-					nextFI = loopFrames -1;
-					currentRT = repeat;
+					setFrameIndex(nextFI);
 				}
 				else
 				{
-					nextFI %= loopFrames;
+					var currentRT:int = nextFI / (loopFrames -1) + _repeatTimes;
+					if(repeat != -1 && currentRT >= repeat)
+					{
+						nextFI = loopFrames -1;
+						currentRT = repeat;
+					}
+					else
+					{
+						nextFI %= loopFrames;
+					}
+					setFrameIndex(nextFI);
+					setRepeatTimes(currentRT);
 				}
-				setFrameIndex(nextFI);
-				setRepeatTimes(currentRT);
+				
+				nextFI = ++nextFI % loopFrames;
 			}
-			
-			nextFI = ++nextFI % loopFrames;
 		}
 		
 		/**真正开始之前的时间*/
 		private var preTime:int = 0;
 		
-		private var _isReady:Boolean = false;
 		/**
 		 *播放但是不执行帧 
 		 */		
@@ -274,13 +258,41 @@ package display.clip.core
 			register(false);
 		}
 		
-		final protected function checkPlayState():void
+		private var _suspended:Boolean;
+		/**
+		 *是否处于挂起状态 true 挂起 false 正常
+		 */
+		public function get suspended():Boolean
 		{
-			var ready:Boolean = isReady();
-			if(_isReady == ready) return;
-			_isReady = ready;
-			if(!isPlaying) return;
-			if(_isReady)
+			return _suspended;
+		}
+		
+		/**
+		 *设置挂起状态 
+		 * @return 
+		 */		
+		private function setSuspended():Boolean
+		{
+			_suspended = moreSuspend || frameDuration < 1;
+			return suspended;
+		}
+
+		/**
+		 *其他挂起条件 
+		 */		
+		private var moreSuspend:Boolean = false;
+		
+		/**
+		 *检测挂起状态 
+		 * @param $value	其它挂起条件
+		 */		
+		final public function setSuspend($value:Boolean):void
+		{
+			var oldSuspended:Boolean = suspended;
+			moreSuspend = $value;
+			setSuspended();
+			if(!isPlaying || oldSuspended == suspended) return;
+			if(!suspended)
 			{
 				register(true);
 			}
@@ -288,40 +300,6 @@ package display.clip.core
 			{
 				playWithoutFrame();
 			}
-		}
-		
-		/**
-		 *播放准备条件 （子类可新增）
-		 * @return 
-		 */		
-		protected function isReady():Boolean
-		{
-			if(!autoHang)
-			{
-				return frameDuration > 0;
-			}
-			return hasStage && frameDuration > 0;
-		}
-		
-		/**
-		 *运行1帧
-		 */		
-		protected function onFrame():void
-		{
-		}
-		
-		/**
-		 *循环一次 
-		 */		
-		protected function onRepeat():void
-		{
-		}
-
-		/**
-		 *所有循环结束 
-		 */		
-		protected function onComplete():void
-		{
 		}
 		
 		private var isRegister:Boolean = false;
@@ -349,7 +327,7 @@ package display.clip.core
 		 */		
 		protected function registerTimer($frameHandler:Function):void
 		{
-			throw new IllegalOperationError("抽象方法子类重写");
+			TickManager.instance.doDuration($frameHandler, this.frameDuration);
 		}
 		
 		/**
@@ -358,7 +336,7 @@ package display.clip.core
 		 */		
 		protected function unRegisterTimer($frameHandler:Function):void
 		{
-			throw new IllegalOperationError("抽象方法子类重写");
+			TickManager.instance.clean($frameHandler);
 		}
 	}
 }

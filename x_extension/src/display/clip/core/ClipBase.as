@@ -13,7 +13,7 @@ package display.clip.core
 	 * 需重写unRegisterTimer解除注册的计时器
 	 * @author yeah
 	 */	
-	public class ClipBase extends DataFrameLooper implements IClip
+	public class ClipBase extends DataClipLooper implements IClip
 	{
 		public function ClipBase($source:IClipData=null)
 		{
@@ -88,7 +88,7 @@ package display.clip.core
 				this.frameLabel = $frameLabel;
 			}
 			
-			gotoAndPlay(nextFI);
+			gotoAndPlay($frameIndex);
 		}
 		
 		public function stop($frameIndex:int = -1, $frameLabel:String = null):void
@@ -156,16 +156,16 @@ package display.clip.core
 			return isNaN(explicitY)? 0 : explicitY;
 		}
 		
-		override protected function isReady():Boolean
+		override protected function getSuspended():Boolean
 		{
-			return super.isReady() && visible;
+			return super.getSuspended() && visible;
 		}
 		
 		override public function set visible(value:Boolean):void
 		{
 			if(super.visible == value) return;
 			super.visible = value;
-			checkPlayState();
+			checkSuspend();
 		}
 	}
 }

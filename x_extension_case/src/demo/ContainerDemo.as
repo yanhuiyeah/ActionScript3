@@ -1,7 +1,5 @@
 package demo
 {
-	import demo.items.ComponentOBJ;
-	
 	import flash.events.MouseEvent;
 	
 	import xlib.framework.Application;
@@ -45,5 +43,24 @@ package demo
 			this.removeChild(c);
 			c = null;
 		}
+	}
+}
+import xlib.framework.core.Component;
+
+class ComponentOBJ extends Component
+{
+	public function ComponentOBJ()
+	{
+		super();
+		this.setActualSize(100, 100);
+	}
+	
+	override protected function updateDisplayList($width:Number, $height:Number):void
+	{
+		super.updateDisplayList($width, $height);
+		this.graphics.clear();
+		this.graphics.beginFill(0x0000ff);
+		this.graphics.drawRect(0, 0, $width, $height);
+		this.graphics.endFill();
 	}
 }

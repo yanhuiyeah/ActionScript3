@@ -9,8 +9,14 @@ package display.clip.insterfaces
 		 *自动挂起，当处于休眠状态时是否自动挂起（等待唤醒后再进行计算） 
 		 * @return 
 		 */		
-		function get autoHang():Boolean;
-		function set autoHang($value:Boolean):void;
+		function get autoSuspend():Boolean;
+		function set autoSuspend($value:Boolean):void;
+		
+		/**
+		 *是否处于挂起状态 
+		 * @return 
+		 */		
+		function get suspended():Boolean;
 		
 		/**
 		 *一个循环经过的帧数 ；0表示一个循环有无限帧数

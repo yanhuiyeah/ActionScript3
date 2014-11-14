@@ -2,7 +2,9 @@
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
     <classEntry path="display.clip.insterfaces.IFrameLooper"/>
+    <classEntry path="display.clip.core.ClipLooper"/>
     <classEntry path="display.clip.core.FrameLooper"/>
+    <classEntry path="display.moving.MovingElements"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
