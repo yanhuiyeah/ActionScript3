@@ -27,7 +27,7 @@ package demo
 			this.addChild(clip as DisplayObject);
 			(clip as DisplayObject).scaleX = .3;
 			(clip as DisplayObject).scaleY = .3;
-			clip.play(0,"walk");
+			clip.play();
 		}
 	}
 }
