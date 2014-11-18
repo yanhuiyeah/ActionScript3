@@ -1,13 +1,16 @@
 package demo
 {
+	import display.clip.Clip;
+	import display.clip.events.ClipEvent;
+	import display.clip.insterfaces.IClip;
+	import display.moving.MovingData;
+	import display.moving.MovingProxy;
+	
 	import flash.display.DisplayObject;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	
-	import display.clip.events.ClipEvent;
-	import display.clip.insterfaces.IClip;
-	import display.moving.MovingElement;
 	import xlib.framework.Application;
 	import xlib.framework.core.Component;
 	
@@ -17,18 +20,35 @@ package demo
 		{
 			super();
 		}
-		private var clip:MovingElement;
+		private var clip:Clip;
+		private var element:MovingProxy;
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			clip = new MovingElement();
+			clip = new Clip();
 			clip.frameDuration = 200;
 			clip.source = new cd3();
 			clip.addEventListener(ClipEvent.FRAME, onframe);
 			this.addChild(clip as DisplayObject);
 			(clip as DisplayObject).scaleX = (clip as DisplayObject).scaleY = .3;
 			clip.play(0, "walk");
-			clip.go();
+			
+			element = new MovingProxy();
+			element.target = clip;
+			element.frameDuration = 200;
+			
+			var md:MovingData = new MovingData();
+//			md.miniSpeed = 0;
+//			md.maxSpeed = 10;
+//			element.hData = md;
+			
+			md = new MovingData();
+			md.miniSpeed = 0;
+			md.maxSpeed = 10;
+			md.accelerate = 1;
+			element.vData = md;
+			
+			element.gotoAndPlay();
 			
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyup);

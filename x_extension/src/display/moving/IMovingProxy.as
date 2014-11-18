@@ -3,7 +3,11 @@ package display.moving
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;
 
-	public interface IMovingElement extends IEventDispatcher
+	/**
+	 *移动代理接口 
+	 * @author yeah
+	 */	
+	public interface IMovingProxy extends IEventDispatcher
 	{
 		/**
 		 *水平移动元素 

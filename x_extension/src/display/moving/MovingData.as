@@ -24,7 +24,7 @@ package display.moving
 		}
 
 		
-		private var _speed:Number;
+		private var _speed:Number = 0;
 		public function get speed():Number
 		{
 			return _speed;
@@ -36,7 +36,7 @@ package display.moving
 			_speed = $value;
 		}
 		
-		private var _accelerate:Number;
+		private var _accelerate:Number = 0;
 		public function get accelerate():Number
 		{
 			return _accelerate;
