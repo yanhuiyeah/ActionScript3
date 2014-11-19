@@ -112,9 +112,9 @@ class cd3 extends ClipParserData
 		parserData(bmd, xml, "name");
 	}
 	
-	[Embed(source="assets/avatar/hero.xml", mimeType="application/octet-stream")]
+	[Embed(source="../../assets/avatar/hero.xml", mimeType="application/octet-stream")]
 	private var config:Class;
 	
-	[Embed(source="../assets/avatar/hero.png")]
+	[Embed(source="../../assets/avatar/hero.png")]
 	private var img:Class;
 }

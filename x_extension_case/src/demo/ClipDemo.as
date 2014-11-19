@@ -109,29 +109,29 @@ class cd extends ClipData
 	}
 	
 	
-	[Embed(source="../assets/clip/30000.png")]
+	[Embed(source="../../assets/clip/30000.png")]
 	private var img30000:Class;
-	[Embed(source="../assets/clip/30001.png")]
+	[Embed(source="../../assets/clip/30001.png")]
 	private var img30001:Class;
-	[Embed(source="../assets/clip/30002.png")]
+	[Embed(source="../../assets/clip/30002.png")]
 	private var img30002:Class;
-	[Embed(source="../assets/clip/30003.png")]
+	[Embed(source="../../assets/clip/30003.png")]
 	private var img30003:Class;
-	[Embed(source="../assets/clip/30004.png")]
+	[Embed(source="../../assets/clip/30004.png")]
 	private var img30004:Class;
-	[Embed(source="../assets/clip/30005.png")]
+	[Embed(source="../../assets/clip/30005.png")]
 	private var img30005:Class;
 	
-	[Embed(source="../assets/clip/60000.png")]
+	[Embed(source="../../assets/clip/60000.png")]
 	private var img60000:Class;
-	[Embed(source="../assets/clip/60001.png")]
+	[Embed(source="../../assets/clip/60001.png")]
 	private var img60001:Class;
-	[Embed(source="../assets/clip/60002.png")]
+	[Embed(source="../../assets/clip/60002.png")]
 	private var img60002:Class;
-	[Embed(source="../assets/clip/60003.png")]
+	[Embed(source="../../assets/clip/60003.png")]
 	private var img60003:Class;
-	[Embed(source="../assets/clip/60004.png")]
+	[Embed(source="../../assets/clip/60004.png")]
 	private var img60004:Class;
-	[Embed(source="../assets/clip/60005.png")]
+	[Embed(source="../../assets/clip/60005.png")]
 	private var img60005:Class;
 }
