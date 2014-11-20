@@ -2,10 +2,10 @@ package xlib.framework.core
 {
 	import flash.display.Stage;
 	
-	import xlib.framework.manager.supportClasses.IRenderManager;
-	import xlib.framework.manager.RenderManager;
-	import xlib.framework.manager.TickManager;
 	import xlib.framework.xlib_internal;
+	import xlib.framework.manager.Injector;
+	import xlib.framework.manager.TickManager;
+	import xlib.framework.manager.supportClasses.IRenderManager;
 	
 	use namespace xlib_internal;
 	
@@ -52,7 +52,7 @@ package xlib.framework.core
 		{
 			this._stage = $stage;
 			this._tick = TickManager.instance;
-			this._renderManager = RenderManager.instance;
+			this._renderManager = Injector.instance.pull(IRenderManager);
 		}
 		
 		//==================================

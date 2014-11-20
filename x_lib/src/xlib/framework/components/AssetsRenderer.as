@@ -2,13 +2,15 @@ package xlib.framework.components
 {
 	import flash.display.DisplayObject;
 	
-	import xlib.framework.manager.supportClasses.ISkinParser;
 	import xlib.framework.core.Component;
 	import xlib.framework.core.interfaces.IInvalidateElement;
 	import xlib.framework.core.interfaces.ILayoutElement;
+	import xlib.framework.manager.Injector;
+	import xlib.framework.manager.supportClasses.ISkinParser;
 	
 	/**
-	 *资源呈现器 （非容器，请勿做相关容器操作）
+	 *资源呈现器 （非容器，请勿做相关容器操作）<br>
+	 * 设置skin可自动解析（通过ISkinParser解析）并且呈现
 	 * @author yeah
 	 */	
 	public class AssetsRenderer extends Component
@@ -18,10 +20,7 @@ package xlib.framework.components
 			super();
 		}
 		
-		
-		private var skinChanged:Boolean = false;
 		private var _skin:Object;
-
 		/**
 		 *皮肤对象
 		 */
@@ -37,14 +36,9 @@ package xlib.framework.components
 		{
 			if(_skin == value) return;
 			_skin = value;
-			
 			if(skinParser)
 			{
 				skinParser.parser(skin, updateSkin);
-			}
-			else
-			{
-				skinChanged = true;
 			}
 		}
 		
@@ -65,54 +59,84 @@ package xlib.framework.components
 			if(_skinParser == value) return;
 			_skinParser = value;
 			if(!skinParser) return;
-			
-			if(skinChanged)
-			{
-				skinParser.parser(skin, updateSkin);
-				skinChanged = false;
-			}
+			skinParser.parser(skin, updateSkin);
 		}
 		
 		/**
-		 *创建默认皮肤解析器 
+		 *创建默认皮肤解析器 （子类可重写）
 		 * @return 
 		 */		
 		protected function createSkinParser():ISkinParser
 		{
-			//返回默认的解析器
+			return Injector.instance.pull(ISkinParser);;
 		}
 		
-		private var displaySkinChanged:Boolean = false;
-		private var _displaySkin:DisplayObject;
+		
+		private var parsedSkinChanged:Boolean = false;
+		private var _parsedSkin:Object;
 		/**
 		 *解析后的皮肤显示对象 
 		 * @return 
 		 */		
-		public function get displaySkin():DisplayObject
+		public function get parsedSkin():Object
 		{
-			return _displaySkin;
+			return _parsedSkin;
 		}
 		
 		/**
-		 *设置解析后的皮肤显示对象 
-		 * @param $value
+		 *上次的skin 
 		 */		
-		private function setDisplaySkin($value:DisplayObject):void
-		{
-			if(_displaySkin == $value) return;
-			_displaySkin = $value;
-			displaySkinChanged = true;
-			invalidateProperties();
-			invalidateSize();
-		}
+		private var lastSkin:Object;
 		
 		/**
 		 * 更新皮肤 
 		 * @param $parserdSkin 解析后的皮肤对象
 		 */		
-		protected function updateSkin($parserdSkin:Object):void
+		private function updateSkin($parserdSkin:Object):void
 		{
-			setDisplaySkin($parserdSkin as DisplayObject);
+			if(_parsedSkin == $parserdSkin) return;
+			lastSkin = _parsedSkin;
+			_parsedSkin = $parserdSkin;
+			parsedSkinChanged = true;
+			invalidateProperties();
+			invalidateSize();
+		}
+		
+		/**
+		 *提交skin 属性 
+		 */		
+		private function validateSkin():void
+		{
+			if(this.lastSkin)	
+			{
+				detachSkin(lastSkin);
+				this.lastSkin = null;
+			}
+			attachSkin(parsedSkin);
+		}
+		
+		/**
+		 *附着皮肤 
+		 * @param $skin
+		 */		
+		protected function attachSkin($skin:Object):void
+		{
+			var displaySkin:DisplayObject = $skin as DisplayObject;
+			if(!displaySkin) return;
+			this.addChildAt(displaySkin, 0);
+		}
+
+		/**
+		 *分离皮肤
+		 * @param $skin
+		 */		
+		protected function detachSkin($skin:Object):void
+		{
+			var displaySkin:DisplayObject = $skin as DisplayObject;
+			if(displaySkin)
+			{
+				this.removeChild(displaySkin);
+			}
 		}
 		
 		override protected function createChildren():void
@@ -132,34 +156,26 @@ package xlib.framework.components
 		{
 			super.commitProperties();
 			
-			if(displaySkinChanged)
+			if(parsedSkinChanged)
 			{
-				if(numChildren > 0)
-				{
-					this.removeChildAt(0);
-				}
-				
-				if(displaySkin)
-				{
-					this.addChildAt(displaySkin, 0);
-				}
-				displaySkinChanged = false;
+				validateSkin();
+				parsedSkinChanged = false;
 			}
 		}
 		
 		override protected function measure():void
 		{
-			if(displaySkin)
+			if(parsedSkin)
 			{
-				if(displaySkin is IInvalidateElement)
+				if(parsedSkin is IInvalidateElement)
 				{
-					this.measuredWidth = IInvalidateElement(displaySkin).measuredWidth;
-					this.measuredHeight = IInvalidateElement(displaySkin).measuredHeight;
+					this.measuredWidth = IInvalidateElement(parsedSkin).measuredWidth;
+					this.measuredHeight = IInvalidateElement(parsedSkin).measuredHeight;
 				}
 				else
 				{
-					this.measuredWidth = displaySkin.width;
-					this.measuredHeight = displaySkin.height;
+					this.measuredWidth = parsedSkin.width;
+					this.measuredHeight = parsedSkin.height;
 				}
 			}
 			else
@@ -170,16 +186,16 @@ package xlib.framework.components
 		
 		override protected function updateDisplayList($width:Number, $height:Number):void
 		{
-			if(displaySkin)
+			if(parsedSkin)
 			{
-				if(displaySkin is ILayoutElement)
+				if(parsedSkin is ILayoutElement)
 				{
-					ILayoutElement(displaySkin).setLayoutSize($width, $height);
+					ILayoutElement(parsedSkin).setLayoutSize($width, $height);
 				}
 				else
 				{
-					this.displaySkin.width = $width;
-					this.displaySkin.height = $height;
+					this.parsedSkin.width = $width;
+					this.parsedSkin.height = $height;
 				}
 			}
 		}
