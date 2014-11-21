@@ -9,13 +9,13 @@ package xlib.framework.components
 	import xlib.framework.manager.supportClasses.ISkinParser;
 	
 	/**
-	 *资源呈现器 （非容器，请勿做相关容器操作）<br>
+	 *皮肤渲染器 （非容器，请勿做相关容器操作）<br>
 	 * 设置skin可自动解析（通过ISkinParser解析）并且呈现
 	 * @author yeah
 	 */	
-	public class AssetsRenderer extends Component
+	public class SkinRenderer extends Component
 	{
-		public function AssetsRenderer()
+		public function SkinRenderer()
 		{
 			super();
 		}

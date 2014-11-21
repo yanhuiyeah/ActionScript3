@@ -1,6 +1,5 @@
 package xlib.framework.core.interfaces
 {
-	import flash.display.DisplayObjectContainer;
 	import flash.events.IEventDispatcher;
 	
 	/**
