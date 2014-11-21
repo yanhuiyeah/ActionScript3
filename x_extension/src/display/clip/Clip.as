@@ -6,10 +6,8 @@ package display.clip
 	
 	import display.clip.core.ClipBase;
 	import display.clip.data.FrameData;
-	import display.clip.events.ClipEvent;
 	import display.clip.insterfaces.IClipData;
 	import display.clip.insterfaces.IFrameData;
-	import xlib.framework.manager.TickManager;
 	
 	/**播放结束*/
 	[Event(name="complete", type="display.clip.events.ClipEvent")]
@@ -48,7 +46,10 @@ package display.clip
 			this.graphics.endFill();
 		}
 		
-		private var matrix:Matrix;
+		/**
+		 *矩阵 
+		 */		
+		private static var matrix:Matrix;
 		/**
 		 *获取渲染matrix
 		 * @param $offset
