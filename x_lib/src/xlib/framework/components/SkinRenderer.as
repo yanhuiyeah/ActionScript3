@@ -68,7 +68,7 @@ package xlib.framework.components
 		 */		
 		protected function createSkinParser():ISkinParser
 		{
-			return Injector.instance.pull(ISkinParser);;
+			return Injector.instance.pull(ISkinParser);
 		}
 		
 		

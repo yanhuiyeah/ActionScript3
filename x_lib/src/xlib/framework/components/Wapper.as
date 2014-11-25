@@ -1,70 +1,27 @@
 package xlib.framework.components
 {
 	import flash.display.BitmapData;
-	import flash.display.Shape;
-	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	
-	import xlib.framework.core.Global;
-	import xlib.framework.events.UIEvent;
+	import xlib.framework.xlib_internal;
+	import xlib.framework.core.Component;
+	
+	use namespace xlib_internal;
 	
 	/**
-	 *更新完成的事件 
-	 */	
-	[Event(name="updateComplete", type="xlib.framework.events.UIEvent")]
-	
-	/**
-	 *图片渲染器<br>
-	 * 渲染完成后派发UIEvent.updateComplete, 此时的尺寸是正确的
+	 *素材包装器 
 	 * @author yeah
 	 */	
-	public class ShapeImage extends Shape
+	public class Wapper extends Component
 	{
-		/**
-		 * 构造函数
-		 * @param $bitmapData	bitmapdata数据源
-		 * @param $rect				缩放用的九宫格
-		 */		
-		public function ShapeImage($bitmapData:BitmapData = null, $rect:Rectangle = null)
+		public function Wapper($bitmapData:BitmapData = null, $rect:Rectangle = null)
 		{
 			super();
 		}
 		
-		private var explicitWidth:Number = NaN;
-		private var _width:Number = 0;
-		override public function get width():Number
-		{
-			return _width;
-		}
-
-		override public function set width(value:Number):void
-		{
-			if(explicitWidth == value) return;
-			explicitWidth = value;
-			if(_width == value) return;
-			_width = value;
-			invalidate();
-		}
-		
-		private var explicitHeight:Number = NaN;
-		private var _height:Number = 0;
-		override public function get height():Number
-		{
-			return _height;
-		}
-
-		override public function set height(value:Number):void
-		{
-			if(explicitHeight == value) return;
-			explicitHeight = value;
-			if(_height == value) return;
-			_height = value;
-			invalidate();
-		}
-		
 		private var _useRepeat:Boolean = true;
-
+		
 		/**
 		 *渲染模式是按照比例缩放还是重复，默认：true<br> 
 		 * 如果设置了scale9Rect此参数无效
@@ -74,7 +31,7 @@ package xlib.framework.components
 		{
 			return _useRepeat;
 		}
-
+		
 		public function set useRepeat(value:Boolean):void
 		{
 			if(_useRepeat == value) return;	
@@ -83,7 +40,7 @@ package xlib.framework.components
 		}
 		
 		private var _smooth:Boolean = false;
-
+		
 		/**
 		 * (default = false) — <br>
 		 * 如果为 false，则使用最近邻点算法来呈现放大的位图图像，而且该图像看起来是像素化的。<br>
@@ -93,7 +50,7 @@ package xlib.framework.components
 		{
 			return _smooth;
 		}
-
+		
 		/**
 		 * @private
 		 */
@@ -103,7 +60,7 @@ package xlib.framework.components
 			_smooth = value;
 			invalidate();
 		}
-
+		
 		private var _scale9Rect:Rectangle;
 		/**
 		 *九宫格 
@@ -112,7 +69,7 @@ package xlib.framework.components
 		{
 			return _scale9Rect;
 		}
-
+		
 		/**
 		 * @private
 		 */
@@ -131,7 +88,7 @@ package xlib.framework.components
 		{
 			return _bitmapData;
 		}
-
+		
 		/**
 		 * @private
 		 */
@@ -139,30 +96,21 @@ package xlib.framework.components
 		{
 			if(_bitmapData == value) return;
 			_bitmapData = value;
-			_width = bitmapData.width;
-			_height = bitmapData.height;
 			invalidate();
 		}
 		
 		/**
-		 *提交渲染生效 
+		 *渲染
 		 */		
-		protected function commitRender():void
+		protected function renderWapper($width:Number, $height:Number):void
 		{
 			this.graphics.clear();
-			if(!bitmapData) 
-			{
-				commintSize();
-				return;
-			}
-			
-			var measureWidth:Number = isNaN(explicitWidth) ? bitmapData.width : explicitWidth;
-			var measureHeight:Number = isNaN(explicitHeight) ? bitmapData.height : explicitHeight;
+			if(!bitmapData) return;
 			
 			var bmd:BitmapData;
 			if(scale9Rect)			
 			{
-				bmd = (isNaN(explicitWidth) && isNaN(explicitHeight)) ? bitmapData : getScaledBitmapData(bitmapData, scale9Rect, measureWidth, measureHeight);
+				bmd = ($width == bitmapData.width && bitmapData.height == $height) ? bitmapData : getScaledBitmapData(bitmapData, scale9Rect, $width, $height);
 				matrix.identity();
 			}
 			else 
@@ -170,23 +118,37 @@ package xlib.framework.components
 				matrix.identity();
 				if(!useRepeat)
 				{
-					matrix.a = measureWidth/bitmapData.width;
-					matrix.d = measureHeight/bitmapData.height;
+					matrix.a = $width/bitmapData.width;
+					matrix.d = $height/bitmapData.height;
 				}
 				bmd = bitmapData;
 			}
 			this.graphics.beginBitmapFill(bmd, matrix, useRepeat, smooth);
-			this.graphics.drawRect(0, 0, measureWidth, measureHeight);
+			this.graphics.drawRect(0, 0, $width, $height);
 			this.graphics.endFill();
 		}
 		
-		/**
-		 *尺寸测量
-		 */		
-		protected function commintSize():void
+		override protected function measure():void
 		{
-			_width = isNaN(explicitWidth) ? super.width : explicitWidth;
-			_height = isNaN(explicitHeight) ? super.height : explicitHeight;
+			if(bitmapData)
+			{
+				measuredWidth = bitmapData.width;
+				measuredHeight = bitmapData.height;
+			}
+			else
+			{
+				measuredWidth = 0;
+				measuredHeight = 0;
+			}
+		}
+		
+		override protected function updateDisplayList($width:Number, $height:Number):void
+		{
+			super.updateDisplayList($width, $height);
+			if(waitValidate)
+			{
+				renderWapper($width, $height);
+			}
 		}
 		
 		/**
@@ -199,35 +161,9 @@ package xlib.framework.components
 		 */		
 		private function invalidate():void
 		{
-			if(waitValidate || !bitmapData) return;
+			if(waitValidate) return;
 			waitValidate = true;
-			Global.instance.stage.addEventListener(Event.RENDER, validate);
-			this.addEventListener(Event.ENTER_FRAME, validate);
-		}
-		
-		/**
-		 * 生效
-		 * @param $e
-		 */		
-		private function validate($e:Event = null):void
-		{
-			if(!waitValidate) return;
-			waitValidate = false;
-			if(this.hasEventListener(Event.ENTER_FRAME))
-			{
-				this.removeEventListener(Event.ENTER_FRAME, validate);
-			}
-			if(Global.instance.stage.hasEventListener(Event.RENDER))
-			{
-				Global.instance.stage.removeEventListener(Event.RENDER, validate);
-			}
-			commitRender();
-			commintSize();
-			
-			if(this.hasEventListener(UIEvent.UPDATE_COMPLETE))
-			{
-				this.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
-			}
+			invalidateProperties();
 		}
 		
 		/**
@@ -255,7 +191,7 @@ package xlib.framework.components
 			
 			matrix.identity();
 			var bmd:BitmapData = new BitmapData($unscaledWidth, $unscaledHeight);
-
+			
 			var unScaledRect:Rectangle = new Rectangle();	//未缩放的rect
 			var scaledRect:Rectangle = new Rectangle();			//缩放后的rect
 			

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="demo/ContainerDemo.as" projectUUID="b2d36f7b-e680-4278-ac35-d69d3638d195" version="10">
-  <compiler additionalCompilerArguments="-locale en_US -default-size 1280 800" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties analytics="false" mainApplicationPath="demo/SkinRendererDemo.as" projectUUID="b2d36f7b-e680-4278-ac35-d69d3638d195" version="11">
+  <compiler additionalCompilerArguments="-locale en_US -default-size 1280 800" advancedTelemetry="false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -33,12 +33,15 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="demo/SkinRendererDemo.as"/>
+    <application path="demo/ShapeImageDemo.as"/>
     <application path="demo/ContainerDemo.as"/>
     <application path="x_lib_case.as"/>
   </applications>
   <modules>
     <module application="src/x_lib_case.as" destPath="ModuleDemo.swf" optimize="true" sourcePath="src/ModuleDemo.as"/>
   </modules>
+  <workers/>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

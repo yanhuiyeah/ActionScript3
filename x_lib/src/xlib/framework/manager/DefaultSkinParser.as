@@ -15,6 +15,7 @@ package xlib.framework.manager
 		public function parser($skin:Object, $callBack:Function):void
 		{
 			$callBack.call(null, $skin);
+			trace("DefaultSkinParser--未完待续。。。");
 		}
 	}
 }
