@@ -70,7 +70,7 @@ package xlib.framework.core
 		
 		public function get priorityWidth():Number
 		{
-			var pw:Number = isNaN(expliciteWidth) ? measuredWidth : expliciteHeight;
+			var pw:Number = isNaN(expliciteWidth) ? measuredWidth : expliciteWidth;
 			return !isNaN(pw) ? pw : 0;
 		}
 
@@ -154,10 +154,6 @@ package xlib.framework.core
 		{
 			if(_updateCompletePendingFlag == $value) return;
 			_updateCompletePendingFlag = $value;
-			if(_updateCompletePendingFlag)
-			{
-				this.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
-			}
 		}
 		
 		public function get updateCompletePendingFlag():Boolean

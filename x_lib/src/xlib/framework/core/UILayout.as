@@ -141,11 +141,18 @@ package xlib.framework.core
 		private var layoutHeightSet:Boolean = false;
 		public function setLayoutSize($width:Number, $height:Number):void
 		{
-			_width = $width;
-			_height = $height;
 			layoutWidthSet = !isNaN($width);
 			layoutHeightSet = !isNaN($height);
-			setActualSize(priorityWidth, priorityHeight);
+			if(!layoutWidthSet)
+			{
+				$width = priorityWidth;
+			}
+			
+			if(!layoutHeightSet)
+			{
+				$height = priorityHeight;
+			}
+			setActualSize($width, $height);
 		}
 		
 		override public function get priorityWidth():Number

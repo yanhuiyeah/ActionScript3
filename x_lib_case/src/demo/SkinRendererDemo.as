@@ -6,15 +6,16 @@ package demo
 	import xlib.framework.Application;
 	import xlib.framework.components.ShapeImage;
 	import xlib.framework.components.SkinRenderer;
+	import xlib.framework.components.Wapper;
 	import xlib.framework.events.UIEvent;
 	
-	
+	[SWF(frameRate="30")]
 	public class SkinRendererDemo extends Application
 	{
 		[Embed(source="../../assets/ui/img.jpg")]
 		private var source:Class;
 		
-		private var img:ShapeImage
+		private var skin:Wapper;
 		
 		private var render:SkinRenderer;
 		
@@ -27,16 +28,16 @@ package demo
 		{
 			super.createChildren();
 			
-			img = new ShapeImage();
-			img.scale9Rect = new Rectangle(71, 73, 71, 73);
-			img.useRepeat = false;
-			img.bitmapData = (new source()).bitmapData;
+			skin = new Wapper();
+			skin.scale9Rect = new Rectangle(71, 73, 71, 73);
+			skin.useRepeat = false;
+			skin.bitmapData = (new source()).bitmapData;
 			
 			render = new SkinRenderer();
 			render.addEventListener(UIEvent.UPDATE_COMPLETE, onComplete);
 //			render.width = 500;
 //			render.height = 500;
-			render.skin = img;
+			render.skin = skin;
 			this.addChild(render);
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			
@@ -50,6 +51,7 @@ package demo
 		protected function onClick(event:MouseEvent):void
 		{
 			render.width+=10;
+			render.height+=10;
 		}
 	}
 }

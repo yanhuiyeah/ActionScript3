@@ -17,6 +17,8 @@ package xlib.framework.components
 	/**
 	 *图片渲染器<br>
 	 * 渲染完成后派发UIEvent.updateComplete, 此时的尺寸是正确的
+	 * <br>
+	 * 因为同步有问题 所以暂时废弃
 	 * @author yeah
 	 */	
 	public class ShapeImage extends Shape
