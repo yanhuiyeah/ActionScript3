@@ -4,9 +4,8 @@ package demo
 	import flash.geom.Rectangle;
 	
 	import xlib.framework.Application;
-	import xlib.framework.components.ShapeImage;
-	import xlib.framework.components.SkinRenderer;
-	import xlib.framework.components.Wapper;
+	import xlib.framework.components.AssetsWrapper;
+	import xlib.framework.components.SkinWrapper;
 	import xlib.framework.events.UIEvent;
 	
 	[SWF(frameRate="30")]
@@ -15,9 +14,9 @@ package demo
 		[Embed(source="../../assets/ui/img.jpg")]
 		private var source:Class;
 		
-		private var skin:Wapper;
+		private var skin:AssetsWrapper = new AssetsWrapper();
 		
-		private var render:SkinRenderer;
+		private var skinWrapper:SkinWrapper;
 		
 		public function SkinRendererDemo()
 		{
@@ -28,30 +27,31 @@ package demo
 		{
 			super.createChildren();
 			
-			skin = new Wapper();
 			skin.scale9Rect = new Rectangle(71, 73, 71, 73);
 			skin.useRepeat = false;
 			skin.bitmapData = (new source()).bitmapData;
 			
-			render = new SkinRenderer();
-			render.addEventListener(UIEvent.UPDATE_COMPLETE, onComplete);
-//			render.width = 500;
-//			render.height = 500;
-			render.skin = skin;
-			this.addChild(render);
+			skinWrapper = new SkinWrapper();
+			skinWrapper.addEventListener(UIEvent.UPDATE_COMPLETE, onComplete);
+			skinWrapper.width = 500;
+			skinWrapper.height = 500;
+			skinWrapper.skin = skin;
+			this.addChild(skinWrapper);
+			
+			skinWrapper.showBorder = true;
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			
 		}
 		
 		protected function onComplete(event:UIEvent):void
 		{
-			trace(render.width, render.height);
+			trace(skinWrapper.width, skinWrapper.height);
 		}
 		
 		protected function onClick(event:MouseEvent):void
 		{
-			render.width+=10;
-			render.height+=10;
+			skinWrapper.width-=10;
+			skinWrapper.height-=10;
 		}
 	}
 }

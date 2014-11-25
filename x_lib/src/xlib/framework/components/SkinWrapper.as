@@ -2,6 +2,7 @@ package xlib.framework.components
 {
 	import flash.display.DisplayObject;
 	
+	import xlib.framework.components.interfaces.IBitmapDataRender;
 	import xlib.framework.core.Component;
 	import xlib.framework.core.interfaces.IInvalidateElement;
 	import xlib.framework.core.interfaces.ILayoutElement;
@@ -9,13 +10,13 @@ package xlib.framework.components
 	import xlib.framework.manager.supportClasses.ISkinParser;
 	
 	/**
-	 *皮肤渲染器 （非容器，请勿做相关容器操作）<br>
+	 *皮肤包装器 （非容器，请勿做相关容器操作）<br>
 	 * 设置skin可自动解析（通过ISkinParser解析）并且呈现
 	 * @author yeah
 	 */	
-	public class SkinRenderer extends Component
+	public class SkinWrapper extends Component
 	{
-		public function SkinRenderer()
+		public function SkinWrapper()
 		{
 			super();
 		}
@@ -186,6 +187,7 @@ package xlib.framework.components
 		
 		override protected function updateDisplayList($width:Number, $height:Number):void
 		{
+			super.updateDisplayList($width, $height);
 			if(parsedSkin)
 			{
 				if(parsedSkin is ILayoutElement)
@@ -196,6 +198,11 @@ package xlib.framework.components
 				{
 					this.parsedSkin.width = $width;
 					this.parsedSkin.height = $height;
+					
+					if(this.parsedSkin is IBitmapDataRender)
+					{
+						IBitmapDataRender(this.parsedSkin).validateNow();
+					}
 				}
 			}
 		}

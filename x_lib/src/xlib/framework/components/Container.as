@@ -127,35 +127,11 @@ package xlib.framework.components
 		
 		override protected function updateDisplayList($width:Number, $height:Number):void
 		{
+			super.updateDisplayList($width, $height);
 			if(layout)
 			{
 				layout.updateDisplayList($width, $height);
 			}
-			else
-			{
-				super.updateDisplayList($width, $height);
-			}
-			
-			if(_showBorder)
-			{
-				this.graphics.clear();
-				this.graphics.lineStyle(1, 0x0000ff);
-				this.graphics.drawRect(0, 0 , priorityWidth, priorityHeight);
-			}
 		}
-		
-		private var _showBorder:Boolean = false;
-
-		public function get showBorder():Boolean
-		{
-			return _showBorder;
-		}
-
-		public function set showBorder(value:Boolean):void
-		{
-			_showBorder = value;
-			updateDisplayList(priorityWidth, priorityHeight);
-		}
-
 	}
 }

@@ -5,7 +5,7 @@ package xlib.framework.components
 	 * 非容器
 	 * @author yeah
 	 */	
-	public class SkinnableComponent extends SkinRenderer
+	public class SkinnableComponent extends SkinWrapper
 	{
 		public function SkinnableComponent()
 		{

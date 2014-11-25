@@ -4,7 +4,7 @@ package demo
 	import flash.geom.Rectangle;
 	
 	import xlib.framework.Application;
-	import xlib.framework.components.ShapeImage;
+	import xlib.framework.components.AssetsWrapper;
 	import xlib.framework.events.UIEvent;
 	
 	
@@ -13,7 +13,7 @@ package demo
 		[Embed(source="../../assets/ui/img.jpg")]
 		private var source:Class;
 		
-		private var img:ShapeImage
+		private var img:AssetsWrapper
 		
 		public function ShapeImageDemo()
 		{
@@ -24,11 +24,11 @@ package demo
 		{
 			super.createChildren();
 			
-			img = new ShapeImage();
-			img.addEventListener(UIEvent.UPDATE_COMPLETE, onComplete);
+			img = new AssetsWrapper();
 			img.scale9Rect = new Rectangle(71, 73, 71, 73);
 			img.useRepeat = false;
 			img.bitmapData = (new source()).bitmapData;
+			img.validateNow();
 			this.addChild(img);
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
@@ -42,6 +42,7 @@ package demo
 		{
 			img.width += 20;
 			img.height += 20;
+			img.validateNow();
 		}
 	}
 }

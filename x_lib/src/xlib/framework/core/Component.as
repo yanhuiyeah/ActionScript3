@@ -80,5 +80,33 @@ package xlib.framework.core
 			}
 		}
 		
+		override protected function updateDisplayList($width:Number, $height:Number):void
+		{
+			super.updateDisplayList($width, $height);
+			if(showBorder)
+			{
+				this.graphics.clear();
+				this.graphics.lineStyle(1, 0x0000ff);
+				this.graphics.drawRect(0, 0 , $width, $height);
+			}
+		}
+		
+		private var _showBorder:Boolean = false;
+		
+		/**
+		 *是否显示边框 
+		 * @return 
+		 */		
+		public function get showBorder():Boolean
+		{
+			return _showBorder;
+		}
+		
+		public function set showBorder(value:Boolean):void
+		{
+			_showBorder = value;
+			updateDisplayList(priorityWidth, priorityHeight);
+		}
+		
 	}
 }
