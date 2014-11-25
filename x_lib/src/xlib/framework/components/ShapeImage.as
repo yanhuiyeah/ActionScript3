@@ -7,7 +7,6 @@ package xlib.framework.components
 	import flash.geom.Rectangle;
 	
 	import xlib.framework.core.Global;
-	import xlib.framework.events.TickEvent;
 	import xlib.framework.events.UIEvent;
 	
 	/**
@@ -16,12 +15,18 @@ package xlib.framework.components
 	[Event(name="updateComplete", type="xlib.framework.events.UIEvent")]
 	
 	/**
-	 *图片资源渲染 
+	 *图片渲染器<br>
+	 * 渲染完成后派发UIEvent.updateComplete, 此时的尺寸是正确的
 	 * @author yeah
 	 */	
 	public class ShapeImage extends Shape
 	{
-		public function ShapeImage()
+		/**
+		 * 构造函数
+		 * @param $bitmapData	bitmapdata数据源
+		 * @param $rect				缩放用的九宫格
+		 */		
+		public function ShapeImage($bitmapData:BitmapData = null, $rect:Rectangle = null)
 		{
 			super();
 		}
@@ -99,27 +104,6 @@ package xlib.framework.components
 			invalidate();
 		}
 
-		
-		private var _source:Object;
-		/**
-		 *数据源 String or Bitmapdata
-		 */
-		public function get source():Object
-		{
-			return _source;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set source(value:Object):void
-		{
-			if(_source == value) return;
-			_source = value;
-			//根据String or Bitmapdata进行解析
-			setBitmapData(_source as BitmapData);
-		}
-		
 		private var _scale9Rect:Rectangle;
 		/**
 		 *九宫格 
@@ -139,26 +123,24 @@ package xlib.framework.components
 			invalidate();
 		}
 		
+		private var _bitmapData:BitmapData;
 		/**
 		 * BitmapData
-		 */		
-		protected var bitmapData:BitmapData;
-		
-		/**
-		 *设置 BitmapData
-		 * @param $bitmapData
-		 */		
-		protected function setBitmapData($bitmapData:BitmapData):void
+		 */
+		public function get bitmapData():BitmapData
 		{
-			if(this.bitmapData == $bitmapData) return;
-			this.bitmapData = $bitmapData;
+			return _bitmapData;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set bitmapData(value:BitmapData):void
+		{
+			if(_bitmapData == value) return;
+			_bitmapData = value;
 			invalidate();
 		}
-		
-		/**
-		 *矩阵 
-		 */		
-		private static var matrix:Matrix = new Matrix();
 		
 		/**
 		 *提交渲染生效 
@@ -178,7 +160,7 @@ package xlib.framework.components
 			var bmd:BitmapData;
 			if(scale9Rect)			
 			{
-				bmd = (isNaN(explicitWidth) && isNaN(explicitHeight)) ? bitmapData : getS9RBitmapData(measureWidth, measureHeight);
+				bmd = (isNaN(explicitWidth) && isNaN(explicitHeight)) ? bitmapData : getScaledBitmapData(bitmapData, scale9Rect, measureWidth, measureHeight);
 				matrix.identity();
 			}
 			else 
@@ -194,59 +176,6 @@ package xlib.framework.components
 			this.graphics.beginBitmapFill(bmd, matrix, useRepeat, smooth);
 			this.graphics.drawRect(0, 0, measureWidth, measureHeight);
 			this.graphics.endFill();
-		}
-		
-		/**
-		 *获取根据九宫格缩放后的bitmapdata
-		 */		
-		private function getS9RBitmapData($unscaledWidth:Number, $unscaledHeight:Number):BitmapData
-		{
-			matrix.identity();
-			var b:BitmapData = new BitmapData(500, 200);
-			matrix.tx = 71;
-			matrix.a = 2;
-			b.draw(bitmapData, matrix, null, null, new Rectangle(71, 73, 71, 73));
-			return b;
-				
-			
-			/**最右边和最下面的宽高*/
-			var rightW:Number = bitmapData.width - scale9Rect.right;
-			var bottomH:Number = bitmapData.height - scale9Rect.bottom;
-			
-			/**将要进行缩放的宽高*/
-			var scaledW:Number = $unscaledWidth - rightW - scale9Rect.x;
-			var scaledH:Number = $unscaledHeight - bottomH - scale9Rect.y;
-			
-			/** 二维数组[[实际值，缩放值],[实际值，缩放值],....]** */
-			var wList:Array = [[scale9Rect.x, scale9Rect.x], [scale9Rect.width, scaledW], [rightW, rightW]];
-			var hList:Array = [[scale9Rect.y, scale9Rect.y], [scale9Rect.height, scaledH], [bottomH, bottomH]];
-			
-			matrix.identity();
-			var bmd:BitmapData = new BitmapData($unscaledWidth, $unscaledHeight);
-			var rect:Rectangle = new Rectangle();
-			for each (var hArray:Array in wList) 
-			{
-				rect.y = 0;
-				matrix.tx = 0;
-				matrix.ty = 0;
-				for each (var vArray:Array in hList) 
-				{
-					rect.width = hArray[0];
-					rect.height = vArray[0];
-					
-					
-					matrix.a = hArray[1]/hArray[0];
-					matrix.d = vArray[1]/vArray[0];
-					trace(matrix);
-					bmd.draw(bitmapData, matrix, null, null, rect);
-					
-					matrix.tx += hArray[1];
-					matrix.ty += vArray[1];
-					rect.y += rect.width;
-				}
-				rect.x += hArray[0];
-			}
-			return bmd;
 		}
 		
 		/**
@@ -296,6 +225,72 @@ package xlib.framework.components
 			{
 				this.dispatchEvent(new UIEvent(UIEvent.UPDATE_COMPLETE));
 			}
+		}
+		
+		/**
+		 *矩阵 
+		 */		
+		private static var matrix:Matrix = new Matrix();
+		
+		/**
+		 *返回根据九宫格缩放后的bitmapdata 
+		 * @param $bmd
+		 * @param $s9r
+		 * @param $unscaledWidth
+		 * @param $unscaledHeight
+		 * @return 一个bitmapdata副本
+		 */		
+		public static function getScaledBitmapData($bmd:BitmapData, $s9r:Rectangle, $unscaledWidth:Number, $unscaledHeight:Number):BitmapData
+		{
+			/**应该缩放的宽高*/
+			var scaledW:Number = $unscaledWidth - $bmd.width + $s9r.width;
+			var scaledH:Number = $unscaledHeight - $bmd.height + $s9r.height;
+			
+			/**未进行缩放的水平/竖直的点*/
+			var hValues:Array = [$s9r.x, $s9r.width, $bmd.width - $s9r.right];
+			var vValues:Array = [$s9r.y, $s9r.height, $bmd.height - $s9r.bottom];
+			
+			matrix.identity();
+			var bmd:BitmapData = new BitmapData($unscaledWidth, $unscaledHeight);
+
+			var unScaledRect:Rectangle = new Rectangle();	//未缩放的rect
+			var scaledRect:Rectangle = new Rectangle();			//缩放后的rect
+			
+			var hScaled:Boolean = true;									//是否需要缩放  false true false
+			var vScaled:Boolean = true;									//是否需要缩放  false true false
+			for each (var x_value:int in hValues) 
+			{
+				hScaled = !hScaled;
+				
+				unScaledRect.y = 0;
+				unScaledRect.width = x_value;
+				
+				scaledRect.y = 0;
+				scaledRect.width = !hScaled ? x_value : scaledW;
+				
+				matrix.a = scaledRect.width / unScaledRect.width;
+				matrix.tx = scaledRect.x - matrix.a* unScaledRect.x;
+				
+				vScaled = true;
+				for each (var v_value:int in vValues) 
+				{
+					vScaled = !vScaled;
+					unScaledRect.height  = v_value;
+					scaledRect.height  = !vScaled ? v_value : scaledH;
+					
+					matrix.d = scaledRect.height / unScaledRect.height;
+					matrix.ty = scaledRect.y - matrix.d * unScaledRect.y;
+					
+					bmd.draw($bmd, matrix, null, null, scaledRect);
+					
+					unScaledRect.y = unScaledRect.bottom;	
+					scaledRect.y = scaledRect.bottom;	
+				}
+				
+				unScaledRect.x = unScaledRect.right;
+				scaledRect.x = scaledRect.right;
+			}
+			return bmd;
 		}
 	}
 }
