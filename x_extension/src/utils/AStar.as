@@ -2,6 +2,7 @@ package utils
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
+	import flash.utils.getTimer;
 
 	/**
 	 *a星 
@@ -10,35 +11,20 @@ package utils
 	public class AStar
 	{
 		
-		private var _find:Boolean = false;
-
-		/**
-		 *是否找到 
-		 */
-		public function get find():Boolean
-		{
-			return _find;
-		}
-		
-		
 		public function AStar()
 		{
 		}
 		
-		
 		/**
-		 *执行 
-		 * @param $map 			地图列表 二维 $map[c][r] = 0 普通 $map[c][r] = 1 障碍
-		 * @param $startX		起始水平格子索引
-		 * @param $startY		起始垂直格子索引
-		 * @param $endX			结束水平格子索引
-		 * @param $endY			结束垂直格子索引
-		 * @return 					格子索引列表（二维数组）
+		 *寻路
+		 * @param $map 			地图列表 二维 $map[c][r] = 0 普通 $map[c][r] > 0 障碍
+		 * @param $start			起点格子索引（$start.x 水平索引， $start.y 竖直索引）
+		 * @param $end			终点格子索引（$end.x 水平索引， $end.y 竖直索引）
+		 * @$success					寻路成功回调函数（参数([[水平索引，竖直索引], [水平索引，竖直索引], [水平索引，竖直索引], .....])）
+		 * @$error					寻路失败（失败提示）
 		 */		
-		public function execute($map:Array, $startX:int, $startY:int, $endX:int, $endY:int):Array
+		public function find($map:Array, $start:Point, $end:Point, $success:Function, $error:Function = null):void
 		{
-			_find = false;
-			
 			/**开放列表*/
 			var ol:Dictionary = new Dictionary();
 			
@@ -46,8 +32,8 @@ package utils
 			var cl:Dictionary = new Dictionary();
 			
 			/**当前节点*/
-			var cn:AStarNode = new AStarNode(null, $startX, $startY); 
-			ol[$startX+"_"+$startY] = cn;
+			var cn:AStarNode = new AStarNode(null, $start.x, $start.y); 
+			ol[$start.x+"_"+$start.y] = cn;
 			
 			/**总行数*/
 			var tx:int = $map.length;
@@ -77,14 +63,15 @@ package utils
 						/**如果存在于开列表则继续下一个*/
 						if(key in ol) continue;
 						
-						if($map[x][y] == 1) continue;
+						/**如果不允许通过继续下一个*/
+						if($map[x][y] > 0) continue;
 						
+						/**此处计算g 应该是10 还是14;*/
 						var g:int = (x==0 || y == 0) ? 10 : 14;
-						//此处计算g 应该是10 还是14;
 						
 						var on:AStarNode = new AStarNode(cn, x, y);
 						on.g = cn.g + g;
-						on.h = (Math.abs(x - $endX) + Math.abs(y - $endY)) * 10;
+						on.h = (Math.abs(x - $end.x) + Math.abs(y - $end.y)) * 10;
 						on.f = on.g + on.h;
 						ol[key] = on;
 					}
@@ -107,27 +94,37 @@ package utils
 						cn = obj;
 					}
 				}
-				
 				if(!cn) break;
 				
-				if(cn.x == $endX && cn.y == $endY)
+				if(cn.x == $end.x && cn.y == $end.y)
 				{
-					_find = true;
 					break;
 				}
 			}
 			
-			if(!cn) return null;
-			
-			var arr:Array = [];
-			while(cn.p)
+			if(cn) 
 			{
-				arr.push(new Point(cn.x, cn.y));
-				cn = cn.p;
+				var path:Array = [];
+				while(cn.p)
+				{
+					path.push(new Point(cn.x, cn.y));
+					cn = cn.p;
+				}
+				
+				if($success != null)
+				{
+					$success.call(null, path);
+				}
 			}
-			
-			//此处计算路径
-			return arr;
+			else 
+			{
+				var error:String = "寻路失败";
+				if($error != null) 
+				{
+					$error.call(null, error);
+				}
+				trace(error);
+			}
 		}
 	}
 }
